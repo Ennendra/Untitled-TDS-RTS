@@ -1,0 +1,14 @@
+[gd_scene load_steps=6 format=3 uid="uid://bajnlaslouu4e"]
+
+[ext_resource type="Script" path="res://Scripts/UI/RTSController.cs" id="1_jhqk3"]
+[ext_resource type="Texture2D" uid="uid://cl6fh2l3g244m" path="res://Textures/UI/Icons/Orders/UICommandMove.png" id="2_mo7gu"]
+[ext_resource type="Texture2D" uid="uid://bgcwpokqubdwa" path="res://Textures/UI/Icons/Orders/UICommandAttack.png" id="3_lvxjj"]
+[ext_resource type="Texture2D" uid="uid://vnbyei0c0dpp" path="res://Textures/UI/Icons/Orders/UICommandGuard.png" id="4_ddpsa"]
+[ext_resource type="PackedScene" uid="uid://ciqxdvvl8hdye" path="res://Objects/UI/UIOrderConfirmation.tscn" id="5_xb0g6"]
+
+[node name="RTSController" type="Node2D"]
+script = ExtResource("1_jhqk3")
+orderConfirmationTextures = Array[Texture2D]([ExtResource("2_mo7gu"), ExtResource("3_lvxjj"), ExtResource("4_ddpsa")])
+orderConfirmationScene = ExtResource("5_xb0g6")
+
+[node name="Camera2D" type="Camera2D" parent="."]

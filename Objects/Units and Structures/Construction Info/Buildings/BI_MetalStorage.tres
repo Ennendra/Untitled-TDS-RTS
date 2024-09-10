@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://3yiscuiw5o3t"]
+
+[ext_resource type="PackedScene" uid="uid://dfotj6mr8sbp" path="res://Objects/Units and Structures/Buildings/Blueprints/BlueprintMetalStorage.tscn" id="2_s4nox"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/Construction Info/ConstructInfo.cs" id="3_pst7u"]
+[ext_resource type="Resource" uid="uid://c007oo5mi2fbn" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_MetalStorage.tres" id="3_yy5yv"]
+
+[resource]
+script = ExtResource("3_pst7u")
+objectToSpawn = ExtResource("2_s4nox")
+type = 2
+objectGridSize = Vector2(2, 2)
+unitInfo = ExtResource("3_yy5yv")

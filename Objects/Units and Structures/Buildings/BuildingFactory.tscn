@@ -1,0 +1,75 @@
+[gd_scene load_steps=13 format=3 uid="uid://dl8s3u8cffmp2"]
+
+[ext_resource type="Script" path="res://Scripts/Buildings/BuildingFactory.cs" id="1_d16vn"]
+[ext_resource type="Resource" uid="uid://c4ifw8ekbi2y1" path="res://Objects/Units and Structures/Construction Info/Units/Unit1.tres" id="2_7pw3w"]
+[ext_resource type="Texture2D" uid="uid://b4vrc26p1ys6q" path="res://Textures/Buildings/Factory.png" id="2_cs615"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="3_2rvdh"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="4_g0k78"]
+[ext_resource type="PackedScene" uid="uid://c5o73c7qclacc" path="res://Objects/Components/ConstructorComponent.tscn" id="5_clapc"]
+[ext_resource type="Texture2D" uid="uid://b24bbmw5yojij" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding3X3.png" id="5_hux7w"]
+[ext_resource type="Resource" uid="uid://blfkxocwevg1k" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Factory.tres" id="5_sg0tp"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="9_4krce"]
+[ext_resource type="PackedScene" uid="uid://cm07ojc8e0ev4" path="res://Objects/Components/FactoryComponent.tscn" id="9_bxytb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3jmgu"]
+size = Vector2(135, 135)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nh6i5"]
+size = Vector2(135, 135)
+
+[node name="BuildingFactory" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "constructorComponent", "factionComponent", "factoryComponent") groups=["Building"]]
+position = Vector2(25, 25)
+collision_layer = 2
+collision_mask = 16384
+script = ExtResource("1_d16vn")
+buildableUnits = Array[Resource]([ExtResource("2_7pw3w")])
+buildCenterOffset = Vector2(0, -10)
+energyReclaimValue = 360.0
+metalReclaimValue = 180.0
+buildingType = 6
+buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+damageComponent = NodePath("DamageComponent")
+constructorComponent = NodePath("ConstructorComponent")
+factionComponent = NodePath("FactionComponent")
+factoryComponent = NodePath("FactoryComponent")
+
+[node name="MainSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_cs615")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_3jmgu")
+
+[node name="DamageComponent" parent="." instance=ExtResource("3_2rvdh")]
+healthBarOffset = 75.0
+maxHealth = 180.0
+
+[node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("RectangleShape2D_nh6i5")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent", "factoryComponent") instance=ExtResource("4_g0k78")]
+damageComponent = NodePath("../DamageComponent")
+factoryComponent = NodePath("../FactoryComponent")
+selectedTexture = ExtResource("5_hux7w")
+unitInfo = ExtResource("5_sg0tp")
+
+[node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("RectangleShape2D_nh6i5")
+
+[node name="ConstructorComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("5_clapc")]
+factionComponent = NodePath("../FactionComponent")
+maxSupplyRate = 12.0
+
+[node name="Collider" type="CollisionShape2D" parent="ConstructorComponent"]
+shape = SubResource("RectangleShape2D_nh6i5")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("9_4krce")]
+markerTag = 2
+
+[node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(75, 75, 75, -75, -75, -75, -75, 75)
+
+[node name="FactoryComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("9_bxytb")]
+buildableUnits = Array[Resource]([ExtResource("2_7pw3w")])
+factionComponent = NodePath("../FactionComponent")
+buildOffset = Vector2(0, -10)

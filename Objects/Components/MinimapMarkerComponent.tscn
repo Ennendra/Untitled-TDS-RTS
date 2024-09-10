@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://eh463onn4fn4"]
+
+[ext_resource type="Script" path="res://Scripts/Components/MinimapMarkerComponent.cs" id="1_7hu3l"]
+
+[node name="MinimapMarkerComponent" type="Node2D" groups=["MinimapMarker"]]
+script = ExtResource("1_7hu3l")

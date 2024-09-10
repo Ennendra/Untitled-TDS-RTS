@@ -1,0 +1,81 @@
+[gd_scene load_steps=13 format=3 uid="uid://bq45e6w40htnj"]
+
+[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BlueprintParent.cs" id="1_qhx84"]
+[ext_resource type="PackedScene" uid="uid://dl8s3u8cffmp2" path="res://Objects/Units and Structures/Buildings/BuildingFactory.tscn" id="2_bushc"]
+[ext_resource type="Texture2D" uid="uid://b4vrc26p1ys6q" path="res://Textures/Buildings/Factory.png" id="3_f7rfi"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_u1aes"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_76jwe"]
+[ext_resource type="Shader" path="res://Textures/Shaders/TestShader.gdshader" id="6_7imu8"]
+[ext_resource type="Resource" uid="uid://blfkxocwevg1k" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Factory.tres" id="6_xqmvr"]
+[ext_resource type="Texture2D" uid="uid://dvt7occ8reyin" path="res://Textures/Buildings/EnergyStorage.png" id="7_s21xw"]
+[ext_resource type="Texture2D" uid="uid://b24bbmw5yojij" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding3X3.png" id="8_ayktn"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="10_wauqm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3qsov"]
+size = Vector2(135, 135)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nm8s"]
+shader = ExtResource("6_7imu8")
+shader_parameter/keep_luminance = false
+shader_parameter/color_start = Color(0, 0.972549, 0.972549, 1)
+shader_parameter/start_pos = 0.0
+shader_parameter/color_mid = Color(0, 0.545098, 0.27451, 1)
+shader_parameter/mid_pos = 0.62
+shader_parameter/color_end = Color(0.517647, 0.701961, 1, 1)
+shader_parameter/end_pos = 0.99
+shader_parameter/midpos_enabled = true
+shader_parameter/effect_filling = 1.0
+
+[node name="BlueprintRefinery" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent", "buildingObstacleBounds") groups=["Blueprint"]]
+collision_layer = 131074
+collision_mask = 0
+script = ExtResource("1_qhx84")
+objectToSpawn = ExtResource("2_bushc")
+damageComponent = NodePath("DamageComponent")
+factionComponent = NodePath("FactionComponent")
+buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_3qsov")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_f7rfi")
+
+[node name="SpriteScaffold" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_3nm8s")
+texture = ExtResource("7_s21xw")
+
+[node name="BuildProgressBar" type="ProgressBar" parent="." groups=["Blueprint"]]
+modulate = Color(1, 0, 0, 1)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = -85.0
+offset_right = 50.0
+offset_bottom = -75.0
+grow_horizontal = 2
+value = 50.0
+show_percentage = false
+
+[node name="DamageComponent" parent="." instance=ExtResource("4_u1aes")]
+healthBarOffset = 75.0
+maxHealth = 180.0
+
+[node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("RectangleShape2D_3qsov")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("5_76jwe")]
+damageComponent = NodePath("../DamageComponent")
+selectedTexture = ExtResource("8_ayktn")
+unitInfo = ExtResource("6_xqmvr")
+
+[node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("RectangleShape2D_3qsov")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("10_wauqm")]
+markerTag = 2
+
+[node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(75, 75, 75, -75, -75, -75, -75, 75)

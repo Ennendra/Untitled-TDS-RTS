@@ -1,0 +1,323 @@
+[gd_scene load_steps=20 format=3 uid="uid://c2tt6j6mlckwl"]
+
+[ext_resource type="Texture2D" uid="uid://dmpxxm1byp76d" path="res://Textures/UI/MainUIFramework/RTSBuildMenu.png" id="1_0dq4w"]
+[ext_resource type="Script" path="res://Scripts/UI/UI_RTSToolbar.cs" id="1_7pdph"]
+[ext_resource type="PackedScene" uid="uid://bsyfqrrdmvel1" path="res://Objects/UI/UISelectedUnitInfo.tscn" id="2_qn0ml"]
+[ext_resource type="Resource" uid="uid://dcxhrv06cdy4i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_NetworkHub.tres" id="2_tdbig"]
+[ext_resource type="Resource" uid="uid://yjs4iloqmg2i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Generator.tres" id="3_pvjvu"]
+[ext_resource type="Resource" uid="uid://uuwgt6j15354" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Miner.tres" id="4_dsxre"]
+[ext_resource type="Resource" uid="uid://cv3aep28kx6f8" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Refinery.tres" id="5_i3o4t"]
+[ext_resource type="Resource" uid="uid://duv5n2wh276mn" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_EnergyStorage.tres" id="6_dnk6g"]
+[ext_resource type="Resource" uid="uid://3yiscuiw5o3t" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_MetalStorage.tres" id="7_hxr0n"]
+[ext_resource type="Resource" uid="uid://cu5mfbycdnot5" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Factory.tres" id="8_701pj"]
+[ext_resource type="Texture2D" uid="uid://dfhpwcgt1mxxq" path="res://Textures/UI/MainUIFramework/RTSOrderHotbar.png" id="10_007am"]
+[ext_resource type="PackedScene" uid="uid://8gchljq3igyy" path="res://Objects/UI/BuildButton.tscn" id="11_2sted"]
+[ext_resource type="PackedScene" uid="uid://dodaethcf3kfh" path="res://Objects/UI/FactoryBuildButton.tscn" id="12_gos2n"]
+[ext_resource type="PackedScene" uid="uid://bsmo2cyvc5lwh" path="res://Objects/UI/OrderButton.tscn" id="14_80dfs"]
+[ext_resource type="Texture2D" uid="uid://cl6fh2l3g244m" path="res://Textures/UI/Icons/Orders/UICommandMove.png" id="15_h7bxi"]
+[ext_resource type="Texture2D" uid="uid://bgcwpokqubdwa" path="res://Textures/UI/Icons/Orders/UICommandAttack.png" id="16_pvwpg"]
+[ext_resource type="Texture2D" uid="uid://cdaxhtixp68j7" path="res://Textures/UI/Icons/Orders/UICommandStop.png" id="17_bt6fg"]
+[ext_resource type="Texture2D" uid="uid://ckuf4gdg3bub2" path="res://Textures/UI/Icons/Orders/UICommandHold.png" id="18_3smou"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lbi0b"]
+font_size = 40
+font_color = Color(1, 0.694118, 1, 1)
+outline_size = 5
+outline_color = Color(1, 0, 1, 1)
+
+[node name="UI_RTSToolbar" type="Control" node_paths=PackedStringArray("buildingButtons", "factoryBuildingButtons", "selectedUnitButtons", "orderButtons")]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -527.5
+offset_top = -187.605
+offset_right = 307.5
+offset_bottom = -7.60498
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_7pdph")
+buildingButtons = [NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton1"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton2"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton3"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton4"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton5"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton6"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton7"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton8"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton9"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton10")]
+factoryBuildingButtons = [NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton1"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton2"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton3"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton4"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton5"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton6"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton7"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton8"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton9"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton10")]
+selectedUnitButtons = [NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo1"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo2"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo3"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo4"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo5"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo6"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo7"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo8"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo9"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo10")]
+orderButtons = [NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonMove"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonAttack"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonStop"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonHold"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial1"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial2"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial3"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial4")]
+buildingList_tier1 = Array[Resource]([ExtResource("2_tdbig"), ExtResource("3_pvjvu"), ExtResource("4_dsxre"), ExtResource("5_i3o4t"), ExtResource("6_dnk6g"), ExtResource("7_hxr0n"), ExtResource("8_701pj")])
+
+[node name="MainTex" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -295.0
+offset_top = -180.0
+offset_right = 515.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 0.8)
+texture = ExtResource("1_0dq4w")
+
+[node name="OrderToolbar" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -517.5
+offset_top = -147.0
+offset_right = -297.5
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("10_007am")
+
+[node name="LabelOrder" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -153.0
+offset_top = -80.0
+offset_right = 153.0
+offset_bottom = -25.0
+grow_horizontal = 2
+mouse_filter = 1
+text = "Designate Move"
+label_settings = SubResource("LabelSettings_lbi0b")
+horizontal_alignment = 1
+
+[node name="SelectionButtonContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 617.0
+offset_top = 168.0
+offset_right = 657.0
+offset_bottom = 208.0
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SelectionButtonContainer"]
+layout_mode = 0
+offset_left = -80.0
+offset_top = -140.0
+offset_right = 286.0
+offset_bottom = 4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SelectionButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="UnitInfo1" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo2" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo3" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo4" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo5" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SelectionButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="UnitInfo6" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo7" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo8" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo9" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="UnitInfo10" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_qn0ml")]
+layout_mode = 2
+
+[node name="BuildButtonContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 617.0
+offset_top = 168.0
+offset_right = 657.0
+offset_bottom = 208.0
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BuildButtonContainer"]
+layout_mode = 0
+offset_left = -460.0
+offset_top = -140.0
+offset_right = -94.0
+offset_bottom = 4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BuildButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BuildButton1" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton2" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton3" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton4" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton5" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="BuildButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BuildButton6" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton7" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton8" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton9" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="BuildButton10" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("11_2sted")]
+layout_mode = 2
+buildInfo = ExtResource("2_tdbig")
+
+[node name="FactoryBuildButtonContainer" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_left = 617.0
+offset_top = 168.0
+offset_right = 657.0
+offset_bottom = 208.0
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FactoryBuildButtonContainer"]
+layout_mode = 0
+offset_left = -460.0
+offset_top = -140.0
+offset_right = -94.0
+offset_bottom = 4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FactoryBuildButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FactoryBuildButton1" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton2" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton3" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton4" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton5" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="FactoryBuildButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FactoryBuildButton6" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton7" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton8" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton9" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="FactoryBuildButton10" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("12_gos2n")]
+layout_mode = 2
+
+[node name="OrderHotbarContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 257.0
+offset_top = -17.0
+offset_right = 297.0
+offset_bottom = 23.0
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OrderHotbarContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = 42.0
+offset_right = -188.0
+offset_bottom = 136.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OrderHotbarContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OrderButtonMove" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("15_h7bxi")
+
+[node name="OrderButtonAttack" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("16_pvwpg")
+buttonCode = 1
+
+[node name="OrderButtonStop" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("17_bt6fg")
+buttonCode = 2
+
+[node name="OrderButtonHold" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("18_3smou")
+buttonCode = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="OrderHotbarContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OrderButtonSpecial1" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="OrderButtonSpecial2" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="OrderButtonSpecial3" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="OrderButtonSpecial4" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("14_80dfs")]
+layout_mode = 2
+mouse_filter = 1

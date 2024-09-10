@@ -1,0 +1,86 @@
+[gd_scene load_steps=16 format=3 uid="uid://de2gm8ancssa7"]
+
+[ext_resource type="Script" path="res://Scripts/UI/MainUI.cs" id="1_jtxnd"]
+[ext_resource type="PackedScene" uid="uid://c5n86pfqwpxsp" path="res://Objects/UI/UI_BuildPlacement.tscn" id="2_1hj84"]
+[ext_resource type="PackedScene" uid="uid://bfenfstvaf3vt" path="res://Objects/UI/UI_ResourceTracker.tscn" id="3_agdkk"]
+[ext_resource type="PackedScene" uid="uid://dgnlq3bybri7b" path="res://Objects/UI/UI_PersonalToolbar.tscn" id="4_miht8"]
+[ext_resource type="PackedScene" uid="uid://c2tt6j6mlckwl" path="res://Objects/UI/UI_RTSToolbar.tscn" id="5_272as"]
+[ext_resource type="PackedScene" uid="uid://b07un4314isw4" path="res://Objects/UI/UI_RTSControlGroupBar.tscn" id="6_243ub"]
+[ext_resource type="PackedScene" uid="uid://b1tc2knsc0m5e" path="res://Objects/UI/UIMinimap.tscn" id="7_oqt4b"]
+[ext_resource type="Texture2D" uid="uid://b6apsbqincpft" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapPlus.png" id="8_r2gcq"]
+[ext_resource type="Texture2D" uid="uid://bxsgxmmf4u5aj" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapPlus_Click.png" id="9_pmnhy"]
+[ext_resource type="Texture2D" uid="uid://lpwynnqv40kg" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapPlus_Hover.png" id="10_qrmeq"]
+[ext_resource type="Texture2D" uid="uid://bjeajt8fl6dwq" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus.png" id="11_3h37u"]
+[ext_resource type="Texture2D" uid="uid://dvrtj1h3xcos8" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapPlus_Disabled.png" id="11_uh58t"]
+[ext_resource type="Texture2D" uid="uid://vwt0l4lfpyld" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus_Click.png" id="12_fcr7g"]
+[ext_resource type="Texture2D" uid="uid://cu2w63r68fdkm" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus_Hover.png" id="13_4uj1k"]
+[ext_resource type="Texture2D" uid="uid://bbjg2kwgfvp38" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus_Disabled.png" id="14_8v02w"]
+
+[node name="MainUI" type="CanvasLayer"]
+script = ExtResource("1_jtxnd")
+ghostPlacementScene = ExtResource("2_1hj84")
+
+[node name="UI_ResourceTracker" parent="." instance=ExtResource("3_agdkk")]
+
+[node name="UI_PersonalToolbar" parent="." instance=ExtResource("4_miht8")]
+offset_left = -377.5
+offset_right = 377.5
+
+[node name="UI_RTSToolbar" parent="." instance=ExtResource("5_272as")]
+visible = false
+
+[node name="UI_ControlGroupBar" parent="." instance=ExtResource("6_243ub")]
+visible = false
+
+[node name="UI_MinimapZoomPlus" type="TextureButton" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -255.0
+offset_top = -299.0
+offset_right = -145.0
+offset_bottom = -269.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("8_r2gcq")
+texture_pressed = ExtResource("9_pmnhy")
+texture_hover = ExtResource("10_qrmeq")
+texture_disabled = ExtResource("11_uh58t")
+
+[node name="UI_MinimapZoomMinus" type="TextureButton" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -385.0
+offset_top = -299.0
+offset_right = -275.0
+offset_bottom = -269.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("11_3h37u")
+texture_pressed = ExtResource("12_fcr7g")
+texture_hover = ExtResource("13_4uj1k")
+texture_disabled = ExtResource("14_8v02w")
+
+[node name="UI_Minimap" parent="." instance=ExtResource("7_oqt4b")]
+
+[connection signal="mouse_entered" from="UI_ResourceTracker" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_ResourceTracker" to="." method="OnMouseExited"]
+[connection signal="mouse_entered" from="UI_PersonalToolbar" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_PersonalToolbar" to="." method="OnMouseExited"]
+[connection signal="mouse_entered" from="UI_RTSToolbar" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_RTSToolbar" to="." method="OnMouseExited"]
+[connection signal="mouse_entered" from="UI_ControlGroupBar" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_ControlGroupBar" to="." method="OnMouseExited"]
+[connection signal="mouse_entered" from="UI_MinimapZoomPlus" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_MinimapZoomPlus" to="." method="OnMouseExited"]
+[connection signal="pressed" from="UI_MinimapZoomPlus" to="." method="OnMinimapZoomPlusButtonPressed"]
+[connection signal="mouse_entered" from="UI_MinimapZoomMinus" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_MinimapZoomMinus" to="." method="OnMouseExited"]
+[connection signal="pressed" from="UI_MinimapZoomMinus" to="." method="OnMinimapZoomMinusButtonPressed"]
+[connection signal="mouse_entered" from="UI_Minimap" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_Minimap" to="." method="OnMouseExited"]

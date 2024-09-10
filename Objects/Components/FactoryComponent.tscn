@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cm07ojc8e0ev4"]
+
+[ext_resource type="Script" path="res://Scripts/Components/FactoryComponent.cs" id="1_3k1ex"]
+[ext_resource type="Texture2D" uid="uid://dvt7occ8reyin" path="res://Textures/Buildings/EnergyStorage.png" id="2_p1d2e"]
+[ext_resource type="Shader" path="res://Textures/Shaders/TestShader.gdshader" id="3_nonub"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5xjjr"]
+shader = ExtResource("3_nonub")
+shader_parameter/keep_luminance = false
+shader_parameter/color_start = Color(0, 0.972549, 0.972549, 1)
+shader_parameter/start_pos = 0.0
+shader_parameter/color_mid = Color(0, 0.545098, 0.27451, 1)
+shader_parameter/mid_pos = 0.62
+shader_parameter/color_end = Color(0.517647, 0.701961, 1, 1)
+shader_parameter/end_pos = 0.99
+shader_parameter/midpos_enabled = true
+shader_parameter/effect_filling = 1.0
+
+[node name="FactoryComponent" type="Node2D"]
+script = ExtResource("1_3k1ex")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_p1d2e")
+
+[node name="SpriteScaffold" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_5xjjr")
+texture = ExtResource("2_p1d2e")
+
+[node name="BuildProgressBar" type="ProgressBar" parent="." groups=["Blueprint"]]
+modulate = Color(1, 0.423529, 0.501961, 1)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -55.0
+grow_horizontal = 2
+value = 50.0
+show_percentage = false

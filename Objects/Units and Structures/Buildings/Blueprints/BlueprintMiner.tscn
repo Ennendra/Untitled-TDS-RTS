@@ -1,0 +1,81 @@
+[gd_scene load_steps=13 format=3 uid="uid://bln8plmd8bvml"]
+
+[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BlueprintParent.cs" id="1_q26le"]
+[ext_resource type="PackedScene" uid="uid://b8wtdlbxd7cm6" path="res://Objects/Units and Structures/Buildings/BuildingMiner.tscn" id="2_msq2o"]
+[ext_resource type="Texture2D" uid="uid://fdos3cgmbhrl" path="res://Textures/Buildings/MinerTest.png" id="3_qerxq"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_d5gy3"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_vpfwi"]
+[ext_resource type="Shader" path="res://Textures/Shaders/TestShader.gdshader" id="6_fe0bv"]
+[ext_resource type="Texture2D" uid="uid://dvt7occ8reyin" path="res://Textures/Buildings/EnergyStorage.png" id="7_6wi1w"]
+[ext_resource type="Texture2D" uid="uid://deaejpuahshey" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding2X2.png" id="8_f0um2"]
+[ext_resource type="Resource" uid="uid://bko37qjwa3b3t" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Miner.tres" id="8_rlixu"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="10_43yl4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bae0p"]
+radius = 43.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qk63k"]
+shader = ExtResource("6_fe0bv")
+shader_parameter/keep_luminance = false
+shader_parameter/color_start = Color(0, 0.972549, 0.972549, 1)
+shader_parameter/start_pos = 0.0
+shader_parameter/color_mid = Color(0, 0.545098, 0.27451, 1)
+shader_parameter/mid_pos = 0.62
+shader_parameter/color_end = Color(0.517647, 0.701961, 1, 1)
+shader_parameter/end_pos = 0.99
+shader_parameter/midpos_enabled = true
+shader_parameter/effect_filling = 1.0
+
+[node name="BlueprintMiner" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent", "buildingObstacleBounds") groups=["Blueprint"]]
+collision_layer = 131074
+collision_mask = 0
+script = ExtResource("1_q26le")
+objectToSpawn = ExtResource("2_msq2o")
+damageComponent = NodePath("DamageComponent")
+factionComponent = NodePath("FactionComponent")
+buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_bae0p")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_qerxq")
+
+[node name="SpriteScaffold" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_qk63k")
+texture = ExtResource("7_6wi1w")
+
+[node name="BuildProgressBar" type="ProgressBar" parent="."]
+modulate = Color(1, 0, 0, 1)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+value = 50.0
+show_percentage = false
+
+[node name="DamageComponent" parent="." instance=ExtResource("4_d5gy3")]
+healthBarOffset = 50.0
+maxHealth = 90.0
+
+[node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("CircleShape2D_bae0p")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("5_vpfwi")]
+damageComponent = NodePath("../DamageComponent")
+selectedTexture = ExtResource("8_f0um2")
+unitInfo = ExtResource("8_rlixu")
+
+[node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("CircleShape2D_bae0p")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("10_43yl4")]
+markerTag = 2
+
+[node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(50, 50, 50, -50, -50, -50, -50, 50)

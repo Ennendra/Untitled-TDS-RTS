@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsyfqrrdmvel1"]
+
+[ext_resource type="Texture2D" uid="uid://b25788itue6g8" path="res://Textures/Units/Unit1/Unit1Bottom.png" id="1_632gt"]
+[ext_resource type="Script" path="res://Scripts/UI/UI_SelectedUnitInfo.cs" id="1_m7j2r"]
+
+[node name="UI_SelectedUnitInfo" type="Button"]
+custom_minimum_size = Vector2(70, 70)
+mouse_filter = 1
+theme_override_constants/outline_size = 1
+theme_override_constants/h_separation = 0
+text_overrun_behavior = 1
+script = ExtResource("1_m7j2r")
+
+[node name="UnitIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 70.0
+texture = ExtResource("1_632gt")
+expand_mode = 1
+
+[node name="UnitAmount" type="Label" parent="."]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 70.0
+text = "12"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[connection signal="pressed" from="." to="." method="OnButtonPressed"]

@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://b07un4314isw4"]
+
+[ext_resource type="PackedScene" uid="uid://x4gxvyts0ih4" path="res://Objects/UI/UI_ControlGroupButton.tscn" id="1_fjtr6"]
+[ext_resource type="Script" path="res://Scripts/UI/UI_RTSControlGroupBar.cs" id="1_sfdga"]
+
+[node name="UI_ControlGroupBar" type="Control" node_paths=PackedStringArray("cgButtons")]
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -275.0
+offset_bottom = 275.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("1_sfdga")
+cgButtons = [NodePath("VBoxContainer/ControlGroupButton1"), NodePath("VBoxContainer/ControlGroupButton2"), NodePath("VBoxContainer/ControlGroupButton3"), NodePath("VBoxContainer/ControlGroupButton4"), NodePath("VBoxContainer/ControlGroupButton5"), NodePath("VBoxContainer/ControlGroupButton6"), NodePath("VBoxContainer/ControlGroupButton7"), NodePath("VBoxContainer/ControlGroupButton8"), NodePath("VBoxContainer/ControlGroupButton9"), NodePath("VBoxContainer/ControlGroupButton10")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -268.0
+offset_bottom = 268.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ControlGroupButton1" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton2" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton3" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton4" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton5" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton6" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton7" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton8" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton9" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2
+
+[node name="ControlGroupButton10" parent="VBoxContainer" instance=ExtResource("1_fjtr6")]
+layout_mode = 2

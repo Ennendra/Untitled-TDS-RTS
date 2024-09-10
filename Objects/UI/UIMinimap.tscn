@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://b1tc2knsc0m5e"]
+
+[ext_resource type="Script" path="res://Scripts/UI/UI_Minimap.cs" id="1_1s8hk"]
+[ext_resource type="Texture2D" uid="uid://cmp8omxw1mvj0" path="res://Textures/UI/MainUIFramework/UIMinimap.png" id="2_mbfd7"]
+[ext_resource type="Texture2D" uid="uid://cmkivamaomlxu" path="res://Textures/UI/MainUIFramework/UIMinimapGrid.png" id="3_70fdk"]
+[ext_resource type="Texture2D" uid="uid://b8xm85pjry1sy" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_Player.png" id="4_wi2sf"]
+[ext_resource type="Texture2D" uid="uid://b5h0rd13ttetu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_AllyUnit.png" id="5_4kfjx"]
+[ext_resource type="Texture2D" uid="uid://b5tjnio50081h" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_AllyBuilding.png" id="6_ids5h"]
+[ext_resource type="Texture2D" uid="uid://ce5wsujjrujxu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_EnemyUnit.png" id="7_6miv6"]
+[ext_resource type="Texture2D" uid="uid://cqqvdhookah3a" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_EnemyBuilding.png" id="8_0ysu1"]
+
+[node name="UI_Minimap" type="MarginContainer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 400.0
+offset_top = -270.0
+offset_right = 670.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_1s8hk")
+initialMinimapDrawSize = Vector2(250, 250)
+initialMinimapDrawOffset = Vector2(10, 10)
+markerPlayer = ExtResource("4_wi2sf")
+markerAllyUnit = ExtResource("5_4kfjx")
+markerAllyBuilding = ExtResource("6_ids5h")
+markerEnemyUnit = ExtResource("7_6miv6")
+markerEnemyBuilding = ExtResource("8_0ysu1")
+
+[node name="BackgroundFrame" type="NinePatchRect" parent="."]
+z_index = -1
+custom_minimum_size = Vector2(260, 260)
+layout_mode = 2
+texture = ExtResource("2_mbfd7")
+region_rect = Rect2(8, 8, 254, 254)
+patch_margin_left = 40
+patch_margin_top = 40
+patch_margin_right = 40
+patch_margin_bottom = 40
+
+[node name="MapSpace" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Grid" type="TextureRect" parent="MapSpace"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("3_70fdk")
+stretch_mode = 1
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(1500, 1500)
+
+[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+position = Vector2(1200, 730)

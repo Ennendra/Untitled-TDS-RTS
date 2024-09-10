@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://blgjco20x48di"]
+
+[ext_resource type="Script" path="res://Scripts/UI/ToolbarButton.cs" id="1_cjsu3"]
+
+[node name="ButtonTool1" type="Button"]
+modulate = Color(0, 1, 1, 1)
+custom_minimum_size = Vector2(70, 70)
+offset_right = 49.0
+offset_bottom = 49.0
+mouse_filter = 1
+action_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_cjsu3")
+isButtonTool = true
+
+[connection signal="pressed" from="." to="." method="OnButtonPressed"]

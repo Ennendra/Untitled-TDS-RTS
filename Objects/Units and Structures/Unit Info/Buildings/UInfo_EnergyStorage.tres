@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://ctsoihcu8ksgs"]
+
+[ext_resource type="Texture2D" uid="uid://dvt7occ8reyin" path="res://Textures/Buildings/EnergyStorage.png" id="1_5av4d"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_n2734"]
+
+[resource]
+script = ExtResource("2_n2734")
+unitName = "Energy Storage"
+unitDescription = "Increases maximum energy storage capacity"
+energyCost = 100.0
+metalCost = 100.0
+iconTex = ExtResource("1_5av4d")
+unitInfoType = 4

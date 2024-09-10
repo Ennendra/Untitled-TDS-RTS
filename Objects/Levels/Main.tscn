@@ -1,0 +1,172 @@
+[gd_scene load_steps=18 format=3 uid="uid://bvji7q1gdfv36"]
+
+[ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
+[ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
+[ext_resource type="Texture2D" uid="uid://b5bi526386u1m" path="res://Textures/Tilesets/grasstile.png" id="3_lxxcb"]
+[ext_resource type="PackedScene" uid="uid://po7nu1qpdrka" path="res://Objects/Units and Structures/Buildings/BuildingGenerator.tscn" id="4_k817o"]
+[ext_resource type="PackedScene" uid="uid://dpyxe4fuquhmf" path="res://Objects/Units and Structures/Buildings/BuildingRefinery.tscn" id="5_oydl6"]
+[ext_resource type="PackedScene" uid="uid://d8rp6yirf64h" path="res://Objects/Units and Structures/Buildings/BuildingNetworkHub.tscn" id="6_ff2od"]
+[ext_resource type="PackedScene" uid="uid://de2gm8ancssa7" path="res://Objects/UI/MainUI.tscn" id="7_3pqy3"]
+[ext_resource type="PackedScene" uid="uid://biil6hteswsdn" path="res://Objects/Units and Structures/Buildings/BuildingMetalStorage.tscn" id="9_qek2b"]
+[ext_resource type="PackedScene" uid="uid://b6n5rl53lqn3g" path="res://Objects/Units and Structures/Buildings/BuildingEnergyStorage.tscn" id="10_2yq5g"]
+[ext_resource type="PackedScene" uid="uid://6akwd6vee46k" path="res://Objects/Units and Structures/Units/Unit1.tscn" id="11_vy2n2"]
+[ext_resource type="PackedScene" uid="uid://rggmpcd6oh4n" path="res://Objects/Other/Obstacle.tscn" id="12_e6phe"]
+[ext_resource type="PackedScene" uid="uid://cn41rvyxe41sf" path="res://Objects/Other/MetalNode.tscn" id="12_sn534"]
+[ext_resource type="PackedScene" uid="uid://bajnlaslouu4e" path="res://Objects/UI/RTSController.tscn" id="13_87ivr"]
+[ext_resource type="PackedScene" uid="uid://b8wtdlbxd7cm6" path="res://Objects/Units and Structures/Buildings/BuildingMiner.tscn" id="14_m5tpb"]
+[ext_resource type="PackedScene" uid="uid://dl8s3u8cffmp2" path="res://Objects/Units and Structures/Buildings/BuildingFactory.tscn" id="15_dafo8"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_eb8bk"]
+vertices = PackedVector2Array(1865, 1265, -1940, 1265, -740, -90, 1865, -2190, -810, -90, -740, -460, -1940, -2190, -1010, -460, -1010, -390, -810, -390)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 2, 1), PackedInt32Array(3, 2, 5), PackedInt32Array(6, 3, 5, 7), PackedInt32Array(1, 6, 7, 8), PackedInt32Array(4, 1, 8, 9)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-1950, -2200, 1875, -2200, 1875, 1275, -1950, 1275), PackedVector2Array(-750, -100, -750, -450, -1000, -450, -1000, -400, -800, -400, -800, -100)])
+source_geometry_mode = 1
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[sub_resource type="TileSet" id="TileSet_d45m0"]
+tile_size = Vector2i(50, 50)
+
+[node name="Main" type="Node2D" node_paths=PackedStringArray("navigationRegion")]
+script = ExtResource("1_slh8m")
+navigationRegion = NodePath("NavigationRegion2D")
+top = -2000.0
+left = -2000.0
+bottom = 4000.0
+right = 2000.0
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_eb8bk")
+
+[node name="MainUIPersonal" parent="." instance=ExtResource("7_3pqy3")]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+z_index = -1
+texture_repeat = 2
+texture = ExtResource("3_lxxcb")
+region_enabled = true
+region_rect = Rect2(0, 0, 80000, 80000)
+
+[node name="BuildingNetworkHub" parent="." instance=ExtResource("6_ff2od")]
+position = Vector2(400, -250)
+
+[node name="BuildingRefinery" parent="." instance=ExtResource("5_oydl6")]
+position = Vector2(525, -25)
+
+[node name="BuildingRefinery2" parent="." instance=ExtResource("5_oydl6")]
+position = Vector2(675, -25)
+
+[node name="Player" parent="." instance=ExtResource("1_ndp2k")]
+position = Vector2(-300, -300)
+
+[node name="RTSController" parent="." instance=ExtResource("13_87ivr")]
+
+[node name="BuildingGenerator3" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(525, -275)
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_d45m0")
+format = 2
+
+[node name="BuildingMetalStorage" parent="." instance=ExtResource("9_qek2b")]
+position = Vector2(450, -650)
+
+[node name="BuildingMetalStorage2" parent="." instance=ExtResource("9_qek2b")]
+position = Vector2(550, -650)
+
+[node name="BuildingEnergyStorage" parent="." instance=ExtResource("10_2yq5g")]
+position = Vector2(450, -550)
+
+[node name="BuildingEnergyStorage2" parent="." instance=ExtResource("10_2yq5g")]
+position = Vector2(550, -550)
+
+[node name="MetalNode" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(50, -450)
+
+[node name="MetalNode2" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(50, -650)
+
+[node name="Obstacle" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-775, -275)
+
+[node name="Obstacle2" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-775, -325)
+
+[node name="Obstacle3" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-775, -225)
+
+[node name="Obstacle4" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-775, -175)
+
+[node name="Obstacle5" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-775, -125)
+
+[node name="Obstacle6" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-775, -375)
+
+[node name="Obstacle7" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-775, -425)
+
+[node name="Obstacle8" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-825, -425)
+
+[node name="Obstacle9" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-875, -425)
+
+[node name="Obstacle10" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-925, -425)
+
+[node name="Obstacle11" parent="." instance=ExtResource("12_e6phe")]
+position = Vector2(-975, -425)
+
+[node name="Unit1" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1900, -300)
+factionOverride = 2
+
+[node name="Unit2" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-475, -150)
+factionOverride = 1
+
+[node name="Unit3" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-475, -225)
+
+[node name="Unit4" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-550, -75)
+
+[node name="Unit5" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-600, -175)
+
+[node name="Unit6" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1775, -375)
+factionOverride = 2
+
+[node name="Unit7" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1775, -275)
+factionOverride = 2
+
+[node name="BuildingMiner" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(50, -450)
+
+[node name="BuildingMiner2" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(50, -650)
+
+[node name="BuildingGenerator" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(675, -275)
+
+[node name="BuildingGenerator2" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(675, -425)
+
+[node name="BuildingGenerator4" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(525, -425)
+
+[node name="BuildingFactory" parent="." instance=ExtResource("15_dafo8")]
+position = Vector2(200, -225)
+
+[node name="BuildingFactory2" parent="." instance=ExtResource("15_dafo8")]
+position = Vector2(25, -225)
+
+[connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
+[connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]

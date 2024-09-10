@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dfofgc4d8mwtx"]
+
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="1_66mvb"]
+[ext_resource type="Texture2D" uid="uid://cushumnxn0gh7" path="res://Textures/Buildings/NetworkHub.png" id="1_vqfl0"]
+
+[resource]
+script = ExtResource("1_66mvb")
+unitName = "Network Pylon"
+unitDescription = "Required to build and operate most other buildings"
+energyCost = 100.0
+metalCost = 60.0
+iconTex = ExtResource("1_vqfl0")
+unitInfoType = 4

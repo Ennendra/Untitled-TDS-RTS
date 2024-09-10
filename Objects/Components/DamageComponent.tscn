@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://3g01cgkmgeug"]
+
+[ext_resource type="Script" path="res://Scripts/Components/DamageComponent.cs" id="1_w1wrq"]
+
+[node name="DamageComponent" type="Area2D" node_paths=PackedStringArray("healthBar") groups=["DamageComponent"]]
+editor_description = "Component which contains health data and receives damage"
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_w1wrq")
+healthBar = NodePath("ProgressBar")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+modulate = Color(1, 0, 0.380392, 1)
+custom_minimum_size = Vector2(80, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_right = 40.0
+offset_bottom = 10.0
+grow_horizontal = 2
+value = 50.0
+show_percentage = false

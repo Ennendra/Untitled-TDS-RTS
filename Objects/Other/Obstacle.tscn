@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://rggmpcd6oh4n"]
+
+[ext_resource type="Texture2D" uid="uid://du5yfbmcmag00" path="res://Textures/Tilesets/Obstacle.png" id="1_um838"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nne40"]
+size = Vector2(50, 50)
+
+[node name="Obstacle" type="Area2D" groups=["EnvironmentObstacles"]]
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nne40")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_um838")
+
+[node name="ObstacleBounds" type="Polygon2D" parent="."]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(25, 25, 25, -25, -25, -25, -25, 25)

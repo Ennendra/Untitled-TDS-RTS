@@ -1,0 +1,105 @@
+[gd_scene load_steps=17 format=3 uid="uid://m05bm446wc85"]
+
+[ext_resource type="Script" path="res://Scripts/Player.cs" id="1_npw5l"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="2_rdpi8"]
+[ext_resource type="Texture2D" uid="uid://b0oh22ujgl8mg" path="res://Textures/Units/Player/PlayerBottom.png" id="2_y0vag"]
+[ext_resource type="PackedScene" uid="uid://dog0l7qteqwmk" path="res://Objects/Components/AimingComponent.tscn" id="3_0kvr3"]
+[ext_resource type="Texture2D" uid="uid://m4l8tww12m2n" path="res://Textures/Units/Player/PlayerTop.png" id="3_k1okn"]
+[ext_resource type="PackedScene" uid="uid://c7n24rpd3x7y5" path="res://Objects/Components/MovementComponent.tscn" id="3_xsw3q"]
+[ext_resource type="PackedScene" uid="uid://bqjnwtxim66nf" path="res://Objects/Weapons/WeaponTest.tscn" id="5_aoebt"]
+[ext_resource type="PackedScene" uid="uid://t2es6slkip7b" path="res://Objects/Tools/ToolBuilder1.tscn" id="6_itfw1"]
+[ext_resource type="Texture2D" uid="uid://bd6uov1kx565x" path="res://Textures/UI/CursorAim.png" id="7_8ipyc"]
+[ext_resource type="PackedScene" uid="uid://b7ly6ppeex6i7" path="res://Objects/Tools/ToolReclaimer1.tscn" id="7_v66lu"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="8_sj1xu"]
+[ext_resource type="PackedScene" uid="uid://dasjfs80ef7q" path="res://Objects/Components/ResourceComponent.tscn" id="9_kxgj0"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="13_7cyop"]
+[ext_resource type="PackedScene" uid="uid://c5n86pfqwpxsp" path="res://Objects/UI/UI_BuildPlacement.tscn" id="13_uxuhc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pk0mf"]
+radius = 30.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0prfk"]
+radius = 25.0
+
+[node name="Player" type="Area2D" node_paths=PackedStringArray("damageComponent", "aimComponent", "movementComponent", "factionComponent", "resourceComponent", "spriteAimCursor", "weaponFolder", "toolFolder") groups=["Player"]]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_npw5l")
+damageComponent = NodePath("DamageComponent")
+aimComponent = NodePath("AimingComponent")
+movementComponent = NodePath("MovementComponent")
+factionComponent = NodePath("FactionComponent")
+resourceComponent = NodePath("ResourceComponent")
+spriteAimCursor = NodePath("AimingComponent/AimingCursor")
+weaponFolder = NodePath("AimingComponent/Weapons")
+toolFolder = NodePath("AimingComponent/Tools")
+
+[node name="BottomSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_y0vag")
+
+[node name="AimingComponent" parent="." instance=ExtResource("3_0kvr3")]
+aimRotationFactor = 5.0
+
+[node name="SpriteTop" type="Sprite2D" parent="AimingComponent"]
+texture = ExtResource("3_k1okn")
+
+[node name="Weapons" type="Node2D" parent="AimingComponent"]
+
+[node name="WeaponTest" parent="AimingComponent/Weapons" instance=ExtResource("5_aoebt")]
+
+[node name="Tools" type="Node2D" parent="AimingComponent"]
+position = Vector2(10, -12.5)
+
+[node name="ToolBuilder1" parent="AimingComponent/Tools" instance=ExtResource("6_itfw1")]
+
+[node name="ToolReclaimer1" parent="AimingComponent/Tools" node_paths=PackedStringArray("componentToIgnore") instance=ExtResource("7_v66lu")]
+componentToIgnore = NodePath("../../../DamageComponent")
+maxReclaimRate = 55.0
+
+[node name="AimingCursor" type="Sprite2D" parent="AimingComponent"]
+position = Vector2(100, 0)
+texture = ExtResource("7_8ipyc")
+
+[node name="DamageComponent" parent="." instance=ExtResource("2_rdpi8")]
+healthBarDisplayed = false
+maxHealth = 250.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("CircleShape2D_pk0mf")
+
+[node name="MovementComponent" parent="." node_paths=PackedStringArray("legSprite") instance=ExtResource("3_xsw3q")]
+maxSpeed = 250.0
+accelerateFactor = 3.0
+legSprite = NodePath("../BottomSprite")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementComponent"]
+shape = SubResource("CircleShape2D_pk0mf")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("8_sj1xu")]
+damageComponent = NodePath("../DamageComponent")
+isAUnit = true
+isPlayer = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("CircleShape2D_pk0mf")
+
+[node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("9_kxgj0")]
+factionComponent = NodePath("../FactionComponent")
+genEnergy = 8.0
+genMetal = 4.0
+stoEnergy = 50.0
+stoMetal = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ResourceComponent"]
+shape = SubResource("CircleShape2D_0prfk")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("13_7cyop")]
+
+[node name="Camera" type="Camera2D" parent="."]
+
+[node name="UI_BuildPlacement" parent="." instance=ExtResource("13_uxuhc")]
+
+[connection signal="child_entered_tree" from="AimingComponent/Weapons" to="." method="OnWeaponAdded"]
+[connection signal="child_exiting_tree" from="AimingComponent/Weapons" to="." method="OnWeaponRemoved"]
+[connection signal="child_entered_tree" from="AimingComponent/Tools" to="." method="OnToolAdded"]
+[connection signal="child_exiting_tree" from="AimingComponent/Tools" to="." method="OnToolRemoved"]

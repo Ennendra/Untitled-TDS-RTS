@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://dpyxe4fuquhmf"]
+
+[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_7bxy3"]
+[ext_resource type="Texture2D" uid="uid://bhe4bd1nkhemy" path="res://Textures/Buildings/Refinery.png" id="3_my4ar"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_avq35"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_erxog"]
+[ext_resource type="Texture2D" uid="uid://b24bbmw5yojij" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding3X3.png" id="5_la666"]
+[ext_resource type="Resource" uid="uid://bs6pt7msq1ki" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Refinery.tres" id="5_rb1gm"]
+[ext_resource type="PackedScene" uid="uid://dasjfs80ef7q" path="res://Objects/Components/ResourceComponent.tscn" id="6_pfpjb"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="8_a8eip"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nh6i5"]
+size = Vector2(135, 135)
+
+[node name="BuildingRefinery" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "resourceComponent", "factionComponent") groups=["Building"]]
+position = Vector2(25, 25)
+collision_layer = 2
+collision_mask = 16384
+script = ExtResource("1_7bxy3")
+energyReclaimValue = 220.0
+metalReclaimValue = 100.0
+buildingType = 2
+buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+damageComponent = NodePath("DamageComponent")
+resourceComponent = NodePath("ResourceComponent")
+factionComponent = NodePath("FactionComponent")
+
+[node name="MainSprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_my4ar")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nh6i5")
+
+[node name="DamageComponent" parent="." instance=ExtResource("4_avq35")]
+healthBarOffset = 75.0
+maxHealth = 180.0
+
+[node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("RectangleShape2D_nh6i5")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("5_erxog")]
+damageComponent = NodePath("../DamageComponent")
+selectedTexture = ExtResource("5_la666")
+unitInfo = ExtResource("5_rb1gm")
+
+[node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("RectangleShape2D_nh6i5")
+
+[node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("6_pfpjb")]
+factionComponent = NodePath("../FactionComponent")
+genMetal = 2.0
+stoMetal = 10.0
+conEnergy = 2.0
+conRawMetal = 2.0
+
+[node name="Collider" type="CollisionShape2D" parent="ResourceComponent"]
+shape = SubResource("RectangleShape2D_nh6i5")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("8_a8eip")]
+markerTag = 2
+
+[node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(75, 75, 75, -75, -75, -75, -75, 75)

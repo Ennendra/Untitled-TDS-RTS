@@ -1,0 +1,133 @@
+[gd_scene load_steps=14 format=3 uid="uid://bfenfstvaf3vt"]
+
+[ext_resource type="Texture2D" uid="uid://cf2q7olmwnbe0" path="res://Textures/UI/MainUIFramework/ResourceCounter/UIResourceCounterV2.png" id="1_2ju0u"]
+[ext_resource type="Script" path="res://Scripts/UI/UI_ResourceTracker.cs" id="1_wp5fj"]
+[ext_resource type="Texture2D" uid="uid://cfwt2fbtrpu4v" path="res://Textures/UI/MainUIFramework/ResourceCounter/RPB_EnergyBack.png" id="2_1r8ig"]
+[ext_resource type="Texture2D" uid="uid://bdqme1gyo1to1" path="res://Textures/UI/MainUIFramework/ResourceCounter/RPB_EnergyFront.png" id="3_o37gg"]
+[ext_resource type="Texture2D" uid="uid://diagc0bu5axky" path="res://Textures/UI/MainUIFramework/ResourceCounter/RPB_EnergyFill.png" id="4_1l04n"]
+[ext_resource type="Texture2D" uid="uid://bobcicdyfo7c5" path="res://Textures/UI/MainUIFramework/ResourceCounter/RPB_MetalBack.png" id="5_tvgy2"]
+[ext_resource type="Texture2D" uid="uid://bfm4f2hoa0ydh" path="res://Textures/UI/MainUIFramework/ResourceCounter/RPB_MetalFront.png" id="6_xqfkv"]
+[ext_resource type="Texture2D" uid="uid://yreuwupd0fpk" path="res://Textures/UI/MainUIFramework/ResourceCounter/RPB_MetalFill.png" id="7_qxeww"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_m4bla"]
+font_size = 32
+outline_size = 1
+outline_color = Color(1, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mhn4d"]
+font_size = 32
+outline_size = 1
+outline_color = Color(0, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7uavn"]
+font_size = 20
+font_color = Color(0, 1, 0, 1)
+outline_color = Color(1, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_75ce2"]
+font_size = 20
+font_color = Color(0.266667, 1, 0, 1)
+outline_color = Color(0, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vctym"]
+font_size = 32
+font_color = Color(0, 1, 0, 1)
+
+[node name="UI_ResourceTracker" type="Control"]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+script = ExtResource("1_wp5fj")
+
+[node name="MainTex" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_right = 200.0
+offset_bottom = 40.0
+grow_horizontal = 2
+texture = ExtResource("1_2ju0u")
+stretch_mode = 2
+
+[node name="LblEnergyCount" type="Label" parent="."]
+layout_mode = 0
+offset_left = -258.0
+offset_top = 7.0
+offset_right = -102.0
+offset_bottom = 52.0
+text = "1000/1000"
+label_settings = SubResource("LabelSettings_m4bla")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblMetalCount" type="Label" parent="."]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 7.0
+offset_right = 306.0
+offset_bottom = 52.0
+text = "1000/1000"
+label_settings = SubResource("LabelSettings_mhn4d")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblEnergyVariance" type="Label" parent="."]
+layout_mode = 0
+offset_left = -63.0
+offset_top = 53.0
+offset_right = 14.0
+offset_bottom = 81.0
+text = "100"
+label_settings = SubResource("LabelSettings_7uavn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblMetalVariance" type="Label" parent="."]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 53.0
+offset_right = 102.0
+offset_bottom = 81.0
+text = "100"
+label_settings = SubResource("LabelSettings_75ce2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblResourcePerformance" type="Label" parent="."]
+layout_mode = 0
+offset_left = -34.0
+offset_top = 7.0
+offset_right = 73.0
+offset_bottom = 52.0
+text = "100%"
+label_settings = SubResource("LabelSettings_vctym")
+horizontal_alignment = 1
+
+[node name="texEnergyPercent" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = -288.0
+offset_top = 57.0
+offset_right = -73.0
+offset_bottom = 107.0
+scale = Vector2(1, 0.4)
+texture_under = ExtResource("2_1r8ig")
+texture_over = ExtResource("3_o37gg")
+texture_progress = ExtResource("4_1l04n")
+
+[node name="texMetalPercent" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 57.0
+offset_right = 328.0
+offset_bottom = 107.0
+scale = Vector2(1, 0.4)
+texture_under = ExtResource("5_tvgy2")
+texture_over = ExtResource("6_xqfkv")
+texture_progress = ExtResource("7_qxeww")

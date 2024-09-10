@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://b2wria38uo7gh"]
+
+[ext_resource type="Texture2D" uid="uid://p37horjv3oax" path="res://Textures/Buildings/Generator.png" id="1_25uic"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="1_xkshd"]
+
+[resource]
+script = ExtResource("1_xkshd")
+unitName = "Generator"
+unitDescription = "Passively generates energy"
+energyCost = 150.0
+metalCost = 60.0
+iconTex = ExtResource("1_25uic")
+unitInfoType = 4

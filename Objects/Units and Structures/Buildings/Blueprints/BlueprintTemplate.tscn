@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://dsmangyv0e48c"]
+
+[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BlueprintParent.cs" id="1_v2vrm"]
+[ext_resource type="PackedScene" uid="uid://b6n5rl53lqn3g" path="res://Objects/Units and Structures/Buildings/BuildingEnergyStorage.tscn" id="2_dredr"]
+[ext_resource type="Texture2D" uid="uid://dvt7occ8reyin" path="res://Textures/Buildings/EnergyStorage.png" id="3_5kv11"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_x0g5q"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_71hg5"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="6_he8ji"]
+[ext_resource type="Shader" path="res://Textures/Shaders/TestShader.gdshader" id="6_ykb41"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kjpm3"]
+shader = ExtResource("6_ykb41")
+shader_parameter/keep_luminance = false
+shader_parameter/color_start = Color(0, 0.972549, 0.972549, 1)
+shader_parameter/start_pos = 0.0
+shader_parameter/color_mid = Color(0, 0.545098, 0.27451, 1)
+shader_parameter/mid_pos = 0.62
+shader_parameter/color_end = Color(0.517647, 0.701961, 1, 1)
+shader_parameter/end_pos = 0.99
+shader_parameter/midpos_enabled = true
+shader_parameter/effect_filling = 1.0
+
+[node name="Blueprint" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent") groups=["Blueprint"]]
+collision_layer = 131074
+collision_mask = 0
+script = ExtResource("1_v2vrm")
+objectToSpawn = ExtResource("2_dredr")
+damageComponent = NodePath("DamageComponent")
+factionComponent = NodePath("FactionComponent")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_5kv11")
+
+[node name="BuildProgressBar" type="ProgressBar" parent="."]
+modulate = Color(1, 0, 0, 1)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+value = 50.0
+show_percentage = false
+
+[node name="DamageComponent" parent="." instance=ExtResource("4_x0g5q")]
+healthBarOffset = 50.0
+maxHealth = 50.0
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("5_71hg5")]
+damageComponent = NodePath("../DamageComponent")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("6_he8ji")]
+markerTag = 2
+
+[node name="SpriteScaffold" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_kjpm3")
+texture = ExtResource("3_5kv11")

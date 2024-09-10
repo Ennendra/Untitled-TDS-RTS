@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsmo2cyvc5lwh"]
+
+[ext_resource type="Script" path="res://Scripts/UI/OrderButton.cs" id="1_uef15"]
+
+[node name="OrderButton" type="Button"]
+custom_minimum_size = Vector2(45, 45)
+expand_icon = true
+script = ExtResource("1_uef15")
+
+[connection signal="pressed" from="." to="." method="OnButtonPressed"]

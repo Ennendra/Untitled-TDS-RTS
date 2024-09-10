@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bb2ewtpnqjdv1"]
+
+[ext_resource type="Texture2D" uid="uid://b25788itue6g8" path="res://Textures/Units/Unit1/Unit1Bottom.png" id="1_0fmpj"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_yqkxb"]
+
+[resource]
+script = ExtResource("2_yqkxb")
+unitName = "Unit1"
+unitDescription = "Small light vehicle with rapid-firing weapons"
+energyCost = 80.0
+metalCost = 40.0
+iconTex = ExtResource("1_0fmpj")

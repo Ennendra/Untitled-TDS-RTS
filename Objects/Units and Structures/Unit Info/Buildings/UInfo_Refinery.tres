@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bs6pt7msq1ki"]
+
+[ext_resource type="Texture2D" uid="uid://bhe4bd1nkhemy" path="res://Textures/Buildings/Refinery.png" id="1_4pfve"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="1_anwif"]
+
+[resource]
+script = ExtResource("1_anwif")
+unitName = "Refinery"
+unitDescription = "Takes raw metal mined from a Miner and converts it into usable metal. One refinery per miner will maintain 100% efficiency"
+energyCost = 220.0
+metalCost = 100.0
+iconTex = ExtResource("1_4pfve")
+unitInfoType = 4

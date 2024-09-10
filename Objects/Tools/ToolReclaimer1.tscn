@@ -1,0 +1,54 @@
+[gd_scene load_steps=11 format=3 uid="uid://b7ly6ppeex6i7"]
+
+[ext_resource type="Script" path="res://Scripts/Tools/ToolReclaimer.cs" id="1_8hb54"]
+[ext_resource type="Texture2D" uid="uid://dsuvqoyfe2drk" path="res://Textures/UI/Icons/Tools/ToolIconReclaimer.png" id="2_qgl8r"]
+[ext_resource type="PackedScene" uid="uid://dasjfs80ef7q" path="res://Objects/Components/ResourceComponent.tscn" id="2_wad28"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="3_swstb"]
+[ext_resource type="Texture2D" uid="uid://bayjj2gyl26sn" path="res://Textures/FX/ParticleTeleportEffect.png" id="4_ehcwy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mfea4"]
+radius = 5.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vga15"]
+particles_animation = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_silg8"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xjm6b"]
+gradient = SubResource("Gradient_silg8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mh8qi"]
+lifetime_randomness = 0.3
+particle_flag_disable_z = true
+spread = 15.0
+initial_velocity_min = 80.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_xjm6b")
+
+[node name="ToolReclaimer1" type="Node2D" node_paths=PackedStringArray("particles", "resourceComponent", "factionComponent")]
+script = ExtResource("1_8hb54")
+particles = NodePath("GPUParticles2D")
+maxReclaimRate = 15.0
+toolIcon = ExtResource("2_qgl8r")
+resourceComponent = NodePath("ResourceComponent")
+factionComponent = NodePath("FactionComponent")
+toolRange = 150.0
+
+[node name="ResourceComponent" parent="." instance=ExtResource("2_wad28")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ResourceComponent"]
+shape = SubResource("CircleShape2D_mfea4")
+
+[node name="FactionComponent" parent="." instance=ExtResource("3_swstb")]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(1, 0.772549, 0.254902, 1)
+material = SubResource("CanvasItemMaterial_vga15")
+amount = 60
+process_material = SubResource("ParticleProcessMaterial_mh8qi")
+texture = ExtResource("4_ehcwy")

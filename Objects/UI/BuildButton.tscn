@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://8gchljq3igyy"]
+
+[ext_resource type="Script" path="res://Scripts/UI/BuildButton.cs" id="1_5q24g"]
+[ext_resource type="Texture2D" uid="uid://fdos3cgmbhrl" path="res://Textures/Buildings/MinerTest.png" id="1_yxulo"]
+
+[node name="BuildButton" type="Button"]
+clip_contents = true
+custom_minimum_size = Vector2(70, 70)
+mouse_filter = 1
+action_mode = 0
+script = ExtResource("1_5q24g")
+
+[node name="ButtonTex" type="TextureRect" parent="."]
+modulate = Color(0, 1, 1, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -35.0
+offset_right = 35.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_yxulo")
+expand_mode = 1
+stretch_mode = 4
+
+[connection signal="pressed" from="." to="." method="OnButtonPressed"]

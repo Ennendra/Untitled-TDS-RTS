@@ -1,0 +1,169 @@
+[gd_scene load_steps=12 format=3 uid="uid://dgnlq3bybri7b"]
+
+[ext_resource type="Script" path="res://Scripts/UI/UI_PersonalToolbar.cs" id="1_vxbyf"]
+[ext_resource type="Texture2D" uid="uid://kqk1saceqc51" path="res://Textures/UI/MainUIFramework/PersonalBuildMenu.png" id="2_mh1b0"]
+[ext_resource type="Resource" uid="uid://yjs4iloqmg2i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Generator.tres" id="3_gtk04"]
+[ext_resource type="PackedScene" uid="uid://blgjco20x48di" path="res://Objects/UI/ToolbarButton.tscn" id="3_hf2e2"]
+[ext_resource type="PackedScene" uid="uid://8gchljq3igyy" path="res://Objects/UI/BuildButton.tscn" id="4_hf4wd"]
+[ext_resource type="Resource" uid="uid://uuwgt6j15354" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Miner.tres" id="4_jtvhx"]
+[ext_resource type="Resource" uid="uid://cv3aep28kx6f8" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Refinery.tres" id="5_625h2"]
+[ext_resource type="Resource" uid="uid://dcxhrv06cdy4i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_NetworkHub.tres" id="5_gyjqo"]
+[ext_resource type="Resource" uid="uid://3yiscuiw5o3t" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_MetalStorage.tres" id="6_i2q61"]
+[ext_resource type="Resource" uid="uid://duv5n2wh276mn" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_EnergyStorage.tres" id="7_wl6ql"]
+[ext_resource type="Resource" uid="uid://cu5mfbycdnot5" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Factory.tres" id="8_etprr"]
+
+[node name="UI_PersonalToolbar" type="Control" node_paths=PackedStringArray("buildingButtons", "toolbarButtons")]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -375.0
+offset_top = -220.0
+offset_right = 375.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_vxbyf")
+buildingButtons = [NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton1"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton2"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton3"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton4"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/BuildButton5"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton6"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton7"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton8"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton9"), NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer2/BuildButton10")]
+toolbarButtons = [NodePath("ToolButtonContainer/ButtonTool1"), NodePath("ToolButtonContainer/ButtonTool2"), NodePath("ToolButtonContainer/ButtonTool3"), NodePath("ToolButtonContainer/ButtonWeapon1"), NodePath("ToolButtonContainer/ButtonWeapon2"), NodePath("ToolButtonContainer/ButtonWeapon3")]
+buildingList_tier1 = Array[Resource]([ExtResource("5_gyjqo"), ExtResource("3_gtk04"), ExtResource("4_jtvhx"), ExtResource("5_625h2"), ExtResource("7_wl6ql"), ExtResource("6_i2q61"), ExtResource("8_etprr")])
+
+[node name="MainTex" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -95.0
+offset_right = 400.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_mh1b0")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 391.0
+offset_top = -3.0
+offset_right = 726.0
+offset_bottom = 13.0
+mouse_filter = 1
+value = 100.0
+show_percentage = false
+
+[node name="ToolButtonContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 355.0
+offset_top = 180.0
+offset_right = 395.0
+offset_bottom = 220.0
+mouse_filter = 1
+
+[node name="ButtonTool1" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+layout_mode = 0
+offset_left = 145.0
+offset_top = -59.0
+offset_right = 215.0
+offset_bottom = 11.0
+
+[node name="ButtonTool2" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+layout_mode = 0
+offset_left = 223.0
+offset_top = -59.0
+offset_right = 293.0
+offset_bottom = 11.0
+
+[node name="ButtonTool3" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+layout_mode = 0
+offset_left = 301.0
+offset_top = -59.0
+offset_right = 371.0
+offset_bottom = 11.0
+
+[node name="ButtonWeapon1" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+layout_mode = 0
+offset_left = 145.0
+offset_top = -140.0
+offset_right = 215.0
+offset_bottom = -70.0
+isButtonTool = false
+
+[node name="ButtonWeapon2" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+layout_mode = 0
+offset_left = 223.0
+offset_top = -140.0
+offset_right = 293.0
+offset_bottom = -70.0
+isButtonTool = false
+
+[node name="ButtonWeapon3" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+layout_mode = 0
+offset_left = 301.0
+offset_top = -140.0
+offset_right = 371.0
+offset_bottom = -70.0
+isButtonTool = false
+
+[node name="BuildButtonContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 355.0
+offset_top = 185.0
+offset_right = 395.0
+offset_bottom = 225.0
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BuildButtonContainer"]
+layout_mode = 0
+offset_left = -352.5
+offset_top = -140.0
+offset_right = 13.5
+offset_bottom = 4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BuildButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BuildButton1" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton2" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton3" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton4" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton5" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="BuildButtonContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BuildButton6" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton7" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton8" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton9" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
+
+[node name="BuildButton10" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("4_hf4wd")]
+layout_mode = 2
+buildInfo = ExtResource("5_gyjqo")
