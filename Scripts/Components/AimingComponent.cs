@@ -14,7 +14,10 @@ public partial class AimingComponent : Node2D
     [Export] public WeaponParent equippedWeapon { get; protected set; }
     [Export] public ToolParent equippedTool { get; protected set; }
 
-    [Export] float aimRotationFactor = 2.5f;
+    //Rotation speed in degrees per second
+    [Export] float rotationSpeed = 2.5f;
+    //The rotation speed converted to radians for use in the _process function
+    float rotationSpeedRadians;
     float currentAimDirection = 0, targetAimDirection = 0;
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -25,10 +28,14 @@ public partial class AimingComponent : Node2D
         //Connect the signals to functions
         EquipTool += EquipNewTool;
         EquipWeapon += EquipNewWeapon;
+
+        rotationSpeedRadians = Mathf.DegToRad(rotationSpeed);
     }
     public override void _Process(double delta)
     {
-        currentAimDirection = Mathf.LerpAngle(currentAimDirection, targetAimDirection, aimRotationFactor * (float)delta);
+        //rotating towards the target direction by a set amount (commented was a more logarithmic rotation but may be out of date)
+        currentAimDirection = Mathf.RotateToward(currentAimDirection, targetAimDirection,rotationSpeedRadians * (float)delta);
+        //currentAimDirection = Mathf.LerpAngle(currentAimDirection, targetAimDirection, aimRotationFactor * (float)delta);
         GlobalRotation = currentAimDirection;
     }
 

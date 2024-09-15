@@ -21,18 +21,24 @@ public partial class MovementComponent : Area2D
 
 	//Direction of movement
 	float targetDirection = 0, moveDirection=0;
-	[Export] float rotationFactor = 3.5f;
+	//The rotation speed of the unit
+	[Export] float rotationSpeedDegrees = 200.0f;
+	//The rotation speed converted to radians for use in the _process function
+	float rotationSpeed;
 
     public override void _Ready()
     {
         base._Ready();
 
 		knockBackAmount = maxSpeed / 120 * 2.25f;
+
+		rotationSpeed = Mathf.DegToRad(rotationSpeedDegrees);
     }
 
     public override void _Process(double delta)
 	{
-		moveDirection = Mathf.LerpAngle(moveDirection,targetDirection,rotationFactor*(float)delta); 
+		moveDirection = Mathf.RotateToward(moveDirection, targetDirection, rotationSpeed * (float)delta);
+		//moveDirection = Mathf.LerpAngle(moveDirection,targetDirection,rotationFactor*(float)delta); 
 		if (legSprite != null )
 		{
 			legSprite.GlobalRotation = moveDirection;

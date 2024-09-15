@@ -38,7 +38,7 @@ toolFolder = NodePath("AimingComponent/Tools")
 texture = ExtResource("2_y0vag")
 
 [node name="AimingComponent" parent="." instance=ExtResource("3_0kvr3")]
-aimRotationFactor = 5.0
+rotationSpeed = 300.0
 
 [node name="SpriteTop" type="Sprite2D" parent="AimingComponent"]
 texture = ExtResource("3_k1okn")
@@ -71,6 +71,7 @@ shape = SubResource("CircleShape2D_pk0mf")
 maxSpeed = 250.0
 accelerateFactor = 3.0
 legSprite = NodePath("../BottomSprite")
+rotationSpeedDegrees = 240.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MovementComponent"]
 shape = SubResource("CircleShape2D_pk0mf")

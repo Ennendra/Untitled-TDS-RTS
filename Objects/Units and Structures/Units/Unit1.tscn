@@ -40,7 +40,7 @@ texture = ExtResource("6_qse03")
 
 [node name="AimingComponent" parent="." node_paths=PackedStringArray("equippedWeapon") instance=ExtResource("3_pv6d6")]
 equippedWeapon = NodePath("Weapon")
-aimRotationFactor = 5.0
+rotationSpeed = 300.0
 
 [node name="SpriteTop" type="Sprite2D" parent="AimingComponent"]
 texture = ExtResource("5_y17g8")
@@ -66,6 +66,7 @@ shape = SubResource("CircleShape2D_e35dv")
 maxSpeed = 180.0
 accelerateFactor = 2.0
 legSprite = NodePath("../SpriteBottom")
+rotationSpeedDegrees = 250.0
 
 [node name="Collider" type="CollisionShape2D" parent="MovementComponent"]
 shape = SubResource("CircleShape2D_xk8um")
