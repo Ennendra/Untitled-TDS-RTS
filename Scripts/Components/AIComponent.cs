@@ -13,10 +13,12 @@ public enum AIUnitState
 
 public partial class AIComponent : Node2D
 {
+	//Components
 	[Export] PathfindingComponent pathComponent;
     [Export] FactionComponent factionComponent;
 	[Export] MovementComponent movementComponent;
 	[Export] AimingComponent aimComponent;
+
 	float standardFireRange;
 	//overrides the standardFireRange from being the equipped weapon's range. if 0, no override is given.
 	//May be used for artillery units, so they don't go chasing enemies too readily.
