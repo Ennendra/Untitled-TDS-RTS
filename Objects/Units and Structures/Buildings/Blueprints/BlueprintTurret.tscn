@@ -1,0 +1,80 @@
+[gd_scene load_steps=12 format=3 uid="uid://bxtblwedpv3i8"]
+
+[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BlueprintParent.cs" id="1_ty3oo"]
+[ext_resource type="PackedScene" uid="uid://dpyxe4fuquhmf" path="res://Objects/Units and Structures/Buildings/BuildingRefinery.tscn" id="2_m7nam"]
+[ext_resource type="Texture2D" uid="uid://8wyhdq20l5o2" path="res://Textures/Buildings/Turret1/Turret1Full.png" id="3_hsoif"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_77bdc"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_dicuk"]
+[ext_resource type="Texture2D" uid="uid://b24bbmw5yojij" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding3X3.png" id="6_vhnk3"]
+[ext_resource type="Resource" uid="uid://bs6pt7msq1ki" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Refinery.tres" id="7_ft2ab"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="8_5qxau"]
+[ext_resource type="Shader" path="res://Textures/Shaders/TestShader.gdshader" id="9_tsdgl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3qsov"]
+size = Vector2(90, 90)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nm8s"]
+shader = ExtResource("9_tsdgl")
+shader_parameter/keep_luminance = false
+shader_parameter/color_start = Color(0, 0.972549, 0.972549, 1)
+shader_parameter/start_pos = 0.0
+shader_parameter/color_mid = Color(0, 0.545098, 0.27451, 1)
+shader_parameter/mid_pos = 0.62
+shader_parameter/color_end = Color(0.517647, 0.701961, 1, 1)
+shader_parameter/end_pos = 0.99
+shader_parameter/midpos_enabled = true
+shader_parameter/effect_filling = 1.0
+
+[node name="BlueprintRefinery" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent", "buildingObstacleBounds") groups=["Blueprint"]]
+collision_layer = 131074
+collision_mask = 0
+script = ExtResource("1_ty3oo")
+objectToSpawn = ExtResource("2_m7nam")
+damageComponent = NodePath("DamageComponent")
+factionComponent = NodePath("FactionComponent")
+buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_3qsov")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_hsoif")
+
+[node name="BuildProgressBar" type="ProgressBar" parent="." groups=["Blueprint"]]
+modulate = Color(1, 0, 0, 1)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = -85.0
+offset_right = 50.0
+offset_bottom = -75.0
+grow_horizontal = 2
+value = 50.0
+show_percentage = false
+
+[node name="DamageComponent" parent="." instance=ExtResource("4_77bdc")]
+healthBarOffset = 75.0
+maxHealth = 180.0
+
+[node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("RectangleShape2D_3qsov")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("5_dicuk")]
+damageComponent = NodePath("../DamageComponent")
+selectedTexture = ExtResource("6_vhnk3")
+unitInfo = ExtResource("7_ft2ab")
+
+[node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("RectangleShape2D_3qsov")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("8_5qxau")]
+markerTag = 2
+
+[node name="SpriteScaffold" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_3nm8s")
+texture = ExtResource("3_hsoif")
+
+[node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(75, 75, 75, -75, -75, -75, -75, 75)

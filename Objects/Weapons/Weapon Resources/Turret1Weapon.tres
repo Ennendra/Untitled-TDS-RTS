@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://7fjox6tyqn7v"]
+
+[ext_resource type="PackedScene" uid="uid://b1mjct7gsmnmm" path="res://Objects/Weapons/Projectiles/TestProjectile.tscn" id="1_rffsr"]
+[ext_resource type="Script" path="res://Objects/Weapons/Weapon Resources/WeaponInfo.cs" id="2_03r5u"]
+
+[resource]
+script = ExtResource("2_03r5u")
+damage = 20.0
+rateOfFire = 3.0
+range = 800.0
+scatter = 3.0
+shotsFired = 1
+projectileToSpawn = ExtResource("1_rffsr")
+isDirectFire = true

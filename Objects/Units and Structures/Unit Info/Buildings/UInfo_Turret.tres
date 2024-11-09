@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bc3s0wejn2g7a"]
+
+[ext_resource type="Texture2D" uid="uid://8wyhdq20l5o2" path="res://Textures/Buildings/Turret1/Turret1Full.png" id="1_4848m"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_72gls"]
+
+[resource]
+script = ExtResource("2_72gls")
+unitName = "Turret"
+unitDescription = "Static defense for your base"
+energyCost = 250.0
+metalCost = 100.0
+iconTex = ExtResource("1_4848m")
+unitInfoType = 2

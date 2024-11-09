@@ -1,0 +1,75 @@
+[gd_scene load_steps=14 format=3 uid="uid://uope7kr0g6fa"]
+
+[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_rlvto"]
+[ext_resource type="Texture2D" uid="uid://jpbjl7hit1gx" path="res://Textures/Buildings/Turret1/Turret1Base.png" id="2_hnot5"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="3_ef1lt"]
+[ext_resource type="PackedScene" uid="uid://dog0l7qteqwmk" path="res://Objects/Components/AimingComponent.tscn" id="3_ouebc"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="4_oafnb"]
+[ext_resource type="Texture2D" uid="uid://c5n1o4g6xmupd" path="res://Textures/Buildings/Turret1/Turret1Top.png" id="4_pjwoa"]
+[ext_resource type="PackedScene" uid="uid://02qtob83lbwv" path="res://Objects/Weapons/MainWeapon.tscn" id="5_4utoe"]
+[ext_resource type="Texture2D" uid="uid://deaejpuahshey" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding2X2.png" id="5_htc87"]
+[ext_resource type="Resource" uid="uid://7fjox6tyqn7v" path="res://Objects/Weapons/Weapon Resources/Turret1Weapon.tres" id="6_jid77"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="8_3l2ct"]
+[ext_resource type="Resource" uid="uid://bc3s0wejn2g7a" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Turret.tres" id="10_1vn5o"]
+[ext_resource type="PackedScene" uid="uid://djckgbda36vuf" path="res://Objects/Components/AIComponent.tscn" id="12_80muq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2qglq"]
+radius = 43.0
+
+[node name="BuildingTurret" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "factionComponent") groups=["Building"]]
+collision_layer = 2
+collision_mask = 16384
+script = ExtResource("1_rlvto")
+energyReclaimValue = 100.0
+metalReclaimValue = 40.0
+buildingType = 1
+buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+damageComponent = NodePath("DamageComponent")
+factionComponent = NodePath("FactionComponent")
+
+[node name="MainSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_hnot5")
+
+[node name="AimingComponent" parent="." node_paths=PackedStringArray("equippedWeapon") instance=ExtResource("3_ouebc")]
+equippedWeapon = NodePath("Weapon")
+rotationSpeed = 180.0
+
+[node name="SpriteTop" type="Sprite2D" parent="AimingComponent"]
+texture = ExtResource("4_pjwoa")
+
+[node name="Weapon" parent="AimingComponent" instance=ExtResource("5_4utoe")]
+weapon = ExtResource("6_jid77")
+
+[node name="FirePoint1" type="Node2D" parent="AimingComponent/Weapon"]
+position = Vector2(30, 0)
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2qglq")
+
+[node name="DamageComponent" parent="." instance=ExtResource("3_ef1lt")]
+healthBarOffset = 50.0
+maxHealth = 90.0
+
+[node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("CircleShape2D_2qglq")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent", "aiComponent") instance=ExtResource("4_oafnb")]
+damageComponent = NodePath("../DamageComponent")
+aiComponent = NodePath("../AiComponent")
+selectedTexture = ExtResource("5_htc87")
+unitInfo = ExtResource("10_1vn5o")
+
+[node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("CircleShape2D_2qglq")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("8_3l2ct")]
+markerTag = 2
+
+[node name="AiComponent" parent="." node_paths=PackedStringArray("factionComponent", "aimComponent") instance=ExtResource("12_80muq")]
+factionComponent = NodePath("../FactionComponent")
+aimComponent = NodePath("../AimingComponent")
+
+[node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
+position = Vector2(30, 0)
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(50, 50, 50, -50, -50, -50, -50, 50)
