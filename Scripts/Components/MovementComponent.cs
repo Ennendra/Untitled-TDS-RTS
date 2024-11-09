@@ -23,8 +23,12 @@ public partial class MovementComponent : Area2D
 	float targetDirection = 0, moveDirection=0;
 	//The rotation speed of the unit
 	[Export] float rotationSpeedDegrees = 200.0f;
+	
 	//The rotation speed converted to radians for use in the _process function
 	float rotationSpeed;
+
+	//The old lerp rotation factor, will remove if confirming to use linear instead
+    float rotationFactor = 2.5f;
 
     public override void _Ready()
     {

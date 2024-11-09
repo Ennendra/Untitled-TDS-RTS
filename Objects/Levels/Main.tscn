@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bvji7q1gdfv36"]
+[gd_scene load_steps=19 format=3 uid="uid://bvji7q1gdfv36"]
 
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
 [ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bajnlaslouu4e" path="res://Objects/UI/RTSController.tscn" id="13_87ivr"]
 [ext_resource type="PackedScene" uid="uid://b8wtdlbxd7cm6" path="res://Objects/Units and Structures/Buildings/BuildingMiner.tscn" id="14_m5tpb"]
 [ext_resource type="PackedScene" uid="uid://dl8s3u8cffmp2" path="res://Objects/Units and Structures/Buildings/BuildingFactory.tscn" id="15_dafo8"]
+[ext_resource type="PackedScene" uid="uid://uope7kr0g6fa" path="res://Objects/Units and Structures/Buildings/BuildingTurret.tscn" id="16_7ws5e"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_eb8bk"]
 vertices = PackedVector2Array(1865, 1265, -1940, 1265, -740, -90, 1865, -2190, -810, -90, -740, -460, -1940, -2190, -1010, -460, -1010, -390, -810, -390)
@@ -46,6 +47,7 @@ navigation_polygon = SubResource("NavigationPolygon_eb8bk")
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 z_index = -1
 texture_repeat = 2
+position = Vector2(-550, 100)
 texture = ExtResource("3_lxxcb")
 region_enabled = true
 region_rect = Rect2(0, 0, 80000, 80000)
@@ -167,6 +169,18 @@ position = Vector2(200, -225)
 
 [node name="BuildingFactory2" parent="." instance=ExtResource("15_dafo8")]
 position = Vector2(25, -225)
+
+[node name="BuildingTurret" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(200, -50)
+
+[node name="BuildingTurret2" parent="." node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "factionComponent") instance=ExtResource("16_7ws5e")]
+position = Vector2(700, 100)
+buildingObstacleBounds = NodePath("../BuildingTurret/BuildingObstacleBounds")
+damageComponent = NodePath("../BuildingTurret/DamageComponent")
+factionComponent = NodePath("../BuildingTurret/FactionComponent")
+
+[node name="BuildingTurret3" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(225, 100)
 
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]

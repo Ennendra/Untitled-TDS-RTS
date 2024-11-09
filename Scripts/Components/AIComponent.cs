@@ -61,7 +61,7 @@ public partial class AIComponent : Node2D
 		}
 		else //Fire target is not valid, set aiming towards movement instead and increment scan timer
 		{
-			aimComponent.SetTargetDirection(movementComponent.GetTargetDirection());
+            if (!IsUnitStatic()) { aimComponent.SetTargetDirection(movementComponent.GetTargetDirection()); }
             scanTimer += (float)delta;
         }
 
@@ -139,13 +139,13 @@ public partial class AIComponent : Node2D
 		}
 		else
 		{
-            movementComponent.Decelerate(delta);
+            if (!IsUnitStatic()) { movementComponent.Decelerate(delta); }
             ScanForTarget(GlobalPosition, standardFireRange + 100.0f);
 		}
 	}
 	public void ProcessOrderMove(double delta)
 	{
-		//Aim towards an enemy if within range
+        //Aim towards an enemy if within range
         float stopTargetRange = standardFireRange;
         if (IsInstanceValid(fireTarget))
         {
@@ -160,15 +160,15 @@ public partial class AIComponent : Node2D
             ScanForTarget(GlobalPosition, standardFireRange);
         }
 
-		//move along the path.
-        MoveTowardsTargetPosition(pathComponent.GetNextPointPosition(),  delta);
+        //move along the path.
+        MoveTowardsTargetPosition(pathComponent.GetNextPointPosition(), delta);
         NavigationCheckResult result = pathComponent.CheckIfNavPointReached();
-		//Have we reached our location?
-		if (result == NavigationCheckResult.PATHCOMPLETED)
-		{
-			unitState = AIUnitState.IDLE;
-			GD.Print("Completed");
-		}
+        //Have we reached our location?
+        if (result == NavigationCheckResult.PATHCOMPLETED)
+        {
+            unitState = AIUnitState.IDLE;
+            GD.Print("Completed");
+        }
     }
 	public void ProcessOrderAttack(double delta)
 	{
@@ -297,7 +297,7 @@ public partial class AIComponent : Node2D
                 }
                 else
                 {
-                    movementComponent.Decelerate(delta);
+                    if (!IsUnitStatic()) { movementComponent.Decelerate(delta); }
                 }
             }
         }
@@ -310,8 +310,11 @@ public partial class AIComponent : Node2D
 	public void ProcessOrderHold(double delta)
 	{
         float stopTargetRange = standardFireRange;
-		//Decelerate, as the object is to strictly not move
-        movementComponent.Decelerate(delta);
+        //Decelerate, as the object is to strictly not move
+        if (!IsUnitStatic())
+        {
+            movementComponent.Decelerate(delta);
+        }
 
         if (IsInstanceValid(fireTarget))
         {
