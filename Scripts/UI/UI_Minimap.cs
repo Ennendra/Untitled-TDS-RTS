@@ -37,7 +37,7 @@ public partial class UI_Minimap : Control
 	[Export] Vector2 initialMinimapDrawSize, initialMinimapDrawOffset;
     Vector2 minimapDrawSize, minimapDrawOffset;
     //The textures used for the minimap markers
-    [Export] Texture2D markerPlayer, markerAllyUnit, markerAllyBuilding, markerEnemyUnit, markerEnemyBuilding;
+    [Export] Texture2D markerPlayer, markerAllyUnit, markerAllyBuilding, markerEnemyUnit, markerEnemyBuilding, markerMetalNode;
     //The list of minimapmarkers in the scene that are ready to draw
     List<MinimapMarkerDrawInfo> markersToDraw = new();
 
@@ -74,7 +74,8 @@ public partial class UI_Minimap : Control
                 case MinimapMarkerTag.ALLYBUILDING: markerTexture = markerAllyBuilding; break;
                 case MinimapMarkerTag.ENEMYUNIT: markerTexture = markerEnemyUnit; break;
                 case MinimapMarkerTag.ENEMYBUILDING: markerTexture = markerEnemyBuilding; break;
-				default: GD.Print("Missing or invalid tag for minimap marker?"); break;
+                case MinimapMarkerTag.METALNODE: markerTexture = markerMetalNode; break;
+                default: GD.Print("Missing or invalid tag for minimap marker?"); break;
             }
             Vector2 textureOffset = markerTexture.GetSize() / 2;
             DrawTexture(markerTexture, marker.markerPosition - textureOffset);

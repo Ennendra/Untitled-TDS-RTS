@@ -101,6 +101,7 @@ stream = ExtResource("3_t0sv8")
 volume_db = -8.0
 autoplay = true
 max_distance = 800.0
+bus = &"ProjectileHit"
 
 [connection signal="animation_finished" from="Sprite" to="." method="OnAnimationFinished"]
 [connection signal="finished" from="Particles" to="." method="OnParticlesFinished"]

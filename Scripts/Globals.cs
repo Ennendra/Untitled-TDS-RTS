@@ -3,16 +3,15 @@ using System;
 
 public partial class Globals : Node
 {
+    //Marking the main battle area for pathfinding purposes
 	public NavigationRegion2D mainBattleArea;
+
 
 	public Resource cursorImage_Personal = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/Cursor.png");
     public Resource cursorImage_Move = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/UICursorMove.png");
     public Resource cursorImage_Attack = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/UICursorAttack.png");
     public Resource cursorImage_Guard = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/UICursorGuard.png");
     string currentCursor = "";
-
-
-
     //Set the custom mouse cursor using a string code:
     //"Personal" -- "Move" -- "Attack" -- "Guard"
     public void SetNewCustomCursor(string newCursor)

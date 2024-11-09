@@ -109,7 +109,6 @@ public partial class DamageComponent : Area2D
     }
     public void TakeDamage(float amount, DamageType type)
 	{
-		GD.Print(maxHealth);
 		health -= amount;
 		healthBar.Value = health;
         timeSinceLastDamage = 0;

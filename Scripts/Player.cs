@@ -33,11 +33,19 @@ public partial class Player : Area2D
 	[Export] Node2D weaponFolder, toolFolder;
 	List<WeaponParent> weapons = new();
     List<ToolParent> tools = new();
+    //Determines whether we can't shoot weapons. Used to prevent weapons firing after placing a building
+    public bool weaponsDisabled = false;
     
 	//General process functions
     public override void _Ready()
 	{
         camera = GetNode<Camera2D>("Camera");
+        var mapEvent = InputMap.ActionGetEvents("CancelBuildPlacement");
+        GD.Print(mapEvent);
+        GD.Print(mapEvent[0]);
+
+        var e = new InputEventKey();
+        
     }
 	public override void _Process(double delta)
 	{
@@ -73,6 +81,7 @@ public partial class Player : Area2D
 			movementComponent.Decelerate(delta);
         }
 
+        if (Input.IsActionJustReleased("Personal_Use_Fire")) { weaponsDisabled = false; }
         
     }
     public float GetResourcePerformance(float generation, float consumption)
@@ -95,7 +104,7 @@ public partial class Player : Area2D
         //General combat controls
         if (playerUI != null)
         {
-            if (Input.IsActionPressed("Personal_Use_Fire") && !playerUI.mouseOverUI)
+            if (Input.IsActionPressed("Personal_Use_Fire") && !playerUI.mouseOverUI && !weaponsDisabled)
             {
                 //TODO: Check whether player UI is in the mouse point, and not fire if so
                 aimComponent.FireWeapons();

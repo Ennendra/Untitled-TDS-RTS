@@ -9,7 +9,8 @@ public enum MinimapMarkerTag
     ALLYUNIT,
     ALLYBUILDING,
     ENEMYUNIT,
-    ENEMYBUILDING
+    ENEMYBUILDING,
+    METALNODE
 }
 
 

@@ -8,3 +8,4 @@ script = ExtResource("1_ann0n")
 [node name="Firepoints" type="Node2D" parent="."]
 
 [node name="WeaponFireSound" type="AudioStreamPlayer2D" parent="."]
+bus = &"ProjectileHit"

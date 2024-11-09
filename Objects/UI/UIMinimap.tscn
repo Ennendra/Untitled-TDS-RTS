@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1tc2knsc0m5e"]
+[gd_scene load_steps=10 format=3 uid="uid://b1tc2knsc0m5e"]
 
 [ext_resource type="Script" path="res://Scripts/UI/UI_Minimap.cs" id="1_1s8hk"]
 [ext_resource type="Texture2D" uid="uid://cmp8omxw1mvj0" path="res://Textures/UI/MainUIFramework/UIMinimap.png" id="2_mbfd7"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b5h0rd13ttetu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_AllyUnit.png" id="5_4kfjx"]
 [ext_resource type="Texture2D" uid="uid://b5tjnio50081h" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_AllyBuilding.png" id="6_ids5h"]
 [ext_resource type="Texture2D" uid="uid://ce5wsujjrujxu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_EnemyUnit.png" id="7_6miv6"]
+[ext_resource type="Texture2D" uid="uid://lfm103isinqu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_MetalNode.png" id="7_us3im"]
 [ext_resource type="Texture2D" uid="uid://cqqvdhookah3a" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_EnemyBuilding.png" id="8_0ysu1"]
 
 [node name="UI_Minimap" type="MarginContainer"]
@@ -28,6 +29,7 @@ markerAllyUnit = ExtResource("5_4kfjx")
 markerAllyBuilding = ExtResource("6_ids5h")
 markerEnemyUnit = ExtResource("7_6miv6")
 markerEnemyBuilding = ExtResource("8_0ysu1")
+markerMetalNode = ExtResource("7_us3im")
 
 [node name="BackgroundFrame" type="NinePatchRect" parent="."]
 z_index = -1

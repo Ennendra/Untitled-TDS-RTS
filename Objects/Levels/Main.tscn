@@ -32,7 +32,7 @@ tile_size = Vector2i(50, 50)
 script = ExtResource("1_slh8m")
 navigationRegion = NodePath("NavigationRegion2D")
 top = -2000.0
-left = -2000.0
+left = -3000.0
 bottom = 6000.0
 right = 3000.0
 
@@ -373,6 +373,39 @@ factionOverride = 2
 [node name="BuildingTurret13" parent="." instance=ExtResource("16_7ws5e")]
 position = Vector2(1100, 4400)
 factionOverride = 2
+
+[node name="MetalNode7" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(-1700, -100)
+
+[node name="MetalNode8" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(-1550, -150)
+
+[node name="MetalNode9" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(-1150, 100)
+
+[node name="MetalNode10" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(2000, -400)
+
+[node name="MetalNode11" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(2000, -200)
+
+[node name="MetalNode12" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(2250, 2450)
+
+[node name="MetalNode13" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(2300, 2750)
+
+[node name="MetalNode14" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(-2000, 2650)
+
+[node name="MetalNode15" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(-800, 2250)
+
+[node name="MetalNode16" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(-550, 1150)
+
+[node name="MetalNode17" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(600, 1150)
 
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]

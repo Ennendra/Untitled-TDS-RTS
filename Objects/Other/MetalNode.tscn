@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cn41rvyxe41sf"]
+[gd_scene load_steps=4 format=3 uid="uid://cn41rvyxe41sf"]
 
 [ext_resource type="Texture2D" uid="uid://bigu5bo45fusm" path="res://Textures/MiningNode.png" id="1_mpegp"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="2_06o1d"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rdivq"]
 
@@ -14,3 +15,6 @@ texture = ExtResource("1_mpegp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_rdivq")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("2_06o1d")]
+markerTag = 5

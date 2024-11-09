@@ -59,11 +59,10 @@ position = Vector2(16, 8)
 
 [node name="WeaponFireSound" parent="AimingComponent/Weapon" index="1"]
 stream = ExtResource("7_ee8su")
-volume_db = -15.146
+volume_db = -9.088
 
 [node name="DamageComponent" parent="." instance=ExtResource("1_etjku")]
 healthBarOffset = 25.0
-maxHealth = 40.0
 
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
 shape = SubResource("CircleShape2D_e35dv")

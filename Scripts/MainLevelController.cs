@@ -247,6 +247,7 @@ public partial class MainLevelController : Node2D
             }
             if (personalPlayState == PersonalPlayState.BUILDPLACEMENT)
             {
+                player.weaponsDisabled = true;
                 ProcessBuildPlacementChecks();
             }
         }
