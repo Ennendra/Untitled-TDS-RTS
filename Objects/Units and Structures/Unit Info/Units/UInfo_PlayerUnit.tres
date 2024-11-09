@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://cocovxks22s8c"]
+
+[ext_resource type="Texture2D" uid="uid://b0oh22ujgl8mg" path="res://Textures/Units/Player/PlayerBottom.png" id="1_r0ggf"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_1vxnm"]
+
+[resource]
+script = ExtResource("2_1vxnm")
+unitName = "Unit1"
+unitDescription = "Small light vehicle with rapid-firing weapons"
+maxHealth = 250.0
+energyCost = 800.0
+metalCost = 800.0
+iconTex = ExtResource("1_r0ggf")
+unitInfoType = 0

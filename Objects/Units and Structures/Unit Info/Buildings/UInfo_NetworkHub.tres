@@ -7,6 +7,7 @@
 script = ExtResource("1_66mvb")
 unitName = "Network Pylon"
 unitDescription = "Required to build and operate most other buildings"
+maxHealth = 200.0
 energyCost = 100.0
 metalCost = 60.0
 iconTex = ExtResource("1_vqfl0")

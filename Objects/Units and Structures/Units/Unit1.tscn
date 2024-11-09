@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://6akwd6vee46k"]
+[gd_scene load_steps=19 format=3 uid="uid://6akwd6vee46k"]
 
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="1_etjku"]
 [ext_resource type="Script" path="res://Scripts/Units/Unit1.cs" id="1_yklge"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dtnmtxl2sd46y" path="res://Textures/Units/Unit1/Unit1Top.png" id="5_y17g8"]
 [ext_resource type="Resource" uid="uid://bt75l6oq777fm" path="res://Objects/Weapons/Weapon Resources/Unit1Weapon.tres" id="6_6gjqt"]
 [ext_resource type="Texture2D" uid="uid://b25788itue6g8" path="res://Textures/Units/Unit1/Unit1Bottom.png" id="6_qse03"]
+[ext_resource type="AudioStream" uid="uid://bh60ci66dmqi1" path="res://Sounds/Weapons/fire_unit1.wav" id="7_ee8su"]
 [ext_resource type="Texture2D" uid="uid://by37h8175i2ia" path="res://Textures/UI/SelectionBoxes/SelectionBoxUnit1.png" id="10_54ann"]
 [ext_resource type="Resource" uid="uid://bb2ewtpnqjdv1" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_Unit1.tres" id="10_g22ja"]
 [ext_resource type="PackedScene" uid="uid://bnss8qnlmgv7" path="res://Objects/Components/PathfindingComponent.tscn" id="11_au3ii"]
@@ -24,16 +25,17 @@ radius = 23.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_j4oht"]
 radius = 18.0
 
-[node name="Unit1" type="Area2D" node_paths=PackedStringArray("mainSprite", "damageComponent", "aimComponent", "movementComponent", "factionComponent", "aiComponent") groups=["Unit"]]
+[node name="Unit1" type="Area2D" node_paths=PackedStringArray("mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "movementComponent") groups=["Unit"]]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_yklge")
+unitInfo = ExtResource("10_g22ja")
 mainSprite = NodePath("SpriteBottom")
 damageComponent = NodePath("DamageComponent")
 aimComponent = NodePath("AimingComponent")
-movementComponent = NodePath("MovementComponent")
-factionComponent = NodePath("FactionComponent")
 aiComponent = NodePath("AiComponent")
+factionComponent = NodePath("FactionComponent")
+movementComponent = NodePath("MovementComponent")
 
 [node name="SpriteBottom" type="Sprite2D" parent="."]
 texture = ExtResource("6_qse03")
@@ -49,11 +51,15 @@ texture = ExtResource("5_y17g8")
 weapon = ExtResource("6_6gjqt")
 weaponFireType = 1
 
-[node name="FirePoint1" type="Node2D" parent="AimingComponent/Weapon"]
+[node name="FirePoint1" type="Node2D" parent="AimingComponent/Weapon/Firepoints" index="0"]
 position = Vector2(16, -8)
 
-[node name="FirePoint2" type="Node2D" parent="AimingComponent/Weapon"]
+[node name="FirePoint2" type="Node2D" parent="AimingComponent/Weapon/Firepoints" index="1"]
 position = Vector2(16, 8)
+
+[node name="WeaponFireSound" parent="AimingComponent/Weapon" index="1"]
+stream = ExtResource("7_ee8su")
+volume_db = -15.146
 
 [node name="DamageComponent" parent="." instance=ExtResource("1_etjku")]
 healthBarOffset = 25.0
@@ -63,8 +69,7 @@ maxHealth = 40.0
 shape = SubResource("CircleShape2D_e35dv")
 
 [node name="MovementComponent" parent="." node_paths=PackedStringArray("legSprite") instance=ExtResource("2_nhwf2")]
-maxSpeed = 180.0
-accelerateFactor = 2.0
+maxSpeed = 240.0
 legSprite = NodePath("../SpriteBottom")
 rotationSpeedDegrees = 250.0
 
@@ -91,3 +96,5 @@ movementComponent = NodePath("../MovementComponent")
 aimComponent = NodePath("../AimingComponent")
 
 [node name="PathfindingComponent" parent="." instance=ExtResource("11_au3ii")]
+
+[editable path="AimingComponent/Weapon"]

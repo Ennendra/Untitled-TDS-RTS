@@ -12,3 +12,5 @@ scatter = 3.0
 shotsFired = 1
 projectileToSpawn = ExtResource("1_5ll2b")
 isDirectFire = true
+projectileSpeed = 2400.0
+projectileSpeedVariance = 0.0

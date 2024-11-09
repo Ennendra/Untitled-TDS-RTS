@@ -42,7 +42,6 @@ public partial class PathfindingComponent : Node2D
 	{
 		Vector2 safeDestinationPoint = NavigationServer2D.MapGetClosestPoint(GetWorld2D().NavigationMap, newTargetPosition);
         currentPath = NavigationServer2D.MapGetPath(GetWorld2D().NavigationMap, GlobalPosition, safeDestinationPoint, true);
-		GD.Print(currentPath.ToString());
         if (!currentPath.IsEmpty())
 		{
 			currentPathIndex = 0;

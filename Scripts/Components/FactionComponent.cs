@@ -40,14 +40,14 @@ public partial class FactionComponent : Area2D
 
     public override void _Ready()
     {
-        
-
         base._Ready();
 
+        //Define the selection box around the unit and then hide it initially
         selectSprite = GetNode<Sprite2D>("SelectionSprite");
         selectSprite.Texture = selectedTexture;
         selectSprite.Visible = false;
 
+        //Signal and method to automatically alter collisions for weapons and taking damage when the unit or building changes side
         AddUserSignal("FactionChanged");
         Connect("FactionChanged", new Callable(this, "OnFactionChanged"));
         EmitSignal("FactionChanged");

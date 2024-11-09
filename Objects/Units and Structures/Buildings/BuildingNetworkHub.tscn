@@ -27,13 +27,13 @@ shader_parameter/linesColorIntensity = 2.0
 shader_parameter/hologramTextureTiling = Vector2(1, 0.1)
 shader_parameter/hologramTexture = ExtResource("8_4geie")
 
-[node name="BuildingNetworkHub" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "factionComponent") groups=["Building"]]
+[node name="BuildingNetworkHub" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_syvvr")
-energyReclaimValue = 100.0
-metalReclaimValue = 60.0
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+unitInfo = ExtResource("5_bkni2")
+mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
 

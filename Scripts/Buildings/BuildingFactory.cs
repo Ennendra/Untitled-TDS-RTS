@@ -42,7 +42,6 @@ public partial class BuildingFactory : BuildingParent
         newUnit.GlobalPosition = GlobalPosition+buildCenterOffset;
         newUnit.SetNewFaction(factionComponent.faction);
         newUnit.GetDamageComponent().SetHealthPercentage(1);
-        newUnit.InitItemDetails(buildableUnits[index]);
 
 		constructorComponent.blueprintTarget = newUnit;
 		constructorComponent.isActive = true;

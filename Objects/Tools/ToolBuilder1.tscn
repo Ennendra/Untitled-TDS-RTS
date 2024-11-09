@@ -18,7 +18,7 @@ particles_anim_loop = false
 [sub_resource type="Gradient" id="Gradient_silg8"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_xjm6b"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_03adk"]
 gradient = SubResource("Gradient_silg8")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_52n8a"]
@@ -28,7 +28,7 @@ spread = 15.0
 initial_velocity_min = 80.0
 initial_velocity_max = 150.0
 gravity = Vector3(0, 0, 0)
-color_ramp = SubResource("GradientTexture1D_xjm6b")
+color_ramp = SubResource("GradientTexture1D_03adk")
 
 [node name="ToolBuilder1" type="Node2D" node_paths=PackedStringArray("particles", "constructorComponent", "factionComponent")]
 script = ExtResource("1_jqk74")

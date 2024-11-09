@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://uope7kr0g6fa"]
+[gd_scene load_steps=15 format=3 uid="uid://uope7kr0g6fa"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_rlvto"]
 [ext_resource type="Texture2D" uid="uid://jpbjl7hit1gx" path="res://Textures/Buildings/Turret1/Turret1Base.png" id="2_hnot5"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://02qtob83lbwv" path="res://Objects/Weapons/MainWeapon.tscn" id="5_4utoe"]
 [ext_resource type="Texture2D" uid="uid://deaejpuahshey" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding2X2.png" id="5_htc87"]
 [ext_resource type="Resource" uid="uid://7fjox6tyqn7v" path="res://Objects/Weapons/Weapon Resources/Turret1Weapon.tres" id="6_jid77"]
+[ext_resource type="AudioStream" uid="uid://bd4gb16qvgxgu" path="res://Sounds/Weapons/fire_turret.wav" id="7_3xhd7"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="8_3l2ct"]
 [ext_resource type="Resource" uid="uid://bc3s0wejn2g7a" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Turret.tres" id="10_1vn5o"]
 [ext_resource type="PackedScene" uid="uid://djckgbda36vuf" path="res://Objects/Components/AIComponent.tscn" id="12_80muq"]
@@ -16,15 +17,16 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qglq"]
 radius = 43.0
 
-[node name="BuildingTurret" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "factionComponent") groups=["Building"]]
+[node name="BuildingTurret" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "aimComponent", "factionComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 16384
 script = ExtResource("1_rlvto")
-energyReclaimValue = 100.0
-metalReclaimValue = 40.0
 buildingType = 1
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+unitInfo = ExtResource("10_1vn5o")
+mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
+aimComponent = NodePath("AimingComponent")
 factionComponent = NodePath("FactionComponent")
 
 [node name="MainSprite" type="Sprite2D" parent="."]
@@ -40,8 +42,12 @@ texture = ExtResource("4_pjwoa")
 [node name="Weapon" parent="AimingComponent" instance=ExtResource("5_4utoe")]
 weapon = ExtResource("6_jid77")
 
-[node name="FirePoint1" type="Node2D" parent="AimingComponent/Weapon"]
+[node name="FirePoint1" type="Node2D" parent="AimingComponent/Weapon/Firepoints" index="0"]
 position = Vector2(30, 0)
+
+[node name="WeaponFireSound" parent="AimingComponent/Weapon" index="1"]
+stream = ExtResource("7_3xhd7")
+volume_db = -4.039
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2qglq")
@@ -73,3 +79,5 @@ aimComponent = NodePath("../AimingComponent")
 position = Vector2(30, 0)
 color = Color(1, 1, 1, 0)
 polygon = PackedVector2Array(50, 50, 50, -50, -50, -50, -50, 50)
+
+[editable path="AimingComponent/Weapon"]

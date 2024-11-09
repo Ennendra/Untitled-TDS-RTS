@@ -3,9 +3,14 @@ using System;
 
 public partial class ProjectileParent : Area2D
 {
-	[Export] AttackComponent attackComponent;
+    [ExportCategory("Projectile Explosion")]
+    [Export] PackedScene explosionToInstance;
 
-    [Export] float projectileSpeed;
+    [ExportCategory("Components")]
+    [Export] AttackComponent attackComponent;
+
+    [ExportCategory("ProjectileStats")]
+    float projectileSpeed;
     float damage;
 	float distanceTravelled, maxDistance;
     bool isDirectFire;
@@ -58,17 +63,29 @@ public partial class ProjectileParent : Area2D
         }
     }
 
-    public void SetProjectileStats(float damage, float range, bool isDirectFire)
+    public void SetProjectileStats(float damage, float range, bool isDirectFire, float projectileSpeed)
     {
         this.damage = damage;
         maxDistance = range;
         this.isDirectFire = isDirectFire;
+        this.projectileSpeed = projectileSpeed;
 
         attackComponent.SetDamage(damage);
+    }
+    public void CreateProjectileExplosion()
+    {
+        if (explosionToInstance != null)
+        {
+            var explosion = explosionToInstance.Instantiate() as Explosion;
+            GetTree().CurrentScene.AddChild(explosion);
+            explosion.GlobalPosition = GlobalPosition;
+        }
     }
 
     public void OnProjectileHit()
     {
+
+        CreateProjectileExplosion();
         DestroyProjectile();
     }
 
@@ -76,6 +93,8 @@ public partial class ProjectileParent : Area2D
     {
         QueueFree();
     }
+
+    
 
     //collision alteration functions ---
     public void SetProjectileCollisions(int[] layer, int[] mask)

@@ -97,8 +97,6 @@ public partial class ResourceComponent : Area2D
             BaseNetworkController controller = (BaseNetworkController)area;
             isAttachedToNetwork = true;
             controller.AddResourceComponentToNetwork(this);
-            if (GetParent().IsInGroup("Player"))
-                GD.Print("Player Resource Component attached");
         }
         
         

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dvukey5qbdslt"
+path="res://.godot/imported/Descent [WIP].mp3-1808f010ab93127268d14d76136da47f.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Music/Descent [WIP].mp3"
+dest_files=["res://.godot/imported/Descent [WIP].mp3-1808f010ab93127268d14d76136da47f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

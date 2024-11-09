@@ -102,7 +102,9 @@ public partial class AIComponent : Node2D
 	{
 		//Set the ranges for movement and pursuit. Set the max pursuit range to the weapon range if no movement component is found (ie. it is a static emplacement)
 		float minimumMovementRange = standardFireRange - 100.0f;
-		float stopTargetRange = standardFireRange + 200.0f;
+		float stopTargetRange = standardFireRange;
+        if (!IsUnitStatic()) { stopTargetRange += 200.0f; }
+
 		if (movementComponent == null)
 		{
             stopTargetRange = standardFireRange;
@@ -167,13 +169,14 @@ public partial class AIComponent : Node2D
         if (result == NavigationCheckResult.PATHCOMPLETED)
         {
             unitState = AIUnitState.IDLE;
-            GD.Print("Completed");
         }
     }
 	public void ProcessOrderAttack(double delta)
 	{
         float minimumMovementRange = standardFireRange - 100.0f;
-        float stopTargetRange = standardFireRange + 200.0f;
+        float stopTargetRange = standardFireRange;
+        if (!IsUnitStatic()) { stopTargetRange += 200.0f; }
+
         //Pursue the target until they die
         if (IsInstanceValid(orderTarget))
 		{
@@ -464,6 +467,7 @@ public partial class AIComponent : Node2D
 	//Functions for setting a new order
 	public void SetNewMoveOrder(Vector2 targetPosition)
 	{
+        if (IsUnitStatic()) { return; }
 		bool pathCheck = false;
 		if (IsInstanceValid(pathComponent)) { pathCheck = pathComponent.SetNewPath(targetPosition); }
         if (pathCheck)
@@ -480,12 +484,14 @@ public partial class AIComponent : Node2D
 	}
 	public void SetNewGuardOrder(FactionComponent target)
 	{
-		if (IsInstanceValid(pathComponent)) { pathComponent.SetNewPath(target.GlobalPosition); }
+        if (IsUnitStatic()) { return; }
+        if (IsInstanceValid(pathComponent)) { pathComponent.SetNewPath(target.GlobalPosition); }
         unitState = AIUnitState.GUARD;
         orderTarget = target;
 	}
 	public void SetNewAttackMoveOrder(Vector2 targetPosition)
     {
+        if (IsUnitStatic()) { return; }
         bool pathCheck = false;
         if (IsInstanceValid(pathComponent)) { pathCheck = pathComponent.SetNewPath(targetPosition); }
         if (pathCheck)

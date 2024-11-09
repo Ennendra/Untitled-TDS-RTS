@@ -371,7 +371,6 @@ public partial class RTSController : Node2D
     //Execute Attack - Sets an attack on the target, or if the target is not an enemy, execute as an attack-move
     public void ExecuteAttackOrder(Vector2 orderPosition)
     {
-        GD.Print("AttackMove order processing");
         //check what's under the cursor to see whether we run an attack move command or a direct attack command
         var spaceState = GetWorld2D().DirectSpaceState;
         PhysicsPointQueryParameters2D pointCheck = new();
@@ -406,12 +405,10 @@ public partial class RTSController : Node2D
     }
     public void ExecuteCancelOrder()
     {
-        GD.Print("Stop order processing");
         AIExecuteOrder_Cancel();
     }
     public void ExecuteHoldOrder()
     {
-        GD.Print("Hold order processing");
         AIExecuteOrder_Hold();
     }
 

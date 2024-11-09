@@ -1,13 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqjnwtxim66nf"]
+[gd_scene load_steps=5 format=3 uid="uid://bqjnwtxim66nf"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/WeaponParent.cs" id="1_jlyio"]
 [ext_resource type="Texture2D" uid="uid://dhidcvgc1ec3c" path="res://Textures/UI/Icons/Weapons/WeaponIconTest1.png" id="2_mp5cv"]
 [ext_resource type="Resource" uid="uid://cgmvi13diyc8b" path="res://Objects/Weapons/Weapon Resources/TestWeapon.tres" id="3_cvy0r"]
+[ext_resource type="AudioStream" uid="uid://x20doo6hpfs2" path="res://Sounds/Weapons/fire_playerWeapon1.wav" id="4_st7af"]
 
 [node name="WeaponTest" type="Node2D"]
 script = ExtResource("1_jlyio")
 weaponIcon = ExtResource("2_mp5cv")
 weapon = ExtResource("3_cvy0r")
 
-[node name="Firepoint" type="Node2D" parent="."]
+[node name="Firepoints" type="Node2D" parent="."]
+
+[node name="Firepoint" type="Node2D" parent="Firepoints"]
 position = Vector2(25, 0)
+
+[node name="WeaponFireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_st7af")

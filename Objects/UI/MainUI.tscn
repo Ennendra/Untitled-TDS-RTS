@@ -33,16 +33,16 @@ visible = false
 visible = false
 
 [node name="UI_MinimapZoomPlus" type="TextureButton" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -255.0
+offset_left = 541.0
 offset_top = -299.0
-offset_right = -145.0
+offset_right = 651.0
 offset_bottom = -269.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("8_r2gcq")
 texture_pressed = ExtResource("9_pmnhy")
@@ -50,16 +50,16 @@ texture_hover = ExtResource("10_qrmeq")
 texture_disabled = ExtResource("11_uh58t")
 
 [node name="UI_MinimapZoomMinus" type="TextureButton" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -385.0
+offset_left = 420.0
 offset_top = -299.0
-offset_right = -275.0
+offset_right = 530.0
 offset_bottom = -269.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("11_3h37u")
 texture_pressed = ExtResource("12_fcr7g")

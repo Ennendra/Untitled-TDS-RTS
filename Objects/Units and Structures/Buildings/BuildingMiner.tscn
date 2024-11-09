@@ -12,17 +12,17 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qglq"]
 radius = 43.0
 
-[node name="BuildingMiner" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "resourceComponent", "factionComponent") groups=["Building"]]
+[node name="BuildingMiner" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent", "resourceComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 16384
 script = ExtResource("1_6f487")
-energyReclaimValue = 100.0
-metalReclaimValue = 40.0
 buildingType = 1
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+unitInfo = ExtResource("5_2oyh4")
+mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
-resourceComponent = NodePath("ResourceComponent")
 factionComponent = NodePath("FactionComponent")
+resourceComponent = NodePath("ResourceComponent")
 
 [node name="MainSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_ubo7v")

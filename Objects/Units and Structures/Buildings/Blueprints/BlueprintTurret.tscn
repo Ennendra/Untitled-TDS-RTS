@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bxtblwedpv3i8"]
+[gd_scene load_steps=13 format=3 uid="uid://bxtblwedpv3i8"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BlueprintParent.cs" id="1_ty3oo"]
-[ext_resource type="PackedScene" uid="uid://dpyxe4fuquhmf" path="res://Objects/Units and Structures/Buildings/BuildingRefinery.tscn" id="2_m7nam"]
+[ext_resource type="Resource" uid="uid://bc3s0wejn2g7a" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Turret.tres" id="2_4bia3"]
+[ext_resource type="PackedScene" uid="uid://uope7kr0g6fa" path="res://Objects/Units and Structures/Buildings/BuildingTurret.tscn" id="2_q1ato"]
 [ext_resource type="Texture2D" uid="uid://8wyhdq20l5o2" path="res://Textures/Buildings/Turret1/Turret1Full.png" id="3_hsoif"]
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_77bdc"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_dicuk"]
@@ -29,7 +30,8 @@ shader_parameter/effect_filling = 1.0
 collision_layer = 131074
 collision_mask = 0
 script = ExtResource("1_ty3oo")
-objectToSpawn = ExtResource("2_m7nam")
+unitInfo = ExtResource("2_4bia3")
+objectToSpawn = ExtResource("2_q1ato")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")

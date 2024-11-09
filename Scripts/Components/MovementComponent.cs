@@ -1,15 +1,29 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+
+public enum MovementType
+{
+	GROUND,
+	HOVER,
+	AIR
+}
 
 public partial class MovementComponent : Area2D
 {
 
+	//The movement type (which can dictate how the unit moves and what count as obstacles
+	[Export] MovementType movementType = MovementType.GROUND;
+
 	//Speed variables
 	[Export] float maxSpeed = 60;
 	float currentSpeed = 0;
-	[Export] float accelerateFactor = 0.5f; //measured in seconds from 0->Max Speed
-	bool confirmMovement = false;
+	[Export] float timeToMaxSpeed = 0.5f;
+	[Export] float timeToZeroSpeed = 0.5f;
+    float AccelerateFactor { get => 1 / timeToMaxSpeed; }
+    float DecelerateFactor { get => 1 / timeToZeroSpeed; }
+    bool confirmMovement = false;
     Vector2 knockBack = Vector2.Zero;
     float knockBackFriction = 1;
     public float knockBackAmount = 2.25f;
@@ -19,8 +33,10 @@ public partial class MovementComponent : Area2D
     //Sprite that will be manipulated by movement rotation if applicable
     [Export] Sprite2D legSprite;
 
-	//Direction of movement
-	float targetDirection = 0, moveDirection=0;
+	//Direction of movement (for ground)
+	float targetDirection = 0, groundMoveDirection=0;
+	//Direction of movement (for hover)
+	Vector2 hoverMoveVector = new Vector2(0,0);
 	//The rotation speed of the unit
 	[Export] float rotationSpeedDegrees = 200.0f;
 	
@@ -35,48 +51,103 @@ public partial class MovementComponent : Area2D
         base._Ready();
 
 		knockBackAmount = maxSpeed / 120 * 2.25f;
-
 		rotationSpeed = Mathf.DegToRad(rotationSpeedDegrees);
     }
 
     public override void _Process(double delta)
 	{
-		moveDirection = Mathf.RotateToward(moveDirection, targetDirection, rotationSpeed * (float)delta);
-		//moveDirection = Mathf.LerpAngle(moveDirection,targetDirection,rotationFactor*(float)delta); 
-		if (legSprite != null )
+		if (movementType == MovementType.HOVER)
 		{
-			legSprite.GlobalRotation = moveDirection;
+            if (IsInstanceValid(legSprite) && hoverMoveVector.Length() > 1.0f)
+            {
+				legSprite.GlobalRotation = Mathf.RotateToward(legSprite.GlobalRotation, targetDirection, rotationSpeed * (float)delta);
+            }
+        }
+		else if (movementType == MovementType.AIR)
+		{
+			if (IsInstanceValid(legSprite))
+			{
+
+			}
 		}
+        else //ground/default
+        {
+			//Rotate the movement towards the target direction
+            groundMoveDirection = Mathf.RotateToward(groundMoveDirection, targetDirection, rotationSpeed * (float)delta);
+            if (IsInstanceValid(legSprite))
+            {
+                legSprite.GlobalRotation = groundMoveDirection;
+            }
+        }
+		
 	}
     public override void _PhysicsProcess(double delta)
     {
         Node2D parent = (Node2D)this.GetParent();
-		knockBack = knockBack.MoveToward(Vector2.Zero, knockBackFriction);
 
+		//Process adding or removing knockback
+		knockBack = knockBack.MoveToward(Vector2.Zero, knockBackFriction);
 		foreach (var area in collidingPhysicsAreas)
 		{
             SetKnockback(area.GlobalPosition.DirectionTo(GlobalPosition) * knockBackAmount);
         }
 
-		Vector2 movement = GetMovementVector(delta);
-		movement += knockBack;
-		parent.GlobalPosition += movement;
+        //Final movements
+        if (movementType == MovementType.HOVER)
+        {
+            Vector2 movement = GetMovementVectorHover(delta);
+            movement += knockBack;
+            parent.GlobalPosition += movement;
+        }
+        else //Ground/default
+		{ 
+			Vector2 movement = GetMovementVectorGround(delta);
+            movement += knockBack;
+            parent.GlobalPosition += movement;
+        }
     }
 
     //Movement Functions
     public void Accelerate(double delta)
 	{
-		currentSpeed += maxSpeed * accelerateFactor * (float)delta;
-		if (currentSpeed > maxSpeed) { currentSpeed = maxSpeed; }
+        float speedAddAmount = maxSpeed * AccelerateFactor * (float)delta;
+        if (movementType == MovementType.HOVER)
+		{
+			//Add acceleration to the movement vector, and cap the length to the maxspeed
+			hoverMoveVector += Vector2.FromAngle(targetDirection) * speedAddAmount;
+			if (hoverMoveVector.Length() > maxSpeed)
+			{
+				hoverMoveVector = hoverMoveVector.Normalized() * maxSpeed;
+			}
+        }
+		else //ground/default
+		{
+			currentSpeed += speedAddAmount;
+            if (currentSpeed > maxSpeed) { currentSpeed = maxSpeed; }
+        }
+		
 	}
 	public void Decelerate(double delta)
 	{
-        currentSpeed -= maxSpeed * accelerateFactor * (float)delta;
-		if (currentSpeed < 0) { currentSpeed = 0; }
+		float speedReduceAmount = maxSpeed * DecelerateFactor * (float)delta;
+
+        if (movementType == MovementType.HOVER)
+		{
+			hoverMoveVector = hoverMoveVector.MoveToward(Vector2.Zero, speedReduceAmount);
+		}
+		else //ground/default
+		{
+			currentSpeed -= speedReduceAmount;
+			if (currentSpeed < 0) { currentSpeed = 0; }
+		}
     }
-	public Vector2 GetMovementVector(double delta)
+	public Vector2 GetMovementVectorHover(double delta)
 	{
-		return Vector2.FromAngle(moveDirection) * currentSpeed * (float)delta;
+		return hoverMoveVector * (float)delta;
+	}
+	public Vector2 GetMovementVectorGround(double delta)
+	{
+		return Vector2.FromAngle(groundMoveDirection) * currentSpeed * (float)delta;
 	}
 	public float GetTargetDirection()
 	{
@@ -84,11 +155,11 @@ public partial class MovementComponent : Area2D
 	}
 	public float GetCurrentDirection()
 	{
-		return moveDirection;
+		return groundMoveDirection;
 	}
 	public void SetMoveDirection(float directionDegrees)
 	{
-		moveDirection = Mathf.DegToRad(directionDegrees);
+		groundMoveDirection = Mathf.DegToRad(directionDegrees);
 	}
 
 	//Rotation functions
@@ -98,7 +169,7 @@ public partial class MovementComponent : Area2D
 	}
 	public void SetInitialRotation(float rotation)
 	{
-		moveDirection = rotation;
+		groundMoveDirection = rotation;
 		targetDirection = rotation;
 	}
 

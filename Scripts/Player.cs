@@ -47,7 +47,7 @@ public partial class Player : Area2D
             mouseDistanceFromPlayer = Mathf.Lerp(mouseDistanceFromPlayer, GlobalPosition.DistanceTo(GetGlobalMousePosition()), 4 * (float)delta);
 
             spriteAimCursor.GlobalPosition = GlobalPosition + (Vector2.FromAngle(aimComponent.GlobalRotation) * mouseDistanceFromPlayer);
-
+            
             SendHealthBarData();
         }
     }

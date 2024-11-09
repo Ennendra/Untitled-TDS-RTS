@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c2tt6j6mlckwl"]
+[gd_scene load_steps=21 format=3 uid="uid://c2tt6j6mlckwl"]
 
 [ext_resource type="Texture2D" uid="uid://dmpxxm1byp76d" path="res://Textures/UI/MainUIFramework/RTSBuildMenu.png" id="1_0dq4w"]
 [ext_resource type="Script" path="res://Scripts/UI/UI_RTSToolbar.cs" id="1_7pdph"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://duv5n2wh276mn" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_EnergyStorage.tres" id="6_dnk6g"]
 [ext_resource type="Resource" uid="uid://3yiscuiw5o3t" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_MetalStorage.tres" id="7_hxr0n"]
 [ext_resource type="Resource" uid="uid://cu5mfbycdnot5" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Factory.tres" id="8_701pj"]
+[ext_resource type="Resource" uid="uid://dclclw6hqdrx7" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Turret.tres" id="9_v0ken"]
 [ext_resource type="Texture2D" uid="uid://dfhpwcgt1mxxq" path="res://Textures/UI/MainUIFramework/RTSOrderHotbar.png" id="10_007am"]
 [ext_resource type="PackedScene" uid="uid://8gchljq3igyy" path="res://Objects/UI/BuildButton.tscn" id="11_2sted"]
 [ext_resource type="PackedScene" uid="uid://dodaethcf3kfh" path="res://Objects/UI/FactoryBuildButton.tscn" id="12_gos2n"]
@@ -43,7 +44,7 @@ buildingButtons = [NodePath("BuildButtonContainer/VBoxContainer/HBoxContainer/Bu
 factoryBuildingButtons = [NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton1"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton2"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton3"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton4"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer/FactoryBuildButton5"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton6"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton7"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton8"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton9"), NodePath("FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2/FactoryBuildButton10")]
 selectedUnitButtons = [NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo1"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo2"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo3"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo4"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer/UnitInfo5"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo6"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo7"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo8"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo9"), NodePath("SelectionButtonContainer/VBoxContainer/HBoxContainer2/UnitInfo10")]
 orderButtons = [NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonMove"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonAttack"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonStop"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer/OrderButtonHold"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial1"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial2"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial3"), NodePath("OrderHotbarContainer/VBoxContainer/HBoxContainer2/OrderButtonSpecial4")]
-buildingList_tier1 = Array[Resource]([ExtResource("2_tdbig"), ExtResource("3_pvjvu"), ExtResource("4_dsxre"), ExtResource("5_i3o4t"), ExtResource("6_dnk6g"), ExtResource("7_hxr0n"), ExtResource("8_701pj")])
+buildingList_tier1 = Array[Resource]([ExtResource("2_tdbig"), ExtResource("3_pvjvu"), ExtResource("4_dsxre"), ExtResource("5_i3o4t"), ExtResource("6_dnk6g"), ExtResource("7_hxr0n"), ExtResource("8_701pj"), ExtResource("9_v0ken")])
 
 [node name="MainTex" type="TextureRect" parent="."]
 layout_mode = 1

@@ -146,8 +146,6 @@ public partial class UI_BuildPlacement : Sprite2D
             GetTree().CurrentScene.AddChild(newBuilding);
             newBuilding.GlobalPosition = buildLocation;
             newBuilding.SetNewFaction(factionLink.GetPlayerFaction());
-            newBuilding.GetDamageComponent().SetHealthPercentage(10);
-            newBuilding.InitItemDetails(currentBuildingInfo);
             return true;
         }
         return false;

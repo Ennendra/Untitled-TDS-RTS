@@ -11,14 +11,17 @@ enum WeaponFireType
 
 public partial class WeaponParent : Node2D
 {
-
+    [ExportCategory("UI References")]
     [Export] public Texture2D weaponIcon { get; private set; }
 
+    [ExportCategory("Weapon Stats")]
     //hold all the general stats like rate of fire, damage etc
     [Export] public WeaponInfo weapon { get; protected set; }
     [Export] WeaponFireType weaponFireType;
     //The array of nodes that will be used for their position of projectile spawns (Added as child nodes in the editor)
+    
     Node2D[] weaponFirePoints;
+    AudioStreamPlayer2D weaponFireSound;
     //Which of the weapons to fire (relevant for ALTERNATE fire)
     int weaponFireIndex = 0;
 
@@ -30,25 +33,30 @@ public partial class WeaponParent : Node2D
     int shotsFired { get => weapon.shotsFired; set => weapon.shotsFired = value; }
     PackedScene projectileToSpawn { get => weapon.projectileToSpawn; set => weapon.projectileToSpawn = value; }
     public bool isDirectFire { get => weapon.isDirectFire; protected set => weapon.isDirectFire = value; }
+    public float projectileSpeed { get => weapon.projectileSpeed; protected set => weapon.projectileSpeed = value; }
+    public float projectileSpeedVariance { get => weapon.projectileSpeedVariance; protected set => weapon.projectileSpeedVariance = value; }
 
     //Checks if the weapon is equipped (normally only really necessary on the player)
     public bool isEquipped = true;
     //the time since it last fired
     float fireTime = 0;
-
-    [Export] int[] attackCollisionLayers, attackCollisionMasks;
+    //The layers and masks that spawned projectiles will inherit
+    int[] attackCollisionLayers, attackCollisionMasks;
 
     public override void _Ready()
     {
         base._Ready();
 
-        //Get the child nodes inside this node and add them to the weapon fire point array
-        var childNodes = GetChildren();
-        weaponFirePoints = new Node2D[childNodes.Count];
+        //Get the weapon fire point nodes and add them to the array
+        var weaponPointChildNodes = GetNode("Firepoints").GetChildren();
+        weaponFirePoints = new Node2D[weaponPointChildNodes.Count];
         for (int i = 0; i < weaponFirePoints.Length; i++)
         {
-            weaponFirePoints[i] = (Node2D)childNodes[i];
+            weaponFirePoints[i] = (Node2D)weaponPointChildNodes[i];
         }
+
+        //define the weapon fire sound player
+        weaponFireSound = GetNode<AudioStreamPlayer2D>("WeaponFireSound");
     }
 
     public override void _Process(double delta)
@@ -106,6 +114,7 @@ public partial class WeaponParent : Node2D
                     break;
             }
             fireTime = 0;
+            weaponFireSound.Play();
             return true;
         }
         return false;
@@ -123,8 +132,9 @@ public partial class WeaponParent : Node2D
             newProjectile.GlobalPosition = spawnPosition;
             newProjectile.Rotation = spawnRotation + scatterAmount;
 
+            float newProjectileSpeed = projectileSpeed - projectileSpeedVariance + (GD.Randf() * (projectileSpeedVariance * 2));
 
-            newProjectile.SetProjectileStats(damage, range, isDirectFire);
+            newProjectile.SetProjectileStats(damage, range, isDirectFire, newProjectileSpeed);
             //Set the projectile collision layers and masks
             newProjectile.CallDeferred("SetProjectileCollisions", attackCollisionLayers, attackCollisionMasks);
         }

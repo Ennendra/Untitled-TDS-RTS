@@ -6,9 +6,11 @@
 [resource]
 script = ExtResource("2_t7dq3")
 damage = 5.0
-rateOfFire = 8.0
+rateOfFire = 12.0
 range = 600.0
 scatter = 3.0
 shotsFired = 1
 projectileToSpawn = ExtResource("1_hbewn")
 isDirectFire = true
+projectileSpeed = 1300.0
+projectileSpeedVariance = 0.0

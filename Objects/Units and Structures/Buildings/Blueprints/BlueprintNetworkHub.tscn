@@ -30,6 +30,7 @@ shader_parameter/effect_filling = 1.0
 collision_layer = 131074
 collision_mask = 0
 script = ExtResource("1_3018x")
+unitInfo = ExtResource("8_t4x8l")
 objectToSpawn = ExtResource("2_faq13")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")

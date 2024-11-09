@@ -18,11 +18,14 @@ public enum ToolType
 
 public partial class ToolParent : Node2D
 {
-	[Export] public Texture2D toolIcon { get; private set; }
+    [ExportCategory("UI Elements")]
+    [Export] public Texture2D toolIcon { get; private set; }
 
-	[Export] protected ConstructorComponent constructorComponent;
+    [ExportCategory("Components")]
+    [Export] protected ConstructorComponent constructorComponent;
     [Export] protected ResourceComponent resourceComponent;
 	[Export] protected FactionComponent factionComponent;
+    [ExportCategory("Tool Traits")]
     [Export] public ToolType toolType { get; private set; }
 	[Export] protected float toolRange;
 

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dvj0ypum3joxq"
+path="res://.godot/imported/Like Angels Fall.mp3-dc550369d47fbf3902c3074787d7defb.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Music/Like Angels Fall.mp3"
+dest_files=["res://.godot/imported/Like Angels Fall.mp3-dc550369d47fbf3902c3074787d7defb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

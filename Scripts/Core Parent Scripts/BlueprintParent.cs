@@ -4,10 +4,8 @@ using System.Reflection.Metadata.Ecma335;
 
 public partial class BlueprintParent : Area2D
 {
-    //A reference to the type of building this will be (e.g. MINER, WALL)
-	public ConstructType blueprintType;
-
-    
+    [ExportCategory("Unit Information Resource")]
+    [Export] UnitInfo unitInfo;
 
     //The total cost of the blueprint and how much has been supplied. Full supply will "complete" the blueprint
 	float energyCost=10, metalCost=10;
@@ -18,12 +16,14 @@ public partial class BlueprintParent : Area2D
 
     float totalCost { get => energyCost + metalCost; }
     float totalSupplied {  get => energySupplied + metalSupplied; }
-
-	[Export] PackedScene objectToSpawn;
-	[Export] DamageComponent damageComponent;
+    [ExportCategory("Building Spawned on Completion")]
+    [Export] PackedScene objectToSpawn;
+    [ExportCategory("Components")]
+    [Export] DamageComponent damageComponent;
     [Export] FactionComponent factionComponent;
     public MinimapMarkerComponent markerComponent { get; protected set; }
 
+    [ExportCategory("Building Size")]
     [Export] public Polygon2D buildingObstacleBounds { get; protected set; }
 
     ProgressBar progressBar;
@@ -38,23 +38,30 @@ public partial class BlueprintParent : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-        markerComponent = GetNode<MinimapMarkerComponent>("MinimapMarkerComponent");
-
-        progressBar = GetNode<ProgressBar>("BuildProgressBar");
-
-        progressBar.Value = 0;
-
-        mainSprite = GetNode<Sprite2D>("Sprite");
-        scaffoldSprite = GetNode<Sprite2D>("SpriteScaffold");
-
-        scaffoldSprite.Texture = mainSprite.Texture;
-        scaffoldShader = scaffoldSprite.Material as ShaderMaterial;
-
-
+        //Define variable values based on unitInfo resource
+        energyCost = unitInfo.energyCost;
+        metalCost = unitInfo.metalCost;
+        SetReclaimValue(energyCost, metalCost);
+        damageComponent.SetMaxHealth(unitInfo.maxHealth);
+        //Set up initial supplied values and health
         energySupplied = energyCost / 10;
         metalSupplied = metalCost / 10;
         damageComponent.SetHealthPercentage(10);
+        //Set the progressbar values
+        progressBar = GetNode<ProgressBar>("BuildProgressBar");
+        progressBar.Value = totalSupplied;
+        progressBar.MaxValue = totalCost;
 
+        //Define general nodes within the blueprint
+        markerComponent = GetNode<MinimapMarkerComponent>("MinimapMarkerComponent");
+        progressBar = GetNode<ProgressBar>("BuildProgressBar");
+        mainSprite = GetNode<Sprite2D>("Sprite");
+        scaffoldSprite = GetNode<Sprite2D>("SpriteScaffold");
+        //Define the scaffold (the holographic part) texture and shader
+        scaffoldSprite.Texture = mainSprite.Texture;
+        scaffoldShader = scaffoldSprite.Material as ShaderMaterial;
+
+        //Define signals
         AddUserSignal("OnDamageKill");
         Connect("OnDamageKill", new Callable(this, "OnDamageKill"));
         AddUserSignal("OnReclaimKill");
@@ -76,6 +83,7 @@ public partial class BlueprintParent : Area2D
 
         scaffoldShader.SetShaderParameter("effect_filling", shaderFillLevel);
 
+        //Complete the construction once enough resources have been supplied
 		if (energySupplied >= energyCost &&  metalSupplied >= metalCost)
 			CompleteBlueprint();
 
@@ -99,21 +107,10 @@ public partial class BlueprintParent : Area2D
     {
         return factionComponent;
     }
-
     public void SetReclaimValue(float energy, float metal)
     {
         damageComponent.SetReclaimValue(energy, metal);
     }
-    public void InitItemDetails(ConstructInfo newInfo)
-	{
-		energyCost = newInfo.unitInfo.energyCost;
-		metalCost = newInfo.unitInfo.metalCost;
-		blueprintType = newInfo.type;
-
-        progressBar.MaxValue = totalCost;
-
-        SetReclaimValue(energyCost, metalCost);
-	}
     //Gets the energy to metal ratio of this blueprint
     public float[] GetEnergyMetalRatio()
     {
@@ -142,6 +139,7 @@ public partial class BlueprintParent : Area2D
         GetTree().CurrentScene.AddChild(newBuilding);
         newBuilding.GlobalPosition = GlobalPosition;
         newBuilding.SetNewFaction(factionComponent.faction);
+        newBuilding.GetDamageComponent().SetHealthPercentage(damageComponent.GetCurrentHealthPercent());
         QueueFree();
     }
     public float GetBuildingRadius()

@@ -68,8 +68,10 @@ maxHealth = 250.0
 shape = SubResource("CircleShape2D_pk0mf")
 
 [node name="MovementComponent" parent="." node_paths=PackedStringArray("legSprite") instance=ExtResource("3_xsw3q")]
-maxSpeed = 250.0
-accelerateFactor = 3.0
+movementType = 1
+maxSpeed = 350.0
+timeToMaxSpeed = 0.4
+timeToZeroSpeed = 0.6
 legSprite = NodePath("../BottomSprite")
 rotationSpeedDegrees = 240.0
 
@@ -104,3 +106,5 @@ shape = SubResource("CircleShape2D_0prfk")
 [connection signal="child_exiting_tree" from="AimingComponent/Weapons" to="." method="OnWeaponRemoved"]
 [connection signal="child_entered_tree" from="AimingComponent/Tools" to="." method="OnToolAdded"]
 [connection signal="child_exiting_tree" from="AimingComponent/Tools" to="." method="OnToolRemoved"]
+
+[editable path="AimingComponent/Weapons/WeaponTest"]

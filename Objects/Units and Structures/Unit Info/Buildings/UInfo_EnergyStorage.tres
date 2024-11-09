@@ -7,6 +7,7 @@
 script = ExtResource("2_n2734")
 unitName = "Energy Storage"
 unitDescription = "Increases maximum energy storage capacity"
+maxHealth = 180.0
 energyCost = 100.0
 metalCost = 100.0
 iconTex = ExtResource("1_5av4d")

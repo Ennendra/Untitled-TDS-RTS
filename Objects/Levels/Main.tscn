@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bvji7q1gdfv36"]
+[gd_scene load_steps=20 format=3 uid="uid://bvji7q1gdfv36"]
 
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
 [ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://b8wtdlbxd7cm6" path="res://Objects/Units and Structures/Buildings/BuildingMiner.tscn" id="14_m5tpb"]
 [ext_resource type="PackedScene" uid="uid://dl8s3u8cffmp2" path="res://Objects/Units and Structures/Buildings/BuildingFactory.tscn" id="15_dafo8"]
 [ext_resource type="PackedScene" uid="uid://uope7kr0g6fa" path="res://Objects/Units and Structures/Buildings/BuildingTurret.tscn" id="16_7ws5e"]
+[ext_resource type="AudioStream" uid="uid://dvj0ypum3joxq" path="res://Sounds/Music/Like Angels Fall.mp3" id="17_ce6kg"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_eb8bk"]
 vertices = PackedVector2Array(1865, 1265, -1940, 1265, -740, -90, 1865, -2190, -810, -90, -740, -460, -1940, -2190, -1010, -460, -1010, -390, -810, -390)
@@ -32,8 +33,8 @@ script = ExtResource("1_slh8m")
 navigationRegion = NodePath("NavigationRegion2D")
 top = -2000.0
 left = -2000.0
-bottom = 4000.0
-right = 2000.0
+bottom = 6000.0
+right = 3000.0
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_eb8bk")
@@ -62,7 +63,7 @@ position = Vector2(525, -25)
 position = Vector2(675, -25)
 
 [node name="Player" parent="." instance=ExtResource("1_ndp2k")]
-position = Vector2(-300, -300)
+position = Vector2(475, 100)
 
 [node name="RTSController" parent="." instance=ExtResource("13_87ivr")]
 
@@ -146,7 +147,59 @@ position = Vector2(1775, -375)
 factionOverride = 2
 
 [node name="Unit7" parent="." instance=ExtResource("11_vy2n2")]
-position = Vector2(1775, -275)
+position = Vector2(1750, -275)
+factionOverride = 2
+
+[node name="Unit8" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1850, -200)
+factionOverride = 2
+
+[node name="Unit9" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-1925, 2575)
+factionOverride = 2
+
+[node name="Unit10" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-1725, 2450)
+factionOverride = 2
+
+[node name="Unit11" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-1725, 2725)
+factionOverride = 2
+
+[node name="Unit12" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-1500, 2575)
+factionOverride = 2
+
+[node name="Unit13" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1875, 2625)
+factionOverride = 2
+
+[node name="Unit14" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1950, 2775)
+factionOverride = 2
+
+[node name="Unit15" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(2125, 2550)
+factionOverride = 2
+
+[node name="Unit16" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(2300, 2875)
+factionOverride = 2
+
+[node name="Unit17" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-1000, 3800)
+factionOverride = 2
+
+[node name="Unit18" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(-350, 3750)
+factionOverride = 2
+
+[node name="Unit19" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1300, 3600)
+factionOverride = 2
+
+[node name="Unit20" parent="." instance=ExtResource("11_vy2n2")]
+position = Vector2(1925, 3975)
 factionOverride = 2
 
 [node name="BuildingMiner" parent="." instance=ExtResource("14_m5tpb")]
@@ -173,14 +226,153 @@ position = Vector2(25, -225)
 [node name="BuildingTurret" parent="." instance=ExtResource("16_7ws5e")]
 position = Vector2(200, -50)
 
-[node name="BuildingTurret2" parent="." node_paths=PackedStringArray("buildingObstacleBounds", "damageComponent", "factionComponent") instance=ExtResource("16_7ws5e")]
-position = Vector2(700, 100)
-buildingObstacleBounds = NodePath("../BuildingTurret/BuildingObstacleBounds")
-damageComponent = NodePath("../BuildingTurret/DamageComponent")
-factionComponent = NodePath("../BuildingTurret/FactionComponent")
+[node name="BuildingTurret2" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(700, 150)
 
 [node name="BuildingTurret3" parent="." instance=ExtResource("16_7ws5e")]
 position = Vector2(225, 100)
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_ce6kg")
+autoplay = true
+parameters/looping = true
+
+[node name="MetalNode3" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(600, 3650)
+
+[node name="MetalNode4" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(1300, 3950)
+
+[node name="MetalNode5" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(450, 4150)
+
+[node name="MetalNode6" parent="." instance=ExtResource("12_sn534")]
+position = Vector2(-150, 4000)
+
+[node name="BuildingMiner3" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(-150, 4000)
+factionOverride = 2
+
+[node name="BuildingMiner4" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(450, 4150)
+factionOverride = 2
+
+[node name="BuildingMiner5" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(1300, 3950)
+factionOverride = 2
+
+[node name="BuildingMiner6" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(600, 3650)
+factionOverride = 2
+
+[node name="BuildingNetworkHub2" parent="." instance=ExtResource("6_ff2od")]
+position = Vector2(150, 3950)
+factionOverride = 2
+
+[node name="BuildingNetworkHub3" parent="." instance=ExtResource("6_ff2od")]
+position = Vector2(1150, 3950)
+priority = 2
+factionOverride = 2
+
+[node name="BuildingRefinery3" parent="." instance=ExtResource("5_oydl6")]
+position = Vector2(425, 4375)
+factionOverride = 2
+
+[node name="BuildingRefinery4" parent="." instance=ExtResource("5_oydl6")]
+position = Vector2(575, 4375)
+factionOverride = 2
+
+[node name="BuildingRefinery5" parent="." instance=ExtResource("5_oydl6")]
+position = Vector2(725, 4375)
+factionOverride = 2
+
+[node name="BuildingRefinery6" parent="." instance=ExtResource("5_oydl6")]
+position = Vector2(875, 4375)
+factionOverride = 2
+
+[node name="BuildingMetalStorage3" parent="." instance=ExtResource("9_qek2b")]
+position = Vector2(50, 4150)
+factionOverride = 2
+
+[node name="BuildingMetalStorage4" parent="." instance=ExtResource("9_qek2b")]
+position = Vector2(150, 4150)
+factionOverride = 2
+
+[node name="BuildingEnergyStorage3" parent="." instance=ExtResource("10_2yq5g")]
+position = Vector2(1200, 4150)
+factionOverride = 2
+
+[node name="BuildingEnergyStorage4" parent="." instance=ExtResource("10_2yq5g")]
+position = Vector2(1300, 4150)
+factionOverride = 2
+
+[node name="BuildingGenerator5" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(575, 3825)
+factionOverride = 2
+
+[node name="BuildingGenerator6" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(575, 3975)
+factionOverride = 2
+
+[node name="BuildingGenerator7" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(875, 3825)
+factionOverride = 2
+
+[node name="BuildingGenerator8" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(725, 3825)
+factionOverride = 2
+
+[node name="BuildingGenerator9" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(875, 3975)
+factionOverride = 2
+
+[node name="BuildingGenerator10" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(725, 3975)
+factionOverride = 2
+
+[node name="BuildingFactory3" parent="." instance=ExtResource("15_dafo8")]
+position = Vector2(-175, 4325)
+factionOverride = 2
+
+[node name="BuildingTurret4" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(-250, 3500)
+factionOverride = 2
+
+[node name="BuildingTurret5" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(1550, 3500)
+factionOverride = 2
+
+[node name="BuildingTurret6" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(900, 3500)
+factionOverride = 2
+
+[node name="BuildingTurret7" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(400, 3500)
+factionOverride = 2
+
+[node name="BuildingTurret8" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(-250, 4000)
+factionOverride = 2
+
+[node name="BuildingTurret9" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(1450, 4000)
+factionOverride = 2
+
+[node name="BuildingTurret10" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(1000, 4400)
+factionOverride = 2
+
+[node name="BuildingTurret11" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(300, 4400)
+factionOverride = 2
+
+[node name="BuildingTurret12" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(200, 4400)
+factionOverride = 2
+
+[node name="BuildingTurret13" parent="." instance=ExtResource("16_7ws5e")]
+position = Vector2(1100, 4400)
+factionOverride = 2
 
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]

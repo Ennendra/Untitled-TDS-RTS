@@ -19,7 +19,7 @@ public partial class DamageComponent : Area2D
 	float timeSinceLastDamage = 10; //Used to hide the healthbar when the object hasn't taken damage in a while
 	public float toolRangeGrace = 50;
 
-	[Export] public float maxHealth { get; private set; }
+	public float maxHealth { get; private set; }
 	float health;
 
 
@@ -94,18 +94,26 @@ public partial class DamageComponent : Area2D
 	{
 		healthBar.Position = new Vector2(-40,amount);
 	}
+	public void SetMaxHealth(float amount)
+	{
+		maxHealth = amount;
+		if (health > maxHealth) {  health = maxHealth; }
+        healthBar.MaxValue = maxHealth;
+        healthBar.Value = health;
+    }
 	public void SetHealthPercentage(float percentage)
 	{
 		health = maxHealth / 100 * percentage;
         healthBar.Value = health;
-		timeSinceLastDamage = 0;
+		//timeSinceLastDamage = 0;
     }
     public void TakeDamage(float amount, DamageType type)
 	{
+		GD.Print(maxHealth);
 		health -= amount;
 		healthBar.Value = health;
         timeSinceLastDamage = 0;
-        if (health < 0)
+        if (health <= 0)
 		{
 			health = 0;
 			TriggerDeath(type);

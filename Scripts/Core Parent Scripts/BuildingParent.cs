@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 //Denotes the type of building. Helps the network controller control which buildings to affect performance on
@@ -12,28 +13,24 @@ public enum BuildingType
 	GENERATOR,
 	ENERGYSTORAGE,
 	METALSTORAGE,
-	FACTORY
+	FACTORY,
+	TURRET
 }
 
-public partial class BuildingParent : Area2D
+public partial class BuildingParent : CombatantParent
 {
-	Sprite2D mainSprite;
-
 	//variables related to before the building has finished construction
 	protected bool buildingConstructed = false;
 	float buildProgress = 1;
-	[Export] float energyReclaimValue = 1;
-    [Export] float metalReclaimValue = 1;
-    [Export] BuildingType buildingType;
+
+    [ExportCategory("Building Definitions")]
+    [Export] BuildingType buildingType; //Defines what type of building this is. Currently only checks if the building is a NetworkHub in relation to being online
 	[Export] public Polygon2D buildingObstacleBounds { get; protected set; }
 
     //Components
-    [Export] protected DamageComponent damageComponent;
-	[Export] protected ResourceComponent resourceComponent;
+    [ExportCategory("Components - Building")]
 	[Export] protected ConstructorComponent constructorComponent;
-	[Export] protected FactionComponent factionComponent;
 	[Export] protected FactoryComponent factoryComponent;
-    public MinimapMarkerComponent markerComponent { get; protected set; }
 
     //performance multiplier of the building
     float currentPerformance = 1;
@@ -46,22 +43,12 @@ public partial class BuildingParent : Area2D
     public override void _Ready()
     {
         base._Ready();
-        markerComponent = GetNode<MinimapMarkerComponent>("MinimapMarkerComponent");
 
         mainSprite = GetNode<Sprite2D>("MainSprite");
-		SetReclaimValue(energyReclaimValue, metalReclaimValue);
 
-		//Set signals for colliding with network areas
-		AreaEntered += OnNetworkEntered;
-		AreaExited += OnNetworkExited;
-		//Set death signals
-        AddUserSignal("OnDamageKill");
-        Connect("OnDamageKill", new Callable(this, "OnDamageKill"));
-        AddUserSignal("OnReclaimKill");
-        Connect("OnReclaimKill", new Callable(this, "OnReclaimKill"));
-
-        damageComponent.SetHealthbarOffset(GetBuildingRadius());
-        damageComponent.toolRangeGrace = GetBuildingRadius();
+        //Set signals for colliding with network areas
+        AreaEntered += OnNetworkEntered;
+        AreaExited += OnNetworkExited;
     }
 
     public override void _Process(double delta)
@@ -70,22 +57,6 @@ public partial class BuildingParent : Area2D
 		ProcessBuildingTick(delta);
     }
 
-    public int GetCurrentFaction()
-	{
-		return factionComponent.faction;
-	}
-	public void SetNewFaction(int newFaction)
-	{
-		factionComponent.faction = newFaction;
-	}
-	public DamageComponent GetDamageComponent()
-	{
-		return damageComponent;
-	}
-    public FactionComponent GetFactionComponent()
-    {
-        return factionComponent;
-    }
     public BuildingType GetBuildingType()
 	{
 		return buildingType;
@@ -96,11 +67,6 @@ public partial class BuildingParent : Area2D
 		{
 			ProcessBuildingOperation(delta);
 		}
-	}
-	public ResourceComponent GetResourceComponent() 
-	{ 
-		if (IsInstanceValid(resourceComponent)) return resourceComponent; 
-		else return null;
 	}
     public ConstructorComponent GetConstructorComponent()
     {
@@ -120,10 +86,6 @@ public partial class BuildingParent : Area2D
 	{
 		currentPerformance = value;
 	}
-	public void SetReclaimValue(float energy, float metal)
-	{
-        damageComponent.SetReclaimValue(energy, metal);
-    }
     public float GetBuildingRadius()
     {
         return mainSprite.Texture.GetHeight() / 2;
@@ -156,15 +118,5 @@ public partial class BuildingParent : Area2D
         //Add this network area to the list that this building is in
         BaseNetworkController controller = (BaseNetworkController)area;
         networksInArea.Remove(controller);
-    }
-    public void OnDamageKill()
-    {
-		GetTree().CurrentScene.RemoveChild(this);
-        QueueFree();
-    }
-    public void OnReclaimKill()
-    {
-        GetTree().CurrentScene.RemoveChild(this);
-        QueueFree();
     }
 }

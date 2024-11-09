@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1mjct7gsmnmm"]
+[gd_scene load_steps=7 format=3 uid="uid://b1mjct7gsmnmm"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/ProjectileParent.cs" id="1_4dist"]
-[ext_resource type="Texture2D" uid="uid://dp0wu67h0f1e5" path="res://Textures/Projectiles/Projectile3.png" id="2_uvtns"]
+[ext_resource type="Texture2D" uid="uid://dumt8cy828d7n" path="res://Textures/Projectiles/Projectile4.png" id="2_k4ami"]
+[ext_resource type="PackedScene" uid="uid://cdlekj3bt2ix6" path="res://Objects/Weapons/Projectiles/ProjectileDetonation.tscn" id="2_rx5n3"]
 [ext_resource type="PackedScene" uid="uid://bn8ogg3a7if1g" path="res://Objects/Components/AttackComponent.tscn" id="2_xad3h"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n4tsn"]
@@ -14,11 +15,11 @@ radius = 3.0
 collision_layer = 0
 collision_mask = 5
 script = ExtResource("1_4dist")
+explosionToInstance = ExtResource("2_rx5n3")
 attackComponent = NodePath("AttackComponent")
-projectileSpeed = 1600.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_uvtns")
+texture = ExtResource("2_k4ami")
 
 [node name="AttackComponent" parent="." instance=ExtResource("2_xad3h")]
 

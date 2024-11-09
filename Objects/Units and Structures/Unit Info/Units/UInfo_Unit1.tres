@@ -7,6 +7,8 @@
 script = ExtResource("2_yqkxb")
 unitName = "Unit1"
 unitDescription = "Small light vehicle with rapid-firing weapons"
+maxHealth = 40.0
 energyCost = 80.0
 metalCost = 40.0
 iconTex = ExtResource("1_0fmpj")
+unitInfoType = 0
