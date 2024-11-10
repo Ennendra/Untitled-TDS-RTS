@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://6akwd6vee46k"]
+[gd_scene load_steps=20 format=3 uid="uid://6akwd6vee46k"]
 
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="1_etjku"]
 [ext_resource type="Script" path="res://Scripts/Units/Unit1.cs" id="1_yklge"]
 [ext_resource type="PackedScene" uid="uid://c7n24rpd3x7y5" path="res://Objects/Components/MovementComponent.tscn" id="2_nhwf2"]
+[ext_resource type="PackedScene" uid="uid://bcoihity33l5c" path="res://Objects/Other/ExplosionSmall.tscn" id="3_b1px4"]
 [ext_resource type="PackedScene" uid="uid://dog0l7qteqwmk" path="res://Objects/Components/AimingComponent.tscn" id="3_pv6d6"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="3_xl2j8"]
 [ext_resource type="PackedScene" uid="uid://djckgbda36vuf" path="res://Objects/Components/AIComponent.tscn" id="4_b2gys"]
@@ -30,6 +31,7 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_yklge")
 unitInfo = ExtResource("10_g22ja")
+deathExplosion = ExtResource("3_b1px4")
 mainSprite = NodePath("SpriteBottom")
 damageComponent = NodePath("DamageComponent")
 aimComponent = NodePath("AimingComponent")
@@ -45,6 +47,7 @@ equippedWeapon = NodePath("Weapon")
 rotationSpeed = 300.0
 
 [node name="SpriteTop" type="Sprite2D" parent="AimingComponent"]
+z_index = 2
 texture = ExtResource("5_y17g8")
 
 [node name="Weapon" parent="AimingComponent" instance=ExtResource("5_mtbdc")]

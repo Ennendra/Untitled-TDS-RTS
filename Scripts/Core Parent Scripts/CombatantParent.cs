@@ -10,6 +10,9 @@ public partial class CombatantParent : Area2D
     [ExportCategory("Unit Information Resource")]
     [Export] protected UnitInfo unitInfo;
 
+    [ExportCategory("Death Items")]
+    [Export] protected PackedScene deathExplosion;
+
     [ExportCategory("Components")]
     [Export] protected Sprite2D mainSprite;
     [Export] protected DamageComponent damageComponent;
@@ -91,10 +94,22 @@ public partial class CombatantParent : Area2D
     {
         return mainSprite.Texture.GetHeight() / 2;
     }
+    //Creating explosion on death
+    public void CreateExplosion()
+    {
+        if (deathExplosion != null)
+        {
+            var explosion = deathExplosion.Instantiate() as Explosion;
+            GetTree().CurrentScene.AddChild(explosion);
+            explosion.GlobalPosition = GlobalPosition;
+            explosion.GlobalRotation = GD.Randf() * 6.3f; //using radians, this is approximately 360 degrees with a bit extra
+        }
+    }
 
     //Signal functions
     public void OnDamageKill()
     {
+        CreateExplosion();
         QueueFree();
     }
     public void OnReclaimKill()

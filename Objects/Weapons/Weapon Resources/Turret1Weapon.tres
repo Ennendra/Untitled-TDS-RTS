@@ -1,7 +1,8 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://7fjox6tyqn7v"]
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://7fjox6tyqn7v"]
 
-[ext_resource type="PackedScene" uid="uid://b1mjct7gsmnmm" path="res://Objects/Weapons/Projectiles/TestProjectile.tscn" id="1_rffsr"]
+[ext_resource type="Texture2D" uid="uid://4uitk2svkyka" path="res://Textures/Projectiles/Projectile2.png" id="1_acxk8"]
 [ext_resource type="Script" path="res://Objects/Weapons/Weapon Resources/WeaponInfo.cs" id="2_03r5u"]
+[ext_resource type="PackedScene" uid="uid://b1mjct7gsmnmm" path="res://Objects/Weapons/Projectiles/ProjectileDirectFire1.tscn" id="2_hsq7i"]
 
 [resource]
 script = ExtResource("2_03r5u")
@@ -10,7 +11,8 @@ rateOfFire = 3.0
 range = 800.0
 scatter = 3.0
 shotsFired = 1
-projectileToSpawn = ExtResource("1_rffsr")
+projectileToSpawn = ExtResource("2_hsq7i")
 isDirectFire = true
-projectileSpeed = 3000.0
+projectileSpeed = 5000.0
 projectileSpeedVariance = 0.0
+projectileTexture = ExtResource("1_acxk8")

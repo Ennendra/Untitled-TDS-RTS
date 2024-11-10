@@ -15,21 +15,17 @@ public partial class ProjectileParent : Area2D
 	float distanceTravelled, maxDistance;
     bool isDirectFire;
 
+    Sprite2D mainSprite;
+
     public override void _Ready()
     {
         base._Ready();
 
+        mainSprite = GetNode<Sprite2D>("Sprite");
+
         AddUserSignal("ProjectileHit");
         Connect("ProjectileHit", new Callable(this, "OnProjectileHit"));
     }
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-	{
-        base._Process(delta);
-
-
-	}
 
     public override void _PhysicsProcess(double delta)
     {
@@ -62,7 +58,6 @@ public partial class ProjectileParent : Area2D
             }
         }
     }
-
     public void SetProjectileStats(float damage, float range, bool isDirectFire, float projectileSpeed)
     {
         this.damage = damage;
@@ -72,6 +67,19 @@ public partial class ProjectileParent : Area2D
 
         attackComponent.SetDamage(damage);
     }
+    public void SetProjectileTexture(Texture2D texture)
+    {
+        mainSprite.Texture = texture;
+    }
+
+    //Signals
+    public void OnProjectileHit()
+    {
+        CreateProjectileExplosion();
+        DestroyProjectile();
+    }
+
+    //Destroying the projectile
     public void CreateProjectileExplosion()
     {
         if (explosionToInstance != null)
@@ -81,14 +89,6 @@ public partial class ProjectileParent : Area2D
             explosion.GlobalPosition = GlobalPosition;
         }
     }
-
-    public void OnProjectileHit()
-    {
-
-        CreateProjectileExplosion();
-        DestroyProjectile();
-    }
-
     public void DestroyProjectile()
     {
         QueueFree();

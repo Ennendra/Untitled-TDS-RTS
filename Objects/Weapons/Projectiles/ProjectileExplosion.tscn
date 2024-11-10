@@ -1,27 +1,27 @@
 [gd_scene load_steps=14 format=3 uid="uid://cdlekj3bt2ix6"]
 
-[ext_resource type="Script" path="res://Scripts/Explosion.cs" id="1_pfysk"]
-[ext_resource type="Texture2D" uid="uid://vorv3r8i15pj" path="res://Textures/FX/projectile_detonate_spritesheet.png" id="2_idpt3"]
-[ext_resource type="AudioStream" uid="uid://c8lijsnqt4lq4" path="res://Sounds/FX/ProjectileExplosion1.wav" id="3_t0sv8"]
+[ext_resource type="Script" path="res://Scripts/Explosion.cs" id="1_xrd57"]
+[ext_resource type="Texture2D" uid="uid://vorv3r8i15pj" path="res://Textures/FX/projectile_detonate_spritesheet.png" id="2_bbcsj"]
+[ext_resource type="AudioStream" uid="uid://c8lijsnqt4lq4" path="res://Sounds/FX/ProjectileExplosion1.wav" id="3_svd8c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c70pl"]
-atlas = ExtResource("2_idpt3")
+atlas = ExtResource("2_bbcsj")
 region = Rect2(0, 0, 21, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4m5jf"]
-atlas = ExtResource("2_idpt3")
+atlas = ExtResource("2_bbcsj")
 region = Rect2(21, 0, 21, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ubsg0"]
-atlas = ExtResource("2_idpt3")
+atlas = ExtResource("2_bbcsj")
 region = Rect2(42, 0, 21, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dcg0n"]
-atlas = ExtResource("2_idpt3")
+atlas = ExtResource("2_bbcsj")
 region = Rect2(63, 0, 21, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_obnj8"]
-atlas = ExtResource("2_idpt3")
+atlas = ExtResource("2_bbcsj")
 region = Rect2(84, 0, 21, 20)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jk8iw"]
@@ -75,29 +75,33 @@ color_ramp = SubResource("GradientTexture1D_wm3i4")
 hue_variation_min = -2.23517e-08
 hue_variation_max = -2.23517e-08
 
-[node name="ProjectileDetonate" type="Node2D"]
-script = ExtResource("1_pfysk")
+[node name="ProjectileExplosion" type="Node2D" node_paths=PackedStringArray("sprite", "particles", "audio")]
+script = ExtResource("1_xrd57")
+sprite = NodePath("Sprite")
+particles = NodePath("Particles")
+audio = NodePath("Audio")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jk8iw")
 frame = 1
 
 [node name="Particles" type="GPUParticles2D" parent="."]
-modulate = Color(0.98151, 0.942221, 1, 1)
+modulate = Color(1.6, 1.6, 1.6, 1)
 material = SubResource("CanvasItemMaterial_gxqh3")
 rotation = 6.28319
 emitting = false
 amount = 60
 process_material = SubResource("ParticleProcessMaterial_sx2yy")
-texture = ExtResource("2_idpt3")
+texture = ExtResource("2_bbcsj")
 lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 40
+visibility_rect = Rect2(-20000, -20000, 40000, 40000)
 trail_lifetime = 0.6
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_t0sv8")
+stream = ExtResource("3_svd8c")
 volume_db = -8.0
 autoplay = true
 max_distance = 800.0

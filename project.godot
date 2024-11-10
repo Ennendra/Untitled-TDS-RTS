@@ -252,3 +252,4 @@ avoidance/layer_2="Buildings"
 [rendering]
 
 environment/defaults/default_clear_color=Color(0, 0.0156863, 0.0431373, 1)
+viewport/hdr_2d=true

@@ -13,19 +13,20 @@ public partial class WeaponInfo : Resource
     [Export] public bool isDirectFire = true; //Determines whether the projectile hits directly or will 'land' on a position (ie. artillery)
     [Export] public float projectileSpeed = 800; //How fast the projectile moves
     [Export] public float projectileSpeedVariance = 0; //How much the projectile speed can vary each way (useful for scatter weapons)
+    [Export] public Texture2D projectileTexture; //Altering the base texture of the projectile (if applicable)
 
-    public WeaponInfo() : this(10, 4, 400, 3, 1, null, true, 800, 0) { }
+    public WeaponInfo() : this(10, 4, 400, 3, 1, null, true, 800, 0, null) { }
 
-    public WeaponInfo(float vDamage, float vRateOfFire, float vRange, float vScatter, int vShotsFired, PackedScene vProjectileToSpawn, bool vIsDirectFire, float vProjectileSpeed, float vProjectileSpeedVariance)
+    public WeaponInfo(float damage, float rateOfFire, float range, float scatter, int shotsFired, PackedScene projectileToSpawn, bool isDirectFire, float projectileSpeed, float projectileSpeedVariance, Texture2D projectileTexture)
     {
-        damage = vDamage;
-        rateOfFire = vRateOfFire;
-        range = vRange;
-        scatter = vScatter;
-        shotsFired = vShotsFired;
-        projectileToSpawn = vProjectileToSpawn;
-        isDirectFire = vIsDirectFire;
-        projectileSpeed = vProjectileSpeed;
-        projectileSpeedVariance = vProjectileSpeedVariance;
+        this.damage = damage;
+        this.rateOfFire = rateOfFire;
+        this.range = range;
+        this.scatter = scatter;
+        this.shotsFired = shotsFired;
+        this.projectileToSpawn = projectileToSpawn;
+        this.isDirectFire = isDirectFire;
+        this.projectileSpeed = projectileSpeed;
+        this.projectileSpeedVariance = projectileSpeedVariance;
     }
 }

@@ -13,7 +13,7 @@ public partial class Player : Area2D
     PlayerState state = PlayerState.COMBAT;
     public MainLevelController levelController;
     Camera2D camera;
-
+    [Export] public UnitInfo unitInfo { get; private set; }
     [Export] public DamageComponent damageComponent { get; private set; }
     [Export] public AimingComponent aimComponent { get; private set; }
     [Export] public MovementComponent movementComponent { get; private set; }
@@ -40,12 +40,11 @@ public partial class Player : Area2D
     public override void _Ready()
 	{
         camera = GetNode<Camera2D>("Camera");
-        var mapEvent = InputMap.ActionGetEvents("CancelBuildPlacement");
-        GD.Print(mapEvent);
-        GD.Print(mapEvent[0]);
 
-        var e = new InputEventKey();
-        
+        damageComponent.SetReclaimValue(unitInfo.energyCost, unitInfo.metalCost);
+        damageComponent.SetMaxHealth(unitInfo.maxHealth);
+        damageComponent.SetHealthPercentage(100);
+
     }
 	public override void _Process(double delta)
 	{

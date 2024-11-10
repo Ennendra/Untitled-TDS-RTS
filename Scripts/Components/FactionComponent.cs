@@ -1,11 +1,16 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 public partial class FactionComponent : Area2D
 {
     Sprite2D unitSprite, unitScaffoldSprite;
 
+    //Tracks the last position of the unit/component and where it may be in 1 second's time
+    public Vector2 lastPos { get; private set; }
+    public Vector2 projectedPosition;
+    [Export] Sprite2D test;
     [Export] private int _faction = 1;
 
     [Export] DamageComponent damageComponent;
@@ -42,6 +47,8 @@ public partial class FactionComponent : Area2D
     {
         base._Ready();
 
+        lastPos = GlobalPosition;
+
         //Define the selection box around the unit and then hide it initially
         selectSprite = GetNode<Sprite2D>("SelectionSprite");
         selectSprite.Texture = selectedTexture;
@@ -51,6 +58,20 @@ public partial class FactionComponent : Area2D
         AddUserSignal("FactionChanged");
         Connect("FactionChanged", new Callable(this, "OnFactionChanged"));
         EmitSignal("FactionChanged");
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+
+        //Create a projected location on the component in 1 second's time
+        Vector2 moveVector = (GlobalPosition - lastPos) / (float)delta;
+        projectedPosition = GlobalPosition + moveVector;
+        if (IsInstanceValid(test)) { test.GlobalPosition = projectedPosition; }
+
+        if (moveVector.Length() < 1.0f) { projectedPosition = GlobalPosition; }
+        //Reset the last position
+        lastPos = GlobalPosition;
     }
 
     //Getting the AI component (used to send orders through the RTS controller)

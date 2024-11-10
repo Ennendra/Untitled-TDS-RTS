@@ -5,8 +5,8 @@
 
 [resource]
 script = ExtResource("2_1vxnm")
-unitName = "Unit1"
-unitDescription = "Small light vehicle with rapid-firing weapons"
+unitName = "Commander"
+unitDescription = "Your main vehicle. Required for building up structures but also has decent combat capabilities."
 maxHealth = 250.0
 energyCost = 800.0
 metalCost = 800.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bvji7q1gdfv36"]
+[gd_scene load_steps=22 format=3 uid="uid://bvji7q1gdfv36"]
 
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
 [ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
@@ -17,6 +17,21 @@
 [ext_resource type="PackedScene" uid="uid://dl8s3u8cffmp2" path="res://Objects/Units and Structures/Buildings/BuildingFactory.tscn" id="15_dafo8"]
 [ext_resource type="PackedScene" uid="uid://uope7kr0g6fa" path="res://Objects/Units and Structures/Buildings/BuildingTurret.tscn" id="16_7ws5e"]
 [ext_resource type="AudioStream" uid="uid://dvj0ypum3joxq" path="res://Sounds/Music/Like Angels Fall.mp3" id="17_ce6kg"]
+[ext_resource type="PackedScene" uid="uid://bcoihity33l5c" path="res://Objects/Other/ExplosionSmall.tscn" id="19_413ej"]
+
+[sub_resource type="Environment" id="Environment_xytmu"]
+background_mode = 3
+glow_enabled = true
+glow_levels/1 = 16.0
+glow_levels/2 = 16.0
+glow_levels/3 = 16.0
+glow_levels/4 = 16.0
+glow_levels/5 = 16.0
+glow_levels/6 = 16.0
+glow_levels/7 = 16.0
+glow_intensity = 2.0
+glow_blend_mode = 1
+glow_hdr_threshold = 0.9
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_eb8bk"]
 vertices = PackedVector2Array(1865, 1265, -1940, 1265, -740, -90, 1865, -2190, -810, -90, -740, -460, -1940, -2190, -1010, -460, -1010, -390, -810, -390)
@@ -36,6 +51,9 @@ left = -3000.0
 bottom = 6000.0
 right = 3000.0
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_xytmu")
+
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_eb8bk")
 
@@ -48,7 +66,7 @@ navigation_polygon = SubResource("NavigationPolygon_eb8bk")
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 z_index = -1
 texture_repeat = 2
-position = Vector2(-550, 100)
+position = Vector2(-550, -100)
 texture = ExtResource("3_lxxcb")
 region_enabled = true
 region_rect = Rect2(0, 0, 80000, 80000)
@@ -407,5 +425,10 @@ position = Vector2(-550, 1150)
 [node name="MetalNode17" parent="." instance=ExtResource("12_sn534")]
 position = Vector2(600, 1150)
 
+[node name="ExplosionSmall" parent="." instance=ExtResource("19_413ej")]
+position = Vector2(2175, 775)
+
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]
+
+[editable path="ExplosionSmall"]

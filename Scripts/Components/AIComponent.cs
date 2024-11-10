@@ -34,6 +34,8 @@ public partial class AIComponent : Node2D
 
     //Which target we are firing/facing at (can be a different enemy if normal target isn't in range or we are idle
     FactionComponent fireTarget;
+    //Tells us whether the unit has (or had) a target to attack. When the target dies, this will stay true for one process tick and will force another scan immediately
+    bool hasFireTarget = false;
 	float distanceToFireTarget { get => GlobalPosition.DistanceTo(fireTarget.GlobalPosition); }
 	//An incrementing timer for scanning for targets, and the gap between each scan
 	float scanTimer = 0, timeToScan = 0.5f;
@@ -57,8 +59,8 @@ public partial class AIComponent : Node2D
 		bool isFireTargetValid = CheckFireTarget();
 		if (isFireTargetValid)
 		{
-			aimComponent.SetTargetDirection(fireTarget.GlobalPosition);
-		}
+            //TrackFireTarget(delta);
+        }
 		else //Fire target is not valid, set aiming towards movement instead and increment scan timer
 		{
             if (!IsUnitStatic()) { aimComponent.SetTargetDirection(movementComponent.GetTargetDirection()); }
@@ -134,16 +136,16 @@ public partial class AIComponent : Node2D
             }
 
             //Firing
-            aimComponent.SetTargetDirection(fireTarget.GlobalPosition);
-            FireWeaponIfInRange();
-			//Stop targeting the firetarget if beyond range
-			CancelTargetIfOutOfRange(stopTargetRange);
+            TrackFireTarget(delta);
+            //Stop targeting the firetarget if beyond range
+            CancelTargetIfOutOfRange(stopTargetRange);
 		}
 		else
 		{
             if (!IsUnitStatic()) { movementComponent.Decelerate(delta); }
-            ScanForTarget(GlobalPosition, standardFireRange + 100.0f);
-		}
+            ScanForTarget(GlobalPosition, standardFireRange + 100.0f, hasFireTarget);
+            hasFireTarget = false;
+        }
 	}
 	public void ProcessOrderMove(double delta)
 	{
@@ -152,14 +154,14 @@ public partial class AIComponent : Node2D
         if (IsInstanceValid(fireTarget))
         {
             //Firing
-            aimComponent.SetTargetDirection(fireTarget.GlobalPosition);
-            FireWeaponIfInRange();
+            TrackFireTarget(delta);
             //Stop targeting the firetarget if beyond range
             CancelTargetIfOutOfRange(stopTargetRange);
         }
         else
         {
-            ScanForTarget(GlobalPosition, standardFireRange);
+            ScanForTarget(GlobalPosition, standardFireRange, hasFireTarget);
+            hasFireTarget = false;
         }
 
         //move along the path.
@@ -195,11 +197,9 @@ public partial class AIComponent : Node2D
             {
                 movementComponent.Decelerate(delta);
             }
-
             //Firing
             fireTarget = orderTarget;
-            aimComponent.SetTargetDirection(orderTarget.GlobalPosition);
-            FireWeaponIfInRange();
+            TrackFireTarget(delta);
         }
 		else //Target down, reset to idle
 		{
@@ -214,10 +214,9 @@ public partial class AIComponent : Node2D
         {
 			if (!IsUnitStatic()) { movementComponent.Decelerate(delta); }
             //Firing
-            aimComponent.SetTargetDirection(fireTarget.GlobalPosition);
-            FireWeaponIfInRange();
-			//Stop targeting the firetarget if beyond range
-			CancelTargetIfOutOfRange(stopTargetRange);
+            TrackFireTarget(delta);
+            //Stop targeting the firetarget if beyond range
+            CancelTargetIfOutOfRange(stopTargetRange);
         }
         else
         {
@@ -238,7 +237,8 @@ public partial class AIComponent : Node2D
 			{
 				unitState = AIUnitState.IDLE;
 			}
-            ScanForTarget(GlobalPosition, standardFireRange);
+            ScanForTarget(GlobalPosition, standardFireRange, hasFireTarget);
+            hasFireTarget = false;
         }
     }
 	public void ProcessOrderGuard(double delta)
@@ -271,8 +271,7 @@ public partial class AIComponent : Node2D
                     }
                 }
                 //Firing
-                aimComponent.SetTargetDirection(fireTarget.GlobalPosition);
-                FireWeaponIfInRange();
+                TrackFireTarget(delta);
                 //Stop targeting the firetarget if beyond range
                 if (orderTarget.GlobalPosition.DistanceTo(fireTarget.GlobalPosition) > stopTargetRange)
                 {
@@ -281,7 +280,7 @@ public partial class AIComponent : Node2D
             }
             else
             {
-                ScanForTarget(orderTarget.GlobalPosition, standardFireRange);
+                ScanForTarget(orderTarget.GlobalPosition, standardFireRange, false);
                 if (GlobalPosition.DistanceTo(orderTarget.GlobalPosition) > preferredGuardDistance)
                 {
                     //float angleToTarget = GlobalPosition.DirectionTo(orderTarget.GlobalPosition).Angle();
@@ -322,27 +321,21 @@ public partial class AIComponent : Node2D
         if (IsInstanceValid(fireTarget))
         {
             //Firing
-            FireWeaponIfInRange();
+            TrackFireTarget(delta);
             //Stop targeting the firetarget if beyond range
             CancelTargetIfOutOfRange(stopTargetRange);
         }
         else
         {
-            ScanForTarget(GlobalPosition, standardFireRange);
+            ScanForTarget(GlobalPosition, standardFireRange, false);
         }
     }
 
-	//move towards a target position, stopping once we are closer than the distanceToStop amount
-	public void SetMovement(Vector2 targetPosition, float distanceToStop)
-	{
-
-	}
-
 	//First checks whether the time since last tick has been long enough
 	//then, pings for enemies that aren't part of this unit's faction and marks them as a target.
-	public void ScanForTarget(Vector2 centerPosition, float radius)
+	public void ScanForTarget(Vector2 centerPosition, float radius, bool forceScan)
 	{
-		if (scanTimer > timeToScan)
+		if (scanTimer > timeToScan || forceScan)
 		{
 			//Init the space state
 			var spaceState = GetWorld2D().DirectSpaceState;
@@ -425,9 +418,26 @@ public partial class AIComponent : Node2D
         return false;
 	}
 
+    public void TrackFireTarget(double delta)
+    {
+        aimComponent.SetTargetDirection(fireTarget.GlobalPosition);
+        
+        //has the target moved?
+        if (fireTarget.projectedPosition != fireTarget.GlobalPosition)
+        {
+            //Trace their movement based on projected speed and projected projectile speed
+            float projectileToTargetTime = (distanceToFireTarget / aimComponent.equippedWeapon.weapon.projectileSpeed); //If the result = 1, that means it will take 1 second to reach the target
+            Vector2 trackVector = fireTarget.projectedPosition - fireTarget.GlobalPosition;
+            //Update the aimcomponents target position based on the track vector
+            aimComponent.SetTargetDirection(fireTarget.GlobalPosition + (trackVector * projectileToTargetTime));
+        }
+        FireWeaponIfInRange();
+    }
+
 	//Checks if the weapon is within range of the fire target and fires if so
 	public void FireWeaponIfInRange()
 	{
+        hasFireTarget = true;
         if (distanceToFireTarget < standardFireRange)
         {
 			aimComponent.FireWeapons();
@@ -439,6 +449,7 @@ public partial class AIComponent : Node2D
         if (distanceToFireTarget > cancelRange)
         {
             fireTarget = null;
+            hasFireTarget = false;
         }
     }
 	//Checks if a movement component doesn't exist (ie, the AI is a static emplacement

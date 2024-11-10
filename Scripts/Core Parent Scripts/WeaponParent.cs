@@ -35,6 +35,7 @@ public partial class WeaponParent : Node2D
     public bool isDirectFire { get => weapon.isDirectFire; protected set => weapon.isDirectFire = value; }
     public float projectileSpeed { get => weapon.projectileSpeed; protected set => weapon.projectileSpeed = value; }
     public float projectileSpeedVariance { get => weapon.projectileSpeedVariance; protected set => weapon.projectileSpeedVariance = value; }
+    public Texture2D projectileTexture { get => weapon.projectileTexture; protected set => weapon.projectileTexture = value; }
 
     //Checks if the weapon is equipped (normally only really necessary on the player)
     public bool isEquipped = true;
@@ -124,16 +125,19 @@ public partial class WeaponParent : Node2D
         float scatterAmount;
         for (int i = 0; i < shotsFired; i++)
         {
+            //Set scatter rotation and speed of projectile
             scatterAmount = -scatter + (GD.Randf() * 2 * scatter);
+            float newProjectileSpeed = projectileSpeed - projectileSpeedVariance + (GD.Randf() * (projectileSpeedVariance * 2));
 
+            //Instantiate the projectile itself
             var newProjectile = projectileToSpawn.Instantiate() as ProjectileParent;
             GetTree().CurrentScene.AddChild(newProjectile);
 
+            //Position, rotation and (if applicable) texture
             newProjectile.GlobalPosition = spawnPosition;
             newProjectile.Rotation = spawnRotation + scatterAmount;
-
-            float newProjectileSpeed = projectileSpeed - projectileSpeedVariance + (GD.Randf() * (projectileSpeedVariance * 2));
-
+            if (projectileTexture != null) { newProjectile.SetProjectileTexture(projectileTexture); }
+            
             newProjectile.SetProjectileStats(damage, range, isDirectFire, newProjectileSpeed);
             //Set the projectile collision layers and masks
             newProjectile.CallDeferred("SetProjectileCollisions", attackCollisionLayers, attackCollisionMasks);

@@ -1,0 +1,116 @@
+[gd_scene load_steps=18 format=3 uid="uid://bcoihity33l5c"]
+
+[ext_resource type="Texture2D" uid="uid://bf1vw4c5785vg" path="res://Textures/FX/explosionParticleTex.png" id="1_6phju"]
+[ext_resource type="Script" path="res://Scripts/Explosion.cs" id="1_ft0s6"]
+[ext_resource type="Texture2D" uid="uid://vorv3r8i15pj" path="res://Textures/FX/projectile_detonate_spritesheet.png" id="3_l1wuy"]
+[ext_resource type="AudioStream" uid="uid://dj8oo303lp7ei" path="res://Sounds/FX/ExplosionSmall.wav" id="4_244nx"]
+
+[sub_resource type="Gradient" id="Gradient_fsony"]
+offsets = PackedFloat32Array(0, 0.394958, 0.731092, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 0.494118, 0, 1, 1, 1, 0, 1, 0.928598, 0.962965, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pi4o6"]
+gradient = SubResource("Gradient_fsony")
+
+[sub_resource type="Gradient" id="Gradient_728g8"]
+offsets = PackedFloat32Array(0, 0.504202, 1)
+colors = PackedColorArray(0.983379, 0.94145, 1, 1, 1, 1, 1, 0.713726, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l6d4y"]
+gradient = SubResource("Gradient_728g8")
+
+[sub_resource type="Curve" id="Curve_q1pqu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_k8fwd"]
+curve = SubResource("Curve_q1pqu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qdtnc"]
+lifetime_randomness = 0.9
+particle_flag_disable_z = true
+angle_min = -720.0
+angle_max = 720.0
+spread = 180.0
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -150.0
+linear_accel_max = -2.23517e-06
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_k8fwd")
+color_ramp = SubResource("GradientTexture1D_l6d4y")
+color_initial_ramp = SubResource("GradientTexture1D_pi4o6")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c70pl"]
+atlas = ExtResource("3_l1wuy")
+region = Rect2(0, 0, 21, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4m5jf"]
+atlas = ExtResource("3_l1wuy")
+region = Rect2(21, 0, 21, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ubsg0"]
+atlas = ExtResource("3_l1wuy")
+region = Rect2(42, 0, 21, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dcg0n"]
+atlas = ExtResource("3_l1wuy")
+region = Rect2(63, 0, 21, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obnj8"]
+atlas = ExtResource("3_l1wuy")
+region = Rect2(84, 0, 21, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6q0fn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c70pl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4m5jf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ubsg0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dcg0n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obnj8")
+}],
+"loop": false,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="ExplosionSmall" type="Node2D" node_paths=PackedStringArray("particles", "audio")]
+script = ExtResource("1_ft0s6")
+particles = NodePath("Particles")
+audio = NodePath("Audio")
+
+[node name="Particles" type="GPUParticles2D" parent="."]
+modulate = Color(1.4, 1.4, 1.4, 1)
+emitting = false
+amount = 120
+process_material = SubResource("ParticleProcessMaterial_qdtnc")
+texture = ExtResource("1_6phju")
+lifetime = 1.2
+one_shot = true
+explosiveness = 1.0
+visibility_rect = Rect2(-20000, -20000, 40000, 40000)
+trail_lifetime = 0.1
+
+[node name="Sprite2" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_6q0fn")
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_244nx")
+autoplay = true
+max_distance = 1500.0
+bus = &"ProjectileHit"
+
+[connection signal="finished" from="Particles" to="." method="OnParticlesFinished"]
