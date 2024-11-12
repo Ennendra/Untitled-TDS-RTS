@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://m05bm446wc85"]
+[gd_scene load_steps=18 format=3 uid="uid://m05bm446wc85"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_npw5l"]
 [ext_resource type="Resource" uid="uid://cocovxks22s8c" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_PlayerUnit.tres" id="2_g2wy7"]
@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://b7ly6ppeex6i7" path="res://Objects/Tools/ToolReclaimer1.tscn" id="7_v66lu"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="8_sj1xu"]
 [ext_resource type="PackedScene" uid="uid://dasjfs80ef7q" path="res://Objects/Components/ResourceComponent.tscn" id="9_kxgj0"]
-[ext_resource type="Texture2D" uid="uid://cijeyog6ik2ak" path="res://Textures/UI/UIGridLines.png" id="13_2nopo"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="13_7cyop"]
 [ext_resource type="PackedScene" uid="uid://c5n86pfqwpxsp" path="res://Objects/UI/UI_BuildPlacement.tscn" id="13_uxuhc"]
 
@@ -82,17 +81,13 @@ rotationSpeedDegrees = 240.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MovementComponent"]
 shape = SubResource("CircleShape2D_pk0mf")
 
-[node name="FactionComponent" parent="." node_paths=PackedStringArray("test", "damageComponent") instance=ExtResource("8_sj1xu")]
-test = NodePath("Sprite2D")
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("8_sj1xu")]
 damageComponent = NodePath("../DamageComponent")
 isAUnit = true
 isPlayer = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FactionComponent"]
 shape = SubResource("CircleShape2D_pk0mf")
-
-[node name="Sprite2D" type="Sprite2D" parent="FactionComponent"]
-texture = ExtResource("13_2nopo")
 
 [node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("9_kxgj0")]
 factionComponent = NodePath("../FactionComponent")

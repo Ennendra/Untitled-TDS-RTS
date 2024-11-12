@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bvji7q1gdfv36"]
+[gd_scene load_steps=21 format=3 uid="uid://bvji7q1gdfv36"]
 
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
 [ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://dl8s3u8cffmp2" path="res://Objects/Units and Structures/Buildings/BuildingFactory.tscn" id="15_dafo8"]
 [ext_resource type="PackedScene" uid="uid://uope7kr0g6fa" path="res://Objects/Units and Structures/Buildings/BuildingTurret.tscn" id="16_7ws5e"]
 [ext_resource type="AudioStream" uid="uid://dvj0ypum3joxq" path="res://Sounds/Music/Like Angels Fall.mp3" id="17_ce6kg"]
-[ext_resource type="PackedScene" uid="uid://bcoihity33l5c" path="res://Objects/Other/ExplosionSmall.tscn" id="19_413ej"]
 
 [sub_resource type="Environment" id="Environment_xytmu"]
 background_mode = 3
@@ -44,6 +43,7 @@ source_geometry_group_name = &"navigation_polygon_source_group"
 tile_size = Vector2i(50, 50)
 
 [node name="Main" type="Node2D" node_paths=PackedStringArray("navigationRegion")]
+process_mode = 3
 script = ExtResource("1_slh8m")
 navigationRegion = NodePath("NavigationRegion2D")
 top = -2000.0
@@ -63,13 +63,24 @@ navigation_polygon = SubResource("NavigationPolygon_eb8bk")
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+[node name="Background" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 z_index = -1
 texture_repeat = 2
 position = Vector2(-550, -100)
 texture = ExtResource("3_lxxcb")
 region_enabled = true
 region_rect = Rect2(0, 0, 80000, 80000)
+
+[node name="RTSController" parent="." instance=ExtResource("13_87ivr")]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_d45m0")
+format = 2
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_ce6kg")
+autoplay = true
+parameters/looping = true
 
 [node name="BuildingNetworkHub" parent="." instance=ExtResource("6_ff2od")]
 position = Vector2(400, -250)
@@ -83,14 +94,8 @@ position = Vector2(675, -25)
 [node name="Player" parent="." instance=ExtResource("1_ndp2k")]
 position = Vector2(475, 100)
 
-[node name="RTSController" parent="." instance=ExtResource("13_87ivr")]
-
 [node name="BuildingGenerator3" parent="." instance=ExtResource("4_k817o")]
 position = Vector2(525, -275)
-
-[node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource("TileSet_d45m0")
-format = 2
 
 [node name="BuildingMetalStorage" parent="." instance=ExtResource("9_qek2b")]
 position = Vector2(450, -650)
@@ -249,11 +254,6 @@ position = Vector2(700, 150)
 
 [node name="BuildingTurret3" parent="." instance=ExtResource("16_7ws5e")]
 position = Vector2(225, 100)
-
-[node name="BGM" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("17_ce6kg")
-autoplay = true
-parameters/looping = true
 
 [node name="MetalNode3" parent="." instance=ExtResource("12_sn534")]
 position = Vector2(600, 3650)
@@ -425,10 +425,5 @@ position = Vector2(-550, 1150)
 [node name="MetalNode17" parent="." instance=ExtResource("12_sn534")]
 position = Vector2(600, 1150)
 
-[node name="ExplosionSmall" parent="." instance=ExtResource("19_413ej")]
-position = Vector2(2175, 775)
-
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]
-
-[editable path="ExplosionSmall"]

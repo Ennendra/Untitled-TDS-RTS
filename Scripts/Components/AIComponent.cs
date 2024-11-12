@@ -55,47 +55,55 @@ public partial class AIComponent : Node2D
 	{
 		base._Process(delta);
 
-		//Set aim direction towards a target to fire at, or towards forward movement if none is available
-		bool isFireTargetValid = CheckFireTarget();
-		if (isFireTargetValid)
-		{
-            //TrackFireTarget(delta);
-        }
-		else //Fire target is not valid, set aiming towards movement instead and increment scan timer
-		{
-            if (!IsUnitStatic()) { aimComponent.SetTargetDirection(movementComponent.GetTargetDirection()); }
-            scanTimer += (float)delta;
+        //Process only if the game isn't paused
+        if (!GetTree().Paused)
+        {
+		    //Set aim direction towards a target to fire at, or towards forward movement if none is available
+		    bool isFireTargetValid = CheckFireTarget();
+		    if (isFireTargetValid)
+		    {
+                //TrackFireTarget(delta);
+            }
+		    else //Fire target is not valid, set aiming towards movement instead and increment scan timer
+		    {
+                if (!IsUnitStatic()) { aimComponent.SetTargetDirection(movementComponent.GetTargetDirection()); }
+                scanTimer += (float)delta;
+            }
         }
 
-	}
+    }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
 
-        pathTimer += (float)delta;
-        //Process orders based on current order state
-        switch (unitState)
+        //Process only if the game isn't paused
+        if (!GetTree().Paused)
         {
-            case AIUnitState.IDLE:
-                ProcessOrderIdle(delta);
-                break;
-            case AIUnitState.MOVE:
-                ProcessOrderMove(delta);
-                break;
-            case AIUnitState.ATTACK:
-                ProcessOrderAttack(delta);
-                break;
-            case AIUnitState.ATTACKMOVE:
-                ProcessOrderAttackMove(delta);
-                break;
-            case AIUnitState.GUARD:
-                ProcessOrderGuard(delta);
-                break;
-            case AIUnitState.HOLD:
-                ProcessOrderHold(delta);
-                break;
+            pathTimer += (float)delta;
+            //Process orders based on current order state
+            switch (unitState)
+            {
+                case AIUnitState.IDLE:
+                    ProcessOrderIdle(delta);
+                    break;
+                case AIUnitState.MOVE:
+                    ProcessOrderMove(delta);
+                    break;
+                case AIUnitState.ATTACK:
+                    ProcessOrderAttack(delta);
+                    break;
+                case AIUnitState.ATTACKMOVE:
+                    ProcessOrderAttackMove(delta);
+                    break;
+                case AIUnitState.GUARD:
+                    ProcessOrderGuard(delta);
+                    break;
+                case AIUnitState.HOLD:
+                    ProcessOrderHold(delta);
+                    break;
 
+            }
         }
     }
 
@@ -283,9 +291,6 @@ public partial class AIComponent : Node2D
                 ScanForTarget(orderTarget.GlobalPosition, standardFireRange, false);
                 if (GlobalPosition.DistanceTo(orderTarget.GlobalPosition) > preferredGuardDistance)
                 {
-                    //float angleToTarget = GlobalPosition.DirectionTo(orderTarget.GlobalPosition).Angle();
-                    //movementComponent.SetTargetDirection(angleToTarget);
-                    //movementComponent.Accelerate(delta);
                     if (!IsUnitStatic())
                     {
                         if (pathTimer > timeToNewPath)

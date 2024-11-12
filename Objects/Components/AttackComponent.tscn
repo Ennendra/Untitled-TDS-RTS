@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Components/AttackComponent.cs" id="1_24py1"]
 
 [node name="AttackComponent" type="Area2D" groups=["AttackComponent"]]
+process_mode = 1
 editor_description = "Component which deals damage. Usually on projectiles or AoE explosions."
 collision_layer = 0
 collision_mask = 0

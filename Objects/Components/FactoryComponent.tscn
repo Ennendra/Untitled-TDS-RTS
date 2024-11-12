@@ -17,6 +17,7 @@ shader_parameter/midpos_enabled = true
 shader_parameter/effect_filling = 1.0
 
 [node name="FactoryComponent" type="Node2D"]
+process_mode = 1
 script = ExtResource("1_3k1ex")
 
 [node name="Sprite" type="Sprite2D" parent="."]

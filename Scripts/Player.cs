@@ -24,6 +24,7 @@ public partial class Player : Area2D
     MainUI playerUI;
     [Export] Sprite2D spriteAimCursor;
     float mouseDistanceFromPlayer = 0;
+    float CameraDistanceFromPlayer = 0;
 
     //the info sent to the UI if not in a network
     //0=energy generation, 1=metal generation
@@ -35,6 +36,9 @@ public partial class Player : Area2D
     List<ToolParent> tools = new();
     //Determines whether we can't shoot weapons. Used to prevent weapons firing after placing a building
     public bool weaponsDisabled = false;
+    //Determines whether the mouse is over the UI while the LMB is *not* pressed. This should allow for the player weapon to fire if they were holding the button down
+    //when starting to hover over UI
+    bool uiInputCheck = false;
     
 	//General process functions
     public override void _Ready()
@@ -44,16 +48,27 @@ public partial class Player : Area2D
         damageComponent.SetReclaimValue(unitInfo.energyCost, unitInfo.metalCost);
         damageComponent.SetMaxHealth(unitInfo.maxHealth);
         damageComponent.SetHealthPercentage(100);
-
     }
 	public override void _Process(double delta)
 	{
+        if (!Input.IsActionPressed("Personal_Use_Fire"))
+        {
+            uiInputCheck = playerUI.mouseOverUI;
+        }
         if (IsLevelControllerSet())
         {
+            //Determining the direction that the player aims
             aimComponent.SetTargetDirection(GetGlobalMousePosition());
-            mouseDistanceFromPlayer = Mathf.Lerp(mouseDistanceFromPlayer, GlobalPosition.DistanceTo(GetGlobalMousePosition()), 4 * (float)delta);
 
+            //Slide an indicator for the aiming based on current aim direction and distance from player to cursor
+            mouseDistanceFromPlayer = Mathf.Lerp(mouseDistanceFromPlayer, GlobalPosition.DistanceTo(GetGlobalMousePosition()), 4 * (float)delta);
             spriteAimCursor.GlobalPosition = GlobalPosition + (Vector2.FromAngle(aimComponent.GlobalRotation) * mouseDistanceFromPlayer);
+
+            //Slide the camera based on camera and mouse position from the center of the screen
+            float viewportMovementScale = 0.1f; //The higher this value, the more the camera will move based on cursor movement
+            Vector2 viewportTargetPos = (GetViewport().GetMousePosition() - (GetViewportRect().Size / 2)) * viewportMovementScale;
+            float cameraMovementAmount = Mathf.Lerp(0, camera.Position.DistanceTo(viewportTargetPos), 4 * (float)delta);
+            camera.Position = camera.Position.MoveToward(viewportTargetPos, cameraMovementAmount);
             
             SendHealthBarData();
         }
@@ -63,25 +78,28 @@ public partial class Player : Area2D
         base._PhysicsProcess(delta);
         Vector2 targetDirection = Vector2.Zero;
 
-        if (IsLevelControllerSet())
+        //Processing movement and firing (only when not paused)
+        if (!GetTree().Paused)
         {
-            targetDirection = Input.GetVector("Personal_MoveLeft", "Personal_MoveRight", "Personal_MoveUp", "Personal_MoveDown");
-        }
-		
-		if (targetDirection!=Vector2.Zero)
-		{
-			float directionTo = targetDirection.Angle();
-            movementComponent.SetTargetDirection(directionTo);
+            if (IsLevelControllerSet())
+            {
+                targetDirection = Input.GetVector("Personal_MoveLeft", "Personal_MoveRight", "Personal_MoveUp", "Personal_MoveDown");
+            }
 
-			movementComponent.Accelerate(delta);
-        }
-		else
-		{
-			movementComponent.Decelerate(delta);
-        }
+            if (targetDirection != Vector2.Zero)
+            {
+                float directionTo = targetDirection.Angle();
+                movementComponent.SetTargetDirection(directionTo);
 
-        if (Input.IsActionJustReleased("Personal_Use_Fire")) { weaponsDisabled = false; }
-        
+                movementComponent.Accelerate(delta);
+            }
+            else
+            {
+                movementComponent.Decelerate(delta);
+            }
+
+            if (Input.IsActionJustReleased("Personal_Use_Fire")) { weaponsDisabled = false; }
+        }
     }
     public float GetResourcePerformance(float generation, float consumption)
     {
@@ -103,13 +121,13 @@ public partial class Player : Area2D
         //General combat controls
         if (playerUI != null)
         {
-            if (Input.IsActionPressed("Personal_Use_Fire") && !playerUI.mouseOverUI && !weaponsDisabled)
+            if (Input.IsActionPressed("Personal_Use_Fire") && !uiInputCheck && !weaponsDisabled)
             {
                 //TODO: Check whether player UI is in the mouse point, and not fire if so
                 aimComponent.FireWeapons();
             }
 
-            if (Input.IsActionPressed("Personal_UseTool") && !playerUI.mouseOverUI)
+            if (Input.IsActionPressed("Personal_UseTool") && !uiInputCheck)
             {
                 //TODO: Check whether player UI is in the mouse point, and not fire if so
                 aimComponent.UseTool();

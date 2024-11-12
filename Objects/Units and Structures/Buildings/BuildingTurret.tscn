@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://uope7kr0g6fa"]
+[gd_scene load_steps=16 format=3 uid="uid://uope7kr0g6fa"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_rlvto"]
 [ext_resource type="Texture2D" uid="uid://jpbjl7hit1gx" path="res://Textures/Buildings/Turret1/Turret1Base.png" id="2_hnot5"]
+[ext_resource type="PackedScene" uid="uid://bdoapkbfo36gc" path="res://Objects/Other/ExplosionMedium.tscn" id="3_4bxip"]
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="3_ef1lt"]
 [ext_resource type="PackedScene" uid="uid://dog0l7qteqwmk" path="res://Objects/Components/AimingComponent.tscn" id="3_ouebc"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="4_oafnb"]
@@ -24,6 +25,7 @@ script = ExtResource("1_rlvto")
 buildingType = 1
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
 unitInfo = ExtResource("10_1vn5o")
+deathExplosion = ExtResource("3_4bxip")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 aimComponent = NodePath("AimingComponent")
@@ -54,7 +56,6 @@ shape = SubResource("CircleShape2D_2qglq")
 
 [node name="DamageComponent" parent="." instance=ExtResource("3_ef1lt")]
 healthBarOffset = 50.0
-maxHealth = 90.0
 
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
 shape = SubResource("CircleShape2D_2qglq")

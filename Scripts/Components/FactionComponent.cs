@@ -10,7 +10,6 @@ public partial class FactionComponent : Area2D
     //Tracks the last position of the unit/component and where it may be in 1 second's time
     public Vector2 lastPos { get; private set; }
     public Vector2 projectedPosition;
-    [Export] Sprite2D test;
     [Export] private int _faction = 1;
 
     [Export] DamageComponent damageComponent;
@@ -67,7 +66,6 @@ public partial class FactionComponent : Area2D
         //Create a projected location on the component in 1 second's time
         Vector2 moveVector = (GlobalPosition - lastPos) / (float)delta;
         projectedPosition = GlobalPosition + moveVector;
-        if (IsInstanceValid(test)) { test.GlobalPosition = projectedPosition; }
 
         if (moveVector.Length() < 1.0f) { projectedPosition = GlobalPosition; }
         //Reset the last position

@@ -3,4 +3,5 @@
 [ext_resource type="Script" path="res://Scripts/Components/PathfindingComponent.cs" id="1_krhkx"]
 
 [node name="PathfindingComponent" type="Node2D"]
+process_mode = 1
 script = ExtResource("1_krhkx")

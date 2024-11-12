@@ -149,29 +149,26 @@ public partial class MainLevelController : Node2D
 
         if (player != null)
         {
+
+            //Set the player and its resource and contructor components to the relevant faction controller
             FactionController playerFController = factionController[player.factionComponent.faction - 1];
+            playerFController.AddPlayer(player);
 
             //Initialise the UI and the player's link to it
             player.SetPlayerUI(mainUI);
             
             mainUI.GetPersonalToolbar().SetAimComponentLink(player.aimComponent);
             mainUI.SetPlayerFactionController(playerFController);
-
             
-
-            //Set the player and its resource and contructor components to the relevant faction controller
-            playerFController.AddPlayer(player);
             //Set the RTS Controller faction to the player, so it checks the correct collision masks
             rtsController.SetFaction(player.factionComponent.faction);
+            player.SetMainCamera();
         }
 
         mainUI.SetButtonConnections(this);
 
         //Set the map bounds
         UpdateMapBounds();
-
-        //Set the new navigation pathing based on map bounds
-        //UpdateNavigationMap();
     }
 
     public Vector2 GetMapSize()
@@ -217,13 +214,17 @@ public partial class MainLevelController : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-        foreach (var controller in factionController)
+        //Process resources when not paused
+        if (!GetTree().Paused)
         {
-            controller.Process(delta);
+            foreach (var controller in factionController)
+            {
+                controller.Process(delta);
+            }
         }
 
         //Processing resource ticks and minimap display
-        UpdateResourceUI();
+        UpdateResourceUI(false);
         UpdateMinimap((float)delta);
 
         //Check whether we are in a build-placement state and set the UI to be visible accordingly
@@ -243,7 +244,7 @@ public partial class MainLevelController : Node2D
             if (Input.IsActionJustPressed("Personal_SelectWeapon3")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(5); }
             if (personalPlayState == PersonalPlayState.STANDARD)
             {
-                player.CheckMouseInputs();
+                if (!GetTree().Paused) { player.CheckMouseInputs(); }
             }
             if (personalPlayState == PersonalPlayState.BUILDPLACEMENT)
             {
@@ -399,6 +400,8 @@ public partial class MainLevelController : Node2D
 
             //Control Group interaction
             ProcessControlGroupInputs();
+
+            
         }
 
         //Check minimap zoom keybinds
@@ -408,6 +411,21 @@ public partial class MainLevelController : Node2D
         {
             CallDeferred("ToggleRTSMode");
         }
+
+        //Pausing and unpausing
+        if (Input.IsActionJustPressed("PauseGame"))
+        {
+            GD.Print("Pause?");
+            PauseGame();
+        }
+    }
+
+    //Setting the pause state
+    public void PauseGame()
+    {
+        GD.Print(GetTree().Paused);
+        GetTree().Paused = !GetTree().Paused;
+        GD.Print(GetTree().Paused);
     }
 
     public Vector2 GetMinimapToMapPosition()
@@ -526,6 +544,7 @@ public partial class MainLevelController : Node2D
             {
                 if (mainUI.AttemptBuildingPlacement())
                 {
+                    UpdateResourceUI(true);
                     if (!Input.IsKeyPressed(Key.Shift))
                     {
                         SetStateToStandard();
@@ -614,7 +633,7 @@ public partial class MainLevelController : Node2D
         
     }
 
-    public void UpdateResourceUI()
+    public void UpdateResourceUI(bool forceRefresh)
 	{
         if (player != null)
         {
@@ -625,7 +644,7 @@ public partial class MainLevelController : Node2D
             //else //Player is not in a network, get personal data instead
             //    { newValues = player.subNetwork.GetCurrentTickValues(); }
 
-            newValues = factionController[player.factionComponent.faction - 1].GetCurrentTickValues();
+            newValues = factionController[player.factionComponent.faction - 1].GetCurrentTickValues(forceRefresh);
 
             mainUI.GetResourceTracker().GetNewResourceValues(newValues);
         }

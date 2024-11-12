@@ -7,7 +7,7 @@
 script = ExtResource("2_72gls")
 unitName = "Turret"
 unitDescription = "Static defense for your base"
-maxHealth = 250.0
+maxHealth = 130.0
 energyCost = 250.0
 metalCost = 100.0
 iconTex = ExtResource("1_4848m")

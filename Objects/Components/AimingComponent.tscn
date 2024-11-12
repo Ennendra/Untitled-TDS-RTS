@@ -3,4 +3,5 @@
 [ext_resource type="Script" path="res://Scripts/Components/AimingComponent.cs" id="1_y64ic"]
 
 [node name="AimingComponent" type="Node2D"]
+process_mode = 1
 script = ExtResource("1_y64ic")

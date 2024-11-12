@@ -25,6 +25,8 @@ public partial class MainUI : CanvasLayer
 	UI_Minimap minimap;
 	//Minimap zoom buttons
 	TextureButton minimapZoomButtonPlus, minimapZoomButtonMinus;
+	//Paused indicator
+	TextureRect pausedIcon;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -36,12 +38,16 @@ public partial class MainUI : CanvasLayer
 		minimap = GetNode<UI_Minimap>("UI_Minimap");
 		minimapZoomButtonPlus = GetNode<TextureButton>("UI_MinimapZoomPlus");
         minimapZoomButtonMinus = GetNode<TextureButton>("UI_MinimapZoomMinus");
+		pausedIcon = GetNode<TextureRect>("UI_Paused");
 
         CallDeferred("InitBuildGhost");
     }
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
+
+		//Toggle the visibility of the pause icon depending on whether or not the game is paused
+		pausedIcon.Visible = GetTree().Paused;
 
 		//Toggle disabling the minimap buttons depending on the current zoom level
 		if (minimap.IsMinimapFullMap())

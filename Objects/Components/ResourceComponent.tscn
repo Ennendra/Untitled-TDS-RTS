@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Components/ResourceComponent.cs" id="1_4k0pu"]
 
 [node name="ResourceComponent" type="Area2D" groups=["Resource Component"]]
+process_mode = 1
 collision_layer = 32768
 collision_mask = 16384
 script = ExtResource("1_4k0pu")

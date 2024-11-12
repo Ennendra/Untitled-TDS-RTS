@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("1_p0ngo")
 damage = 15.0
-rateOfFire = 4.0
+rateOfFire = 7.0
 range = 700.0
 scatter = 3.0
 shotsFired = 1

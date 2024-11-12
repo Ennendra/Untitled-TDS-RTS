@@ -76,6 +76,8 @@ hue_variation_min = -2.23517e-08
 hue_variation_max = -2.23517e-08
 
 [node name="ProjectileExplosion" type="Node2D" node_paths=PackedStringArray("sprite", "particles", "audio")]
+process_mode = 1
+physics_interpolation_mode = 2
 script = ExtResource("1_xrd57")
 sprite = NodePath("Sprite")
 particles = NodePath("Particles")
@@ -97,6 +99,7 @@ lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 40
+interpolate = false
 visibility_rect = Rect2(-20000, -20000, 40000, 40000)
 trail_lifetime = 0.6
 

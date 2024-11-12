@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Components/DamageComponent.cs" id="1_w1wrq"]
 
 [node name="DamageComponent" type="Area2D" node_paths=PackedStringArray("healthBar") groups=["DamageComponent"]]
+process_mode = 1
 editor_description = "Component which contains health data and receives damage"
 collision_layer = 0
 collision_mask = 0

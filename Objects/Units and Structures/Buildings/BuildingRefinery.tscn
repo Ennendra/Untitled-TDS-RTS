@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dpyxe4fuquhmf"]
+[gd_scene load_steps=11 format=3 uid="uid://dpyxe4fuquhmf"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_7bxy3"]
+[ext_resource type="PackedScene" uid="uid://d1txr636bg1t2" path="res://Objects/Other/ExplosionLarge.tscn" id="3_bjwvs"]
 [ext_resource type="Texture2D" uid="uid://bhe4bd1nkhemy" path="res://Textures/Buildings/Refinery.png" id="3_my4ar"]
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_avq35"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_erxog"]
@@ -20,6 +21,7 @@ script = ExtResource("1_7bxy3")
 buildingType = 2
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
 unitInfo = ExtResource("5_rb1gm")
+deathExplosion = ExtResource("3_bjwvs")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
@@ -33,7 +35,6 @@ shape = SubResource("RectangleShape2D_nh6i5")
 
 [node name="DamageComponent" parent="." instance=ExtResource("4_avq35")]
 healthBarOffset = 75.0
-maxHealth = 180.0
 
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
 shape = SubResource("RectangleShape2D_nh6i5")

@@ -286,8 +286,9 @@ public partial class FactionController
         UITickResults[5] = (int)(totalVariance[1] / processTickNext);
         UITickResults[6] = (int)(currentNetworkPerformance * 100);
     }
-    public int[] GetCurrentTickValues()
+    public int[] GetCurrentTickValues(bool forceRefresh)
     {
+        if (forceRefresh) { UpdateResourceTickValues(); }
         return UITickResults;
     }
 

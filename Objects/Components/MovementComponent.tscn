@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Components/MovementComponent.cs" id="1_6e2ua"]
 
 [node name="MovementComponent" type="Area2D"]
+process_mode = 1
 editor_description = "Contains object movement data, such as speed and direction.
 Also tracks collisions with objects that may require physics interaction"
 collision_layer = 8

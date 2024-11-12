@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Components/ConstructorComponent.cs" id="1_ear4i"]
 
 [node name="ConstructorComponent" type="Area2D" groups=["Constructor Component"]]
+process_mode = 1
 collision_layer = 65536
 collision_mask = 16384
 script = ExtResource("1_ear4i")

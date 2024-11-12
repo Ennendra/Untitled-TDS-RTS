@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://d8rp6yirf64h"]
+[gd_scene load_steps=16 format=3 uid="uid://d8rp6yirf64h"]
 
 [ext_resource type="Script" path="res://Scripts/Buildings/BuildingNetworkHub.cs" id="1_syvvr"]
 [ext_resource type="Texture2D" uid="uid://cushumnxn0gh7" path="res://Textures/Buildings/NetworkHub.png" id="2_vcfvo"]
+[ext_resource type="PackedScene" uid="uid://bdoapkbfo36gc" path="res://Objects/Other/ExplosionMedium.tscn" id="3_4tsre"]
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="4_4o1ia"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_21qxu"]
 [ext_resource type="Texture2D" uid="uid://deaejpuahshey" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding2X2.png" id="5_86ifb"]
@@ -33,6 +34,7 @@ collision_mask = 0
 script = ExtResource("1_syvvr")
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
 unitInfo = ExtResource("5_bkni2")
+deathExplosion = ExtResource("3_4tsre")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
@@ -45,7 +47,6 @@ shape = SubResource("CircleShape2D_vg8ap")
 
 [node name="DamageComponent" parent="." instance=ExtResource("4_4o1ia")]
 healthBarOffset = 50.0
-maxHealth = 50.0
 
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent" groups=["Building"]]
 shape = SubResource("CircleShape2D_vg8ap")

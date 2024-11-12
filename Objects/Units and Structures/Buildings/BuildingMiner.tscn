@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://b8wtdlbxd7cm6"]
+[gd_scene load_steps=11 format=3 uid="uid://b8wtdlbxd7cm6"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_6f487"]
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="2_mlgor"]
 [ext_resource type="Texture2D" uid="uid://fdos3cgmbhrl" path="res://Textures/Buildings/MinerTest.png" id="2_ubo7v"]
+[ext_resource type="PackedScene" uid="uid://bdoapkbfo36gc" path="res://Objects/Other/ExplosionMedium.tscn" id="3_vqyc0"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="4_b0gr4"]
 [ext_resource type="PackedScene" uid="uid://dasjfs80ef7q" path="res://Objects/Components/ResourceComponent.tscn" id="4_sip2a"]
 [ext_resource type="Resource" uid="uid://bko37qjwa3b3t" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Miner.tres" id="5_2oyh4"]
@@ -19,6 +20,7 @@ script = ExtResource("1_6f487")
 buildingType = 1
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
 unitInfo = ExtResource("5_2oyh4")
+deathExplosion = ExtResource("3_vqyc0")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
@@ -32,7 +34,6 @@ shape = SubResource("CircleShape2D_2qglq")
 
 [node name="DamageComponent" parent="." instance=ExtResource("2_mlgor")]
 healthBarOffset = 50.0
-maxHealth = 90.0
 
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
 shape = SubResource("CircleShape2D_2qglq")
