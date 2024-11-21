@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3 uid="uid://cs54r54j5pqy2"]
+
+[ext_resource type="Shader" path="res://Textures/Shaders/fow.gdshader" id="1_vykkv"]
+[ext_resource type="Script" path="res://Scripts/FogOfWarElement.cs" id="2_2pdsj"]
+[ext_resource type="Shader" path="res://Textures/Shaders/ConvertLightMask.gdshader" id="3_gv0h5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tskh5"]
+shader = ExtResource("1_vykkv")
+shader_parameter/fog_scroll_velocity = Vector2(0, 0)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_cjh5l"]
+
+[sub_resource type="Gradient" id="Gradient_ibl0g"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2fepm"]
+gradient = SubResource("Gradient_ibl0g")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_a44lb"]
+viewport_path = NodePath("LightSubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_olmep"]
+resource_local_to_scene = true
+shader = ExtResource("3_gv0h5")
+shader_parameter/persistent_reveal = true
+shader_parameter/light_texture = SubResource("ViewportTexture_a44lb")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_68ivh"]
+
+[node name="FOWElement" type="TextureRect"]
+material = SubResource("ShaderMaterial_tskh5")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -600.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_cjh5l")
+script = ExtResource("2_2pdsj")
+persistentFog = null
+fowCalculateScale = null
+
+[node name="LightSubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_repeat = 1
+size = Vector2i(400, 600)
+render_target_update_mode = 4
+
+[node name="Background" type="TextureRect" parent="LightSubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("GradientTexture2D_2fepm")
+stretch_mode = 1
+
+[node name="Camera2D" type="Camera2D" parent="LightSubViewport/Background"]
+anchor_mode = 0
+
+[node name="CanvasModulate" type="CanvasModulate" parent="LightSubViewport"]
+scale = Vector2(1.1, 1.1)
+color = Color(0, 0, 0, 1)
+
+[node name="MaskSubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_repeat = 1
+canvas_cull_mask = 4294966273
+size = Vector2i(2, 2)
+render_target_update_mode = 4
+
+[node name="FogMask" type="TextureRect" parent="MaskSubViewport"]
+material = SubResource("ShaderMaterial_olmep")
+texture = SubResource("CanvasTexture_68ivh")
+expand_mode = 3

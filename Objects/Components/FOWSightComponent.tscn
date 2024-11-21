@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccx23ah2havia"]
+
+[ext_resource type="Texture2D" uid="uid://cqrxnwe4adl37" path="res://Textures/Shaders/FOWLightMask.png" id="1_bvlik"]
+[ext_resource type="Script" path="res://Scripts/Components/FOWSightComponent.cs" id="1_ypfji"]
+
+[node name="SightComponent" type="Node2D"]
+script = ExtResource("1_ypfji")
+visionTexture = ExtResource("1_bvlik")

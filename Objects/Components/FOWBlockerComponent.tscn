@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwy1l156mvmw7"]
+
+[ext_resource type="Script" path="res://Scripts/Components/FOWBlockerComponent.cs" id="1_sk018"]
+
+[node name="FowBlockerComponent" type="LightOccluder2D" groups=["SightBlocker"]]
+script = ExtResource("1_sk018")

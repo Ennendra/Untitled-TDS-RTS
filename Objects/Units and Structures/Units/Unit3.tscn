@@ -1,0 +1,118 @@
+[gd_scene load_steps=24 format=3 uid="uid://dde4d5v8fc1f0"]
+
+[ext_resource type="Script" path="res://Scripts/Units/Unit1.cs" id="1_ufsob"]
+[ext_resource type="Resource" uid="uid://bb2ewtpnqjdv1" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_Unit1.tres" id="2_i5y1b"]
+[ext_resource type="PackedScene" uid="uid://bcoihity33l5c" path="res://Objects/Other/ExplosionSmall.tscn" id="3_klews"]
+[ext_resource type="Texture2D" uid="uid://hkotgqc1olk7" path="res://Textures/FX/HoverEffect.png" id="4_dcyeg"]
+[ext_resource type="Texture2D" uid="uid://tpkpp8ile1pg" path="res://Textures/Units/Unit3/Unit3Bottom.png" id="4_f8v6p"]
+[ext_resource type="Texture2D" uid="uid://by8jft8ml7a07" path="res://Textures/Units/Unit3/Unit3Midring.png" id="5_cdtil"]
+[ext_resource type="Script" path="res://Scripts/FX/HoverEffect.cs" id="5_cwnuq"]
+[ext_resource type="PackedScene" uid="uid://dog0l7qteqwmk" path="res://Objects/Components/AimingComponent.tscn" id="5_s6ryd"]
+[ext_resource type="PackedScene" uid="uid://02qtob83lbwv" path="res://Objects/Weapons/MainWeapon.tscn" id="7_6afhx"]
+[ext_resource type="Texture2D" uid="uid://1v7e0quy7bpp" path="res://Textures/Units/Unit3/Unit3Top.png" id="7_m7885"]
+[ext_resource type="Resource" uid="uid://b4ja2fh7rjpbx" path="res://Objects/Weapons/Weapon Resources/Unit3Weapon.tres" id="9_f1gkm"]
+[ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="10_fussk"]
+[ext_resource type="AudioStream" uid="uid://ssf4pmeea44s" path="res://Sounds/Weapons/fire_unit3.wav" id="10_jia2i"]
+[ext_resource type="PackedScene" uid="uid://c7n24rpd3x7y5" path="res://Objects/Components/MovementComponent.tscn" id="11_luam4"]
+[ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="12_a8ynw"]
+[ext_resource type="Texture2D" uid="uid://by37h8175i2ia" path="res://Textures/UI/SelectionBoxes/SelectionBoxUnit1.png" id="13_hkog0"]
+[ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="14_5763q"]
+[ext_resource type="PackedScene" uid="uid://djckgbda36vuf" path="res://Objects/Components/AIComponent.tscn" id="15_omcek"]
+[ext_resource type="PackedScene" uid="uid://bnss8qnlmgv7" path="res://Objects/Components/PathfindingComponent.tscn" id="16_hotpd"]
+[ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="20_vsu0p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e35dv"]
+radius = 30.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xk8um"]
+radius = 30.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j4oht"]
+radius = 30.0
+
+[node name="Unit3" type="Area2D" node_paths=PackedStringArray("mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "movementComponent", "sightComponent") groups=["Unit"]]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_ufsob")
+unitInfo = ExtResource("2_i5y1b")
+deathExplosion = ExtResource("3_klews")
+mainSprite = NodePath("SpriteBottom")
+damageComponent = NodePath("DamageComponent")
+aimComponent = NodePath("AimingComponent")
+aiComponent = NodePath("AiComponent")
+factionComponent = NodePath("FactionComponent")
+movementComponent = NodePath("MovementComponent")
+sightComponent = NodePath("SightComponent")
+
+[node name="HoverEffect" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_dcyeg")
+script = ExtResource("5_cwnuq")
+
+[node name="SpriteBottom" type="Sprite2D" parent="."]
+texture = ExtResource("4_f8v6p")
+
+[node name="SpriteConnector" type="Sprite2D" parent="SpriteBottom"]
+z_index = -1
+texture = ExtResource("5_cdtil")
+
+[node name="AimingComponent" parent="." node_paths=PackedStringArray("equippedWeapon") instance=ExtResource("5_s6ryd")]
+equippedWeapon = NodePath("Weapon")
+rotationSpeed = 40.0
+
+[node name="SpriteTop" type="Sprite2D" parent="AimingComponent"]
+z_index = 2
+texture = ExtResource("7_m7885")
+
+[node name="Weapon" parent="AimingComponent" instance=ExtResource("7_6afhx")]
+weapon = ExtResource("9_f1gkm")
+
+[node name="FirePoint1" type="Node2D" parent="AimingComponent/Weapon/Firepoints" index="0"]
+position = Vector2(28, -13)
+
+[node name="WeaponFireSound" parent="AimingComponent/Weapon" index="1"]
+stream = ExtResource("10_jia2i")
+volume_db = -5.0
+
+[node name="DamageComponent" parent="." instance=ExtResource("10_fussk")]
+healthBarOffset = 25.0
+
+[node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
+shape = SubResource("CircleShape2D_e35dv")
+
+[node name="MovementComponent" parent="." node_paths=PackedStringArray("legSprite") instance=ExtResource("11_luam4")]
+movementType = 1
+maxSpeed = 120.0
+legSprite = NodePath("../SpriteBottom")
+rotationSpeedDegrees = 240.0
+
+[node name="Collider" type="CollisionShape2D" parent="MovementComponent"]
+shape = SubResource("CircleShape2D_xk8um")
+
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent", "aiComponent") instance=ExtResource("12_a8ynw")]
+damageComponent = NodePath("../DamageComponent")
+aiComponent = NodePath("../AiComponent")
+isAUnit = true
+selectedTexture = ExtResource("13_hkog0")
+unitInfo = ExtResource("2_i5y1b")
+
+[node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
+shape = SubResource("CircleShape2D_j4oht")
+
+[node name="MinimapMarkerComponent" parent="." instance=ExtResource("14_5763q")]
+markerTag = 1
+
+[node name="AiComponent" parent="." node_paths=PackedStringArray("pathComponent", "factionComponent", "movementComponent", "aimComponent") instance=ExtResource("15_omcek")]
+pathComponent = NodePath("../PathfindingComponent")
+factionComponent = NodePath("../FactionComponent")
+movementComponent = NodePath("../MovementComponent")
+aimComponent = NodePath("../AimingComponent")
+
+[node name="PathfindingComponent" parent="." instance=ExtResource("16_hotpd")]
+
+[node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("20_vsu0p")]
+visible = false
+factionComponent = NodePath("../FactionComponent")
+
+[editable path="AimingComponent/Weapon"]

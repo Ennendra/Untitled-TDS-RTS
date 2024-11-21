@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgxbaegip6qd3"]
+
+[ext_resource type="Script" path="res://Scripts/FOWController.cs" id="1_06vm4"]
+[ext_resource type="Texture2D" uid="uid://cqrxnwe4adl37" path="res://Textures/Shaders/FOWLightMask.png" id="2_iectc"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_16da5"]
+blend_mode = 3
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3u7jt"]
+blend_mode = 3
+
+[node name="FowController" type="Node2D" node_paths=PackedStringArray("visionFog", "shroudFog")]
+script = ExtResource("1_06vm4")
+visionFog = NodePath("Fog")
+shroudFog = NodePath("Shroud")
+visionTexture = ExtResource("2_iectc")
+
+[node name="Fog" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_16da5")
+centered = false
+
+[node name="Shroud" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_3u7jt")
+centered = false

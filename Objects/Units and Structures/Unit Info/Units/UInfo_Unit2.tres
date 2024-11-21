@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://duy336cphqkam"]
+
+[ext_resource type="Texture2D" uid="uid://ddj2rcfri7kw8" path="res://Textures/Units/Unit2/Unit2Full.png" id="1_hg3ff"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_6l2l1"]
+
+[resource]
+script = ExtResource("2_6l2l1")
+unitName = "Unit2"
+unitDescription = "Medium Battle Tank"
+maxHealth = 120.0
+energyCost = 180.0
+metalCost = 100.0
+iconTex = ExtResource("1_hg3ff")
+unitInfoType = 0

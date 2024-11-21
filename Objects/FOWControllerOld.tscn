@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://dyheoterl0fia"]
+
+[ext_resource type="Script" path="res://Scripts/FOWControllerOld.cs" id="1_aqwdj"]
+[ext_resource type="PackedScene" uid="uid://cs54r54j5pqy2" path="res://Objects/FOWElement.tscn" id="2_ps175"]
+[ext_resource type="Shader" path="res://Textures/Shaders/fow.gdshader" id="3_5atob"]
+[ext_resource type="Texture2D" uid="uid://bnw8nmb8s0uwj" path="res://Textures/Shaders/FOWFog.png" id="3_fpdey"]
+[ext_resource type="Texture2D" uid="uid://2d3ukj7lqva7" path="res://Textures/Shaders/FOWShroud.png" id="4_08br4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wwv0x"]
+shader = ExtResource("3_5atob")
+shader_parameter/fog_scroll_velocity = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w4s07"]
+shader = ExtResource("3_5atob")
+shader_parameter/fog_scroll_velocity = Vector2(0, 0)
+
+[node name="FOWController" type="Control" node_paths=PackedStringArray("fogElement", "shroudElement")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_aqwdj")
+fogElement = NodePath("FOWFog")
+shroudElement = NodePath("FOWShroud")
+
+[node name="FOWFog" parent="." instance=ExtResource("2_ps175")]
+material = SubResource("ShaderMaterial_wwv0x")
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+persistentFog = true
+fogTexture = ExtResource("3_fpdey")
+
+[node name="FOWShroud" parent="." instance=ExtResource("2_ps175")]
+material = SubResource("ShaderMaterial_w4s07")
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+fogTexture = ExtResource("4_08br4")
