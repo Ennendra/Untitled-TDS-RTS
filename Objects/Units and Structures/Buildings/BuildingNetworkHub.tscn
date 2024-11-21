@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d8rp6yirf64h"]
+[gd_scene load_steps=17 format=3 uid="uid://d8rp6yirf64h"]
 
 [ext_resource type="Script" path="res://Scripts/Buildings/BuildingNetworkHub.cs" id="1_syvvr"]
 [ext_resource type="Texture2D" uid="uid://cushumnxn0gh7" path="res://Textures/Buildings/NetworkHub.png" id="2_vcfvo"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bblidg6qcu4p" path="res://Textures/Shaders/hologramShaderMap.bmp" id="8_4geie"]
 [ext_resource type="Texture2D" uid="uid://87eogpif1ted" path="res://Textures/UI/CustomUIPixel.png" id="9_d28g0"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="11_8eymw"]
+[ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="13_ermop"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vg8ap"]
 radius = 43.0
@@ -28,7 +29,7 @@ shader_parameter/linesColorIntensity = 2.0
 shader_parameter/hologramTextureTiling = Vector2(1, 0.1)
 shader_parameter/hologramTexture = ExtResource("8_4geie")
 
-[node name="BuildingNetworkHub" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent") groups=["Building"]]
+[node name="BuildingNetworkHub" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent", "sightComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_syvvr")
@@ -38,6 +39,7 @@ deathExplosion = ExtResource("3_4tsre")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
+sightComponent = NodePath("SightComponent")
 
 [node name="MainSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_vcfvo")
@@ -84,6 +86,11 @@ markerTag = 2
 [node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
 color = Color(1, 1, 1, 0)
 polygon = PackedVector2Array(50, 50, 50, -50, -50, -50, -50, 50)
+
+[node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("13_ermop")]
+visible = false
+sightRange = 200
+factionComponent = NodePath("../FactionComponent")
 
 [connection signal="area_entered" from="NetworkController" to="NetworkController" method="OnComponentEntered"]
 [connection signal="area_exited" from="NetworkController" to="NetworkController" method="OnComponentExited"]

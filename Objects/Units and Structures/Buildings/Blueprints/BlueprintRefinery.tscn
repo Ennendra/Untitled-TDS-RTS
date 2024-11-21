@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://u3o1sqfnvsd6"]
+[gd_scene load_steps=14 format=3 uid="uid://u3o1sqfnvsd6"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BlueprintParent.cs" id="1_h82x6"]
 [ext_resource type="PackedScene" uid="uid://dpyxe4fuquhmf" path="res://Objects/Units and Structures/Buildings/BuildingRefinery.tscn" id="2_ckmp1"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://bs6pt7msq1ki" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Refinery.tres" id="6_u2n33"]
 [ext_resource type="Texture2D" uid="uid://dvt7occ8reyin" path="res://Textures/Buildings/EnergyStorage.png" id="7_jki44"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="8_od2r1"]
+[ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="11_7rxl5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qsov"]
 size = Vector2(135, 135)
@@ -26,7 +27,7 @@ shader_parameter/end_pos = 0.99
 shader_parameter/midpos_enabled = true
 shader_parameter/effect_filling = 1.0
 
-[node name="BlueprintRefinery" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent", "buildingObstacleBounds") groups=["Blueprint"]]
+[node name="BlueprintRefinery" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent", "sightComponent", "buildingObstacleBounds") groups=["Blueprint"]]
 collision_layer = 131074
 collision_mask = 0
 script = ExtResource("1_h82x6")
@@ -34,6 +35,7 @@ unitInfo = ExtResource("6_u2n33")
 objectToSpawn = ExtResource("2_ckmp1")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
+sightComponent = NodePath("SightComponent")
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
 
 [node name="Collider" type="CollisionShape2D" parent="."]
@@ -57,7 +59,6 @@ show_percentage = false
 
 [node name="DamageComponent" parent="." instance=ExtResource("4_10nly")]
 healthBarOffset = 75.0
-maxHealth = 180.0
 
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
 shape = SubResource("RectangleShape2D_3qsov")
@@ -80,3 +81,8 @@ texture = ExtResource("7_jki44")
 [node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
 color = Color(1, 1, 1, 0)
 polygon = PackedVector2Array(75, 75, 75, -75, -75, -75, -75, 75)
+
+[node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("11_7rxl5")]
+visible = false
+sightRange = 200
+factionComponent = NodePath("../FactionComponent")

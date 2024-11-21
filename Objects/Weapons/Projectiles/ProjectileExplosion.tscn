@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://cdlekj3bt2ix6"]
 
-[ext_resource type="Script" path="res://Scripts/Explosion.cs" id="1_xrd57"]
+[ext_resource type="Script" path="res://Scripts/FX/Explosion.cs" id="1_xrd57"]
 [ext_resource type="Texture2D" uid="uid://vorv3r8i15pj" path="res://Textures/FX/projectile_detonate_spritesheet.png" id="2_bbcsj"]
 [ext_resource type="AudioStream" uid="uid://c8lijsnqt4lq4" path="res://Sounds/FX/ProjectileExplosion1.wav" id="3_svd8c"]
 

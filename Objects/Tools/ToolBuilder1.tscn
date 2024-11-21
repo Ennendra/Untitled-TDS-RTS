@@ -40,7 +40,7 @@ toolRange = 450.0
 
 [node name="ConstructorComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("2_slgdd")]
 factionComponent = NodePath("../FactionComponent")
-maxSupplyRate = 20.0
+maxSupplyRate = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ConstructorComponent"]
 shape = SubResource("CircleShape2D_wbwb8")

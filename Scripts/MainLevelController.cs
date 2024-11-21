@@ -83,7 +83,12 @@ public partial class MainLevelController : Node2D
     //Trackers for each faction's resources
     ResourceStats[] factionResources = new ResourceStats[2];
 
+    //Fog of war tracking
+    [Export] FOWController fowController;
+    ImageTexture[] fowTextures;
+
     //Tracker for all misc environment obstacles used when baking new navmeshes
+    [Export] TileMapLayer[] terrainTilemapLayers;
     List<Polygon2D> miscObstaclesInScene = new();
     bool navMapInitialised = false;
 
@@ -108,6 +113,8 @@ public partial class MainLevelController : Node2D
 
         player.levelController = this;
         rtsController.levelController = this;
+
+        
         
 
         //instantiate the faction controllers
@@ -115,6 +122,8 @@ public partial class MainLevelController : Node2D
         {
             factionController[i] = new();
         }
+
+        
 
         //Add all buildings, blueprints and units spawned in the scene into their respective lists
         //Also, Find all misc environment obstacles and add their polygons to a misc obstacle list
@@ -126,26 +135,42 @@ public partial class MainLevelController : Node2D
                 BuildingParent childCast = (BuildingParent)child;
                 buildingsInScene.Add(childCast);
                 factionController[childCast.GetCurrentFaction() - 1].AddBuilding(childCast);
+                fowController.AddSightComponent(childCast.GetSightComponent());
             }
             else if (child.IsInGroup("Blueprint"))
             {
                 BlueprintParent childCast = (BlueprintParent)child;
                 blueprintsInScene.Add(childCast);
                 factionController[childCast.GetCurrentFaction() - 1].AddBlueprint(childCast);
+                fowController.AddSightComponent(childCast.GetSightComponent());
             }
             else if (child.IsInGroup("Unit"))
             {
                 UnitParent childCast = (UnitParent)child;
                 unitsInScene.Add(childCast);
                 factionController[childCast.GetCurrentFaction() - 1].AddUnit(childCast);
+                fowController.AddSightComponent(childCast.GetSightComponent());
             }
             if (child.IsInGroup("EnvironmentObstacles"))
             {
                 Polygon2D childCast = child.GetNode<Polygon2D>("ObstacleBounds");
                 miscObstaclesInScene.Add(childCast);
             }
+            //if (child.IsInGroup("SightBlocker"))
+            //{
+            //    FOWBlockerComponent childCast = (FOWBlockerComponent)child;
+            //    fowController.AddBlockerComponent(childCast);
+            //}
+            if (child.IsInGroup("Player"))
+            {
+                Player childCast = (Player)child;
+                fowController.AddSightComponent(childCast.sightComponent);
+            }
             navMapInitialised = true;
         }
+
+        //Init the Fog of War and its textures, and prepare a set of them for the minimap
+        fowTextures = fowController.InitFOW(new Vector2(left, top), GetMapSize());
 
         if (player != null)
         {
@@ -223,6 +248,8 @@ public partial class MainLevelController : Node2D
             }
         }
 
+        //Processing Fog of War
+        UpdateFOW(delta);
         //Processing resource ticks and minimap display
         UpdateResourceUI(false);
         UpdateMinimap((float)delta);
@@ -654,6 +681,13 @@ public partial class MainLevelController : Node2D
         }
     }
 
+    //Functions for the fog of war
+    public void UpdateFOW(double delta)
+    {
+        ImageTexture[] newFOWTextures = fowController.ProcessCall(delta);
+        if (newFOWTextures != null) { fowTextures = newFOWTextures; }
+    }
+
     //Functions for the minimap
     public void UpdateMinimap(float delta)
     {
@@ -703,6 +737,7 @@ public partial class MainLevelController : Node2D
         buildingsInScene.Add(building);
         UpdateNavigationMap();
         factionController[building.GetCurrentFaction() - 1].AddBuilding(building);
+        fowController.AddSightComponent(building.GetSightComponent());
     }
     public void RemoveBuilding(BuildingParent building)
     {
@@ -711,12 +746,14 @@ public partial class MainLevelController : Node2D
 
         UpdateNavigationMap();
         factionController[building.GetCurrentFaction() - 1].RemoveBuilding(building);
+        fowController.RemoveSightComponent(building.GetSightComponent());
     }
     public void AddBlueprint(BlueprintParent blueprint)
     {
         blueprintsInScene.Add(blueprint);
         UpdateNavigationMap();
         factionController[blueprint.GetCurrentFaction() - 1].AddBlueprint(blueprint);
+        fowController.AddSightComponent(blueprint.GetSightComponent());
     }
     public void RemoveBlueprint(BlueprintParent blueprint)
     {
@@ -725,11 +762,13 @@ public partial class MainLevelController : Node2D
 
         UpdateNavigationMap();
         factionController[blueprint.GetCurrentFaction() - 1].RemoveBlueprint(blueprint);
+        fowController.RemoveSightComponent(blueprint.GetSightComponent());
     }
     public void AddUnit(UnitParent unit)
     {
         unitsInScene.Add(unit);
         factionController[unit.GetCurrentFaction() - 1].AddUnit(unit);
+        fowController.AddSightComponent(unit.GetSightComponent());
     }
     public void RemoveUnit(UnitParent unit)
     {
@@ -738,6 +777,7 @@ public partial class MainLevelController : Node2D
         
 
         factionController[unit.GetCurrentFaction() - 1].RemoveUnit(unit);
+        fowController.RemoveSightComponent(unit.GetSightComponent());
     }
     public void UnitDeathSelectionAndControlGroupCheck(FactionComponent unitComponent)
     {
@@ -880,10 +920,11 @@ public partial class MainLevelController : Node2D
         newNavMesh.AddOutline(mapBounds);
         newNavMesh.AgentRadius = 20;
 
-
         //Create the nav geometry data that will hold all the obstacle data
         NavigationMeshSourceGeometryData2D navGeometryData = new();
         //TODO: Get geometry data from a tilemap?
+        
+        
 
         //Get the geometry obstacle data from all buildings and blueprints
         foreach (BuildingParent building in buildingsInScene)
@@ -914,7 +955,12 @@ public partial class MainLevelController : Node2D
             }
             navGeometryData.AddObstructionOutline(polygonVertices);
         }
-        
+        //Todo: Add obstacle data from tilesets
+        foreach (TileMapLayer layer in terrainTilemapLayers)
+        {
+            
+        }
+
         //bake the new region from the mesh
         NavigationServer2D.BakeFromSourceGeometryData(newNavMesh, navGeometryData);
         navigationRegion.NavigationPolygon = newNavMesh;

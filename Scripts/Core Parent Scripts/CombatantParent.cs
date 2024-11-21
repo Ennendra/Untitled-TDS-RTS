@@ -21,6 +21,7 @@ public partial class CombatantParent : Area2D
     [Export] protected FactionComponent factionComponent;
     [Export] protected MovementComponent movementComponent;
     [Export] protected ResourceComponent resourceComponent;
+    [Export] protected FOWSightComponent sightComponent;
 
     [ExportCategory("Faction Definition")]
     [Export] int factionOverride = 0;
@@ -83,6 +84,10 @@ public partial class CombatantParent : Area2D
     {
         if (IsInstanceValid(aiComponent)) return aiComponent;
         else return null;
+    }
+    public FOWSightComponent GetSightComponent()
+    {
+        return sightComponent;
     }
 
     public void SetReclaimValue(float energy, float metal)

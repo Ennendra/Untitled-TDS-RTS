@@ -19,6 +19,7 @@ public partial class Player : Area2D
     [Export] public MovementComponent movementComponent { get; private set; }
     [Export] public FactionComponent factionComponent { get; private set; }
     [Export] public ResourceComponent resourceComponent { get; private set; }
+    [Export] public FOWSightComponent sightComponent { get; private set; }
 
     //UI related
     MainUI playerUI;
@@ -51,10 +52,8 @@ public partial class Player : Area2D
     }
 	public override void _Process(double delta)
 	{
-        if (!Input.IsActionPressed("Personal_Use_Fire"))
-        {
-            uiInputCheck = playerUI.mouseOverUI;
-        }
+        if (!Input.IsActionPressed("Personal_Use_Fire")) { uiInputCheck = playerUI.mouseOverUI; }
+
         if (IsLevelControllerSet())
         {
             //Determining the direction that the player aims

@@ -68,7 +68,8 @@ public partial class UI_RTSToolbar : Control
                 selectedUnitButtons[i].Visible = false;
             }
         }
-        //TODO: Add code for the order toolbar here
+
+        //Enable or disable the toolbar based on whether we selected any non-structure units
         if (selection.Count > 0)
         {
             EnableOrderHotbar();

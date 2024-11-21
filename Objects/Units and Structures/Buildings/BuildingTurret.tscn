@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://uope7kr0g6fa"]
+[gd_scene load_steps=17 format=3 uid="uid://uope7kr0g6fa"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_rlvto"]
 [ext_resource type="Texture2D" uid="uid://jpbjl7hit1gx" path="res://Textures/Buildings/Turret1/Turret1Base.png" id="2_hnot5"]
@@ -14,11 +14,12 @@
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="8_3l2ct"]
 [ext_resource type="Resource" uid="uid://bc3s0wejn2g7a" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Turret.tres" id="10_1vn5o"]
 [ext_resource type="PackedScene" uid="uid://djckgbda36vuf" path="res://Objects/Components/AIComponent.tscn" id="12_80muq"]
+[ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="15_abe3b"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qglq"]
 radius = 43.0
 
-[node name="BuildingTurret" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "aimComponent", "factionComponent") groups=["Building"]]
+[node name="BuildingTurret" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "sightComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 16384
 script = ExtResource("1_rlvto")
@@ -30,6 +31,7 @@ mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 aimComponent = NodePath("AimingComponent")
 factionComponent = NodePath("FactionComponent")
+sightComponent = NodePath("SightComponent")
 
 [node name="MainSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_hnot5")
@@ -80,5 +82,10 @@ aimComponent = NodePath("../AimingComponent")
 position = Vector2(30, 0)
 color = Color(1, 1, 1, 0)
 polygon = PackedVector2Array(50, 50, 50, -50, -50, -50, -50, 50)
+
+[node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("15_abe3b")]
+visible = false
+sightRange = 600
+factionComponent = NodePath("../FactionComponent")
 
 [editable path="AimingComponent/Weapon"]

@@ -15,6 +15,7 @@ public partial class MovementComponent : Area2D
 
 	//The movement type (which can dictate how the unit moves and what count as obstacles
 	[Export] MovementType movementType = MovementType.GROUND;
+	public MovementType GetMovementType() { return movementType; }
 
 	//Speed variables
 	[Export] float maxSpeed = 60;
@@ -78,6 +79,7 @@ public partial class MovementComponent : Area2D
             {
                 legSprite.GlobalRotation = groundMoveDirection;
             }
+			
         }
 		
 	}

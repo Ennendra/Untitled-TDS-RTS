@@ -18,7 +18,8 @@ public partial class AimingComponent : Node2D
     [Export] float rotationSpeed = 2.5f;
     //The rotation speed converted to radians for use in the _process function
     float rotationSpeedRadians;
-    float currentAimDirection = 0, targetAimDirection = 0;
+    public float currentAimDirection { get; private set; } = 0;
+    public float targetAimDirection { get; private set; } = 0;
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Ready()

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://lfm103isinqu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_MetalNode.png" id="7_us3im"]
 [ext_resource type="Texture2D" uid="uid://cqqvdhookah3a" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_EnemyBuilding.png" id="8_0ysu1"]
 
-[node name="UI_Minimap" type="MarginContainer"]
+[node name="UI_Minimap" type="MarginContainer" node_paths=PackedStringArray("fogSprite", "shroudSprite")]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -22,6 +22,8 @@ offset_right = 670.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_1s8hk")
+fogSprite = NodePath("Fog2")
+shroudSprite = NodePath("Shroud2")
 initialMinimapDrawSize = Vector2(250, 250)
 initialMinimapDrawOffset = Vector2(10, 10)
 markerPlayer = ExtResource("4_wi2sf")
@@ -60,3 +62,12 @@ size = Vector2i(1500, 1500)
 
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]
 position = Vector2(1200, 730)
+
+[node name="Fog2" type="TextureRect" parent="."]
+clip_contents = true
+layout_mode = 2
+
+[node name="Shroud2" type="TextureRect" parent="."]
+clip_contents = true
+layout_mode = 2
+stretch_mode = 4

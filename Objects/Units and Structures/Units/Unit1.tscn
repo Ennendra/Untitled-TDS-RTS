@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://6akwd6vee46k"]
+[gd_scene load_steps=21 format=3 uid="uid://6akwd6vee46k"]
 
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="1_etjku"]
 [ext_resource type="Script" path="res://Scripts/Units/Unit1.cs" id="1_yklge"]
@@ -16,6 +16,7 @@
 [ext_resource type="Resource" uid="uid://bb2ewtpnqjdv1" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_Unit1.tres" id="10_g22ja"]
 [ext_resource type="PackedScene" uid="uid://bnss8qnlmgv7" path="res://Objects/Components/PathfindingComponent.tscn" id="11_au3ii"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="12_iyajs"]
+[ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="17_40s6b"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e35dv"]
 radius = 23.0
@@ -26,7 +27,7 @@ radius = 23.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_j4oht"]
 radius = 18.0
 
-[node name="Unit1" type="Area2D" node_paths=PackedStringArray("mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "movementComponent") groups=["Unit"]]
+[node name="Unit1" type="Area2D" node_paths=PackedStringArray("mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "movementComponent", "sightComponent") groups=["Unit"]]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_yklge")
@@ -38,6 +39,7 @@ aimComponent = NodePath("AimingComponent")
 aiComponent = NodePath("AiComponent")
 factionComponent = NodePath("FactionComponent")
 movementComponent = NodePath("MovementComponent")
+sightComponent = NodePath("SightComponent")
 
 [node name="SpriteBottom" type="Sprite2D" parent="."]
 texture = ExtResource("6_qse03")
@@ -98,5 +100,10 @@ movementComponent = NodePath("../MovementComponent")
 aimComponent = NodePath("../AimingComponent")
 
 [node name="PathfindingComponent" parent="." instance=ExtResource("11_au3ii")]
+
+[node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("17_40s6b")]
+visible = false
+sightRange = 1400
+factionComponent = NodePath("../FactionComponent")
 
 [editable path="AimingComponent/Weapon"]

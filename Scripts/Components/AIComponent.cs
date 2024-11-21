@@ -425,6 +425,7 @@ public partial class AIComponent : Node2D
 
     public void TrackFireTarget(double delta)
     {
+
         aimComponent.SetTargetDirection(fireTarget.GlobalPosition);
         
         //has the target moved?
@@ -436,11 +437,17 @@ public partial class AIComponent : Node2D
             //Update the aimcomponents target position based on the track vector
             aimComponent.SetTargetDirection(fireTarget.GlobalPosition + (trackVector * projectileToTargetTime));
         }
-        FireWeaponIfInRange();
+
+        //If we're nearly aiming directly at the target, fire
+        float angleDifference = Vector2.FromAngle(aimComponent.currentAimDirection).Dot(Vector2.FromAngle(aimComponent.targetAimDirection));
+        if (angleDifference > 0.999) 
+        {
+            FireWeaponIfInRange();
+        }
     }
 
-	//Checks if the weapon is within range of the fire target and fires if so
-	public void FireWeaponIfInRange()
+        //Checks if the weapon is within range of the fire target and fires if so
+        public void FireWeaponIfInRange()
 	{
         hasFireTarget = true;
         if (distanceToFireTarget < standardFireRange)
@@ -469,13 +476,27 @@ public partial class AIComponent : Node2D
 		//check that the point we're moving to isn't where we're standing. This is so that there isn't unnecessary movement with pathfinding
         float angleToTarget = GlobalPosition.DirectionTo(newPosition).Angle();
         movementComponent.SetTargetDirection(angleToTarget);
-		float angleDifference = Vector2.FromAngle(movementComponent.GetCurrentDirection()).Dot(GlobalPosition.DirectionTo(newPosition));
+		
 
-        if (angleDifference > 0.5) //If we're within 45 degrees of facing the target
-			movementComponent.Accelerate(delta);
-		else
-			movementComponent.Decelerate(delta);
-        
+        if (movementComponent.GetMovementType() == MovementType.GROUND)
+        {
+            float angleDifference = Vector2.FromAngle(movementComponent.GetCurrentDirection()).Dot(GlobalPosition.DirectionTo(newPosition));
+            if (angleDifference > 0.5) //If we're within ~45 degrees of facing the target
+                movementComponent.Accelerate(delta);
+            else
+                movementComponent.Decelerate(delta);
+        }
+        else if (movementComponent.GetMovementType() == MovementType.HOVER)
+        {
+            float currentMoveAngle = movementComponent.GetMovementVectorHover(1).Angle();
+            float angleDifference = Vector2.FromAngle(currentMoveAngle).Dot(GlobalPosition.DirectionTo(newPosition));
+            //If we are hovering, we don't need to worry about rotation
+            if (angleDifference > 0.5 || movementComponent.GetMovementVectorHover(1).Length() <= 10) //If our current movement is close enough to the direction we want to go, or if we've slowed down enought
+                movementComponent.Accelerate(delta);
+            else
+                movementComponent.Decelerate(delta);
+        }
+
     }
 
 

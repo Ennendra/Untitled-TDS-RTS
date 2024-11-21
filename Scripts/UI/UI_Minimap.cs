@@ -34,12 +34,16 @@ public partial class UI_Minimap : Control
 
 	//The size of the minimap itself (in case we need to change the UI size later)
 	//The initial draw size and offset can be edited to accomodate the minimap should I wish to scale it, while the others are based on the map ratio
+	[Export] TextureRect fogSprite, shroudSprite;
 	[Export] Vector2 initialMinimapDrawSize, initialMinimapDrawOffset;
     Vector2 minimapDrawSize, minimapDrawOffset;
     //The textures used for the minimap markers
     [Export] Texture2D markerPlayer, markerAllyUnit, markerAllyBuilding, markerEnemyUnit, markerEnemyBuilding, markerMetalNode;
     //The list of minimapmarkers in the scene that are ready to draw
     List<MinimapMarkerDrawInfo> markersToDraw = new();
+
+	//Textures of the fog of war to overlay over the minimap
+	ImageTexture[] fowTextures;
 
     public override void _Draw()
     {
@@ -80,6 +84,13 @@ public partial class UI_Minimap : Control
             Vector2 textureOffset = markerTexture.GetSize() / 2;
             DrawTexture(markerTexture, marker.markerPosition - textureOffset);
 		}
+
+		//drawing the fow textures if applicable
+		if (fowTextures!=null)
+		{
+			DrawTexture(fowTextures[0], minimapDrawOffset);
+            DrawTexture(fowTextures[1], minimapDrawOffset);
+        }
 
 		//Draw a rectangle on the minimap to represent the viewport size
 		DrawRect(minimapViewport, new Color(1, 1, 0, 0.5f), false);
@@ -226,6 +237,18 @@ public partial class UI_Minimap : Control
             scanRegion = minimapFullmapScanSize;
 			drawCenter = minimapFullmapCenter;
 			drawScale = tickDrawSize / minimapFullmapScanSize;
+
+			if (fowTextures != null)
+			{
+				fogSprite.Texture = fowTextures[0];
+				shroudSprite.Texture = fowTextures[1];
+
+				fogSprite.Position = minimapDrawOffset;
+                shroudSprite.Position = minimapDrawOffset;
+
+				fogSprite.Size = minimapDrawSize;
+                shroudSprite.Size = minimapDrawSize;
+            }
 		}
 
         //Create the rectangle boundaries of the viewport relative to the minimap

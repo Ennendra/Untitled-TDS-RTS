@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dsmangyv0e48c"]
+[gd_scene load_steps=10 format=3 uid="uid://dsmangyv0e48c"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BlueprintParent.cs" id="1_v2vrm"]
 [ext_resource type="PackedScene" uid="uid://b6n5rl53lqn3g" path="res://Objects/Units and Structures/Buildings/BuildingEnergyStorage.tscn" id="2_dredr"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="5_71hg5"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="6_he8ji"]
 [ext_resource type="Shader" path="res://Textures/Shaders/TestShader.gdshader" id="6_ykb41"]
+[ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="8_pls14"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kjpm3"]
 shader = ExtResource("6_ykb41")
@@ -20,13 +21,14 @@ shader_parameter/end_pos = 0.99
 shader_parameter/midpos_enabled = true
 shader_parameter/effect_filling = 1.0
 
-[node name="Blueprint" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent") groups=["Blueprint"]]
+[node name="Blueprint" type="Area2D" node_paths=PackedStringArray("damageComponent", "factionComponent", "sightComponent") groups=["Blueprint"]]
 collision_layer = 131074
 collision_mask = 0
 script = ExtResource("1_v2vrm")
 objectToSpawn = ExtResource("2_dredr")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
+sightComponent = NodePath("SightComponent")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("3_5kv11")
@@ -46,7 +48,6 @@ show_percentage = false
 
 [node name="DamageComponent" parent="." instance=ExtResource("4_x0g5q")]
 healthBarOffset = 50.0
-maxHealth = 50.0
 
 [node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("5_71hg5")]
 damageComponent = NodePath("../DamageComponent")
@@ -57,3 +58,8 @@ markerTag = 2
 [node name="SpriteScaffold" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_kjpm3")
 texture = ExtResource("3_5kv11")
+
+[node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("8_pls14")]
+visible = false
+sightRange = 200
+factionComponent = NodePath("../FactionComponent")

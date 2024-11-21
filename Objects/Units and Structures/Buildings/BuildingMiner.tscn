@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b8wtdlbxd7cm6"]
+[gd_scene load_steps=12 format=3 uid="uid://b8wtdlbxd7cm6"]
 
 [ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_6f487"]
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="2_mlgor"]
@@ -9,11 +9,12 @@
 [ext_resource type="Resource" uid="uid://bko37qjwa3b3t" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Miner.tres" id="5_2oyh4"]
 [ext_resource type="Texture2D" uid="uid://deaejpuahshey" path="res://Textures/UI/SelectionBoxes/SelectionBoxBuilding2X2.png" id="5_4phsb"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="8_os1ja"]
+[ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="10_ornqv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qglq"]
 radius = 43.0
 
-[node name="BuildingMiner" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent", "resourceComponent") groups=["Building"]]
+[node name="BuildingMiner" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent", "resourceComponent", "sightComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 16384
 script = ExtResource("1_6f487")
@@ -25,6 +26,7 @@ mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 factionComponent = NodePath("FactionComponent")
 resourceComponent = NodePath("ResourceComponent")
+sightComponent = NodePath("SightComponent")
 
 [node name="MainSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_ubo7v")
@@ -59,3 +61,8 @@ markerTag = 2
 [node name="BuildingObstacleBounds" type="Polygon2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
 color = Color(1, 1, 1, 0)
 polygon = PackedVector2Array(50, 50, 50, -50, -50, -50, -50, 50)
+
+[node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("10_ornqv")]
+visible = false
+sightRange = 200
+factionComponent = NodePath("../FactionComponent")

@@ -21,6 +21,7 @@ public partial class BlueprintParent : Area2D
     [ExportCategory("Components")]
     [Export] DamageComponent damageComponent;
     [Export] FactionComponent factionComponent;
+    [Export] FOWSightComponent sightComponent;
     public MinimapMarkerComponent markerComponent { get; protected set; }
 
     [ExportCategory("Building Size")]
@@ -106,6 +107,10 @@ public partial class BlueprintParent : Area2D
     public FactionComponent GetFactionComponent()
     {
         return factionComponent;
+    }
+    public FOWSightComponent GetSightComponent()
+    {
+        return sightComponent;
     }
     public void SetReclaimValue(float energy, float metal)
     {
