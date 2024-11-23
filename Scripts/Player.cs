@@ -49,6 +49,8 @@ public partial class Player : Area2D
         damageComponent.SetReclaimValue(unitInfo.energyCost, unitInfo.metalCost);
         damageComponent.SetMaxHealth(unitInfo.maxHealth);
         damageComponent.SetHealthPercentage(100);
+
+        factionComponent.SetAsSpotted(factionComponent.faction);
     }
 	public override void _Process(double delta)
 	{

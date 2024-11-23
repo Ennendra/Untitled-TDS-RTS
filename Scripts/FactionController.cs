@@ -348,14 +348,18 @@ public partial class FactionController
         foreach(BuildingParent building in buildings)
         {
             building.markerComponent.markerTag = buildingTag;
+            building.markerComponent.spottedByFaction = building.GetFactionComponent().spottedByFaction;
+
         }
         foreach (BlueprintParent blueprint in blueprints)
         {
             blueprint.markerComponent.markerTag = blueprintTag;
+            blueprint.markerComponent.spottedByFaction = blueprint.GetFactionComponent().spottedByFaction;
         }
         foreach (UnitParent unit in units)
         {
             unit.markerComponent.markerTag = unitTag;
+            unit.markerComponent.spottedByFaction = unit.GetFactionComponent().spottedByFaction;
         }
 
     }

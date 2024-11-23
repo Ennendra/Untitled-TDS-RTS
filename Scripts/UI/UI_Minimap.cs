@@ -45,6 +45,8 @@ public partial class UI_Minimap : Control
 	//Textures of the fog of war to overlay over the minimap
 	ImageTexture[] fowTextures;
 
+	public int playerFaction = 1;
+
     public override void _Draw()
     {
         base._Draw();
@@ -67,6 +69,8 @@ public partial class UI_Minimap : Control
             }
         }
 
+        
+
         //Draw Each Marker
         foreach (var marker in markersToDraw)
 		{
@@ -85,15 +89,15 @@ public partial class UI_Minimap : Control
             DrawTexture(markerTexture, marker.markerPosition - textureOffset);
 		}
 
-		//drawing the fow textures if applicable
-		if (fowTextures!=null)
-		{
-			DrawTexture(fowTextures[0], minimapDrawOffset);
+        //drawing the fow textures if applicable
+        if (fowTextures != null)
+        {
+            DrawTexture(fowTextures[0], minimapDrawOffset);
             DrawTexture(fowTextures[1], minimapDrawOffset);
         }
 
-		//Draw a rectangle on the minimap to represent the viewport size
-		DrawRect(minimapViewport, new Color(1, 1, 0, 0.5f), false);
+        //Draw a rectangle on the minimap to represent the viewport size
+        DrawRect(minimapViewport, new Color(1, 1, 0, 0.5f), false);
 	}
 
 	//Setting the node for the local minimap center
@@ -209,7 +213,7 @@ public partial class UI_Minimap : Control
 
 
 	
-    public void ProcessMinimapTick(List<MinimapMarkerComponent> markers)
+    public void ProcessMinimapTick(List<MinimapMarkerComponent> markers, ImageTexture[] fowTextures)
 	{
 		//clear the current set of drawn markers
 		markersToDraw.Clear();
@@ -243,11 +247,13 @@ public partial class UI_Minimap : Control
 				fogSprite.Texture = fowTextures[0];
 				shroudSprite.Texture = fowTextures[1];
 
-				fogSprite.Position = minimapDrawOffset;
-                shroudSprite.Position = minimapDrawOffset;
+				fogSprite.Position = minimapDrawOffset + new Vector2(1,1);
+                shroudSprite.Position = minimapDrawOffset + new Vector2(1, 1);
 
-				fogSprite.Size = minimapDrawSize;
-                shroudSprite.Size = minimapDrawSize;
+				fogSprite.Size = minimapDrawSize - new Vector2(1, 1);
+                shroudSprite.Size = minimapDrawSize - new Vector2(1, 1);
+
+				//Blend the textures so that the 'white' (revealed) parts are transparent
             }
 		}
 
@@ -272,8 +278,9 @@ public partial class UI_Minimap : Control
         foreach (MinimapMarkerComponent marker in markers)
 		{
 			//Check whether the marker is within the region to be shown on the minimap
-			if (IsWithinScanAreaRectangle(marker.GlobalPosition, drawCenter, scanRegion))
+			if (IsWithinScanAreaRectangle(marker.GlobalPosition, drawCenter, scanRegion) && marker.spottedByFaction[playerFaction])
 			{
+
 				//Set the position on the minimap (relative to the center of the minimap) that this marker will draw
 				Vector2 drawPosition = (marker.GlobalPosition - drawCenter) * drawScale + (minimapDrawSize / 2) + minimapDrawOffset;
 

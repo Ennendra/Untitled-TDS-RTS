@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using static Godot.WebSocketPeer;
 
 public enum LevelControllerPlayState
@@ -61,6 +62,7 @@ public partial class MainLevelController : Node2D
     public RTSPlayState rtsPlayState { get; private set; } = RTSPlayState.STANDARD; 
     
     Player player;
+    int playerFaction = 1;
 	MainUI mainUI;
     RTSController rtsController;
 
@@ -178,6 +180,7 @@ public partial class MainLevelController : Node2D
             //Set the player and its resource and contructor components to the relevant faction controller
             FactionController playerFController = factionController[player.factionComponent.faction - 1];
             playerFController.AddPlayer(player);
+            playerFaction = player.factionComponent.faction;
 
             //Initialise the UI and the player's link to it
             player.SetPlayerUI(mainUI);
@@ -666,10 +669,6 @@ public partial class MainLevelController : Node2D
         {
             //Get the resource values of the current network
             int[] newValues;
-            //if (player.subNetwork.isAttachedToNetwork)
-            //    { newValues = player.GetCurrentNetworkController().GetCurrentTickValues(); }
-            //else //Player is not in a network, get personal data instead
-            //    { newValues = player.subNetwork.GetCurrentTickValues(); }
 
             newValues = factionController[player.factionComponent.faction - 1].GetCurrentTickValues(forceRefresh);
 
@@ -685,8 +684,49 @@ public partial class MainLevelController : Node2D
     public void UpdateFOW(double delta)
     {
         ImageTexture[] newFOWTextures = fowController.ProcessCall(delta);
-        if (newFOWTextures != null) { fowTextures = newFOWTextures; }
+        //Will only return textures when the actual FOW updates
+        if (newFOWTextures != null) 
+        { 
+            //set the new textures for use with the minimap
+            fowTextures = newFOWTextures; 
+
+            //Reset and process the 'spotting' process for units
+            foreach (UnitParent unit in unitsInScene)
+            {
+                unit.GetFactionComponent().ResetSpottedValues();
+            }
+            foreach (BlueprintParent blueprint in blueprintsInScene)
+            {
+                blueprint.GetFactionComponent().ResetSpottedValues();
+            }
+            foreach (BuildingParent building in buildingsInScene)
+            {
+                building.GetFactionComponent().ResetSpottedValues();
+            }
+
+            //Run the scan process for all sight components. Doing this via the fowController which has access to all sight components
+            fowController.ExecuteSightScans();
+
+            //Hide any non-allied units
+            var fComponentGroup = GetTree().GetNodesInGroup("FactionCombatant");
+            foreach (var fComponent in fComponentGroup)
+            {
+                FactionComponent combatant = fComponent as FactionComponent;
+                if (combatant.spottedByFaction[playerFaction])
+                {
+                    Node2D parent = (Node2D)combatant.GetParent();
+                    parent.Visible = true;
+                }
+                else
+                {
+                    Node2D parent = (Node2D)combatant.GetParent();
+                    parent.Visible = false;
+                }
+            }
+
+        }
     }
+    
 
     //Functions for the minimap
     public void UpdateMinimap(float delta)
@@ -700,17 +740,26 @@ public partial class MainLevelController : Node2D
             List<MinimapMarkerComponent> minimapMarkers = new();
             var markerNodes = GetTree().GetNodesInGroup("MinimapMarker");
             //Set the minimap markers in case the player's or another unit's faction has changed
+            //Also sets the spotted status to the markers to tell whether to display them or not
             SetFactionMinimapMarkers();
 
             //Cast the nodes obtained into the specific minimap marker component and add to the list
             foreach (var node in markerNodes)
             {
                 MinimapMarkerComponent nodeCast = (MinimapMarkerComponent)node;
+                
                 minimapMarkers.Add(nodeCast);
             }
 
             //Send the list to the minimap UI to process and draw
-            mainUI.GetMinimap().ProcessMinimapTick(minimapMarkers);
+            if (fowTextures[0] != null)
+            {
+                mainUI.GetMinimap().ProcessMinimapTick(minimapMarkers, fowTextures);
+            }
+            else
+            {
+                mainUI.GetMinimap().ProcessMinimapTick(minimapMarkers, null);
+            }
         }
     }
     //Update the minimap marker tags of all combatants and buildings based on the player's faction

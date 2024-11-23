@@ -388,13 +388,13 @@ public partial class AIComponent : Node2D
 				}
 			}
 
-			//Find nearest of the targets in list and mark it as the main target.
+			//Find nearest of the targets in list and mark it as the main target (As long as it's spotted by the team)
 			FactionComponent closestTarget = null;
 			float closestDistance = 0;
 			foreach (var targetCheck in componentCollisions)
 			{
 				float distanceToTarget = GlobalPosition.DistanceTo(targetCheck.GlobalPosition);
-				if (distanceToTarget < closestDistance || closestTarget == null)
+				if (distanceToTarget < closestDistance || closestTarget == null && targetCheck.spottedByFaction[factionComponent.faction])
 				{
 					closestTarget = targetCheck;
 					closestDistance = distanceToTarget;

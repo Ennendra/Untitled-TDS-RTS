@@ -13,15 +13,18 @@ public partial class FactionComponent : Area2D
     [Export] private int _faction = 1;
 
     [Export] DamageComponent damageComponent;
-
     [Export] AIComponent aiComponent;
     [Export] FactoryComponent factoryComponent;
+
     //Tells us if this item is a unit or not, for the purposes of unit selection (ie, filter out buildings from selection)
     [Export] public bool isAUnit = false;
     [Export] public bool isPlayer = false;
     bool isSelected = false;
     [Export] Texture2D selectedTexture;
     Sprite2D selectSprite;
+
+    //Determines what factions can 'see' this object
+    public bool[] spottedByFaction { get; protected set; } = {false, false, false, false, false};
 
     [Export] public UnitInfo unitInfo { get; private set; }
 
@@ -45,6 +48,8 @@ public partial class FactionComponent : Area2D
     public override void _Ready()
     {
         base._Ready();
+
+        //Set all spotted values to 0
 
         lastPos = GlobalPosition;
 
@@ -134,6 +139,26 @@ public partial class FactionComponent : Area2D
     }
     public Vector2 GetRallyPoint() { return this.rallyPoint; }
 
+    //Functions related to spotting and FOW
+    public void ResetSpottedValues()
+    {
+        //don't reset the spotted value if the object is a building (They will maintain spotted status)
+        if (isAUnit)
+        {
+            for (int i = 0; i < spottedByFaction.Length; i++) 
+            {
+                spottedByFaction[i] = false;
+            }
+
+        }
+        //make sure they are spotted by their own faction
+        spottedByFaction[faction] = true;
+    }
+    public void SetAsSpotted(int spottingFaction)
+    {
+        spottedByFaction[spottingFaction] = true;
+    }
+
 
     //Weapon and tool list editing functions
     public void AddWeapon(WeaponParent weapon)
@@ -180,6 +205,8 @@ public partial class FactionComponent : Area2D
     
     public void OnFactionChanged()
     {
+        
+
         int[] attackLayers, attackMasks, damageLayers, damageMasks;
         int factionLayer;
         switch (faction)

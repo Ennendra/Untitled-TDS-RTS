@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/Components/FactionComponent.cs" id="1_e8hy2"]
 
-[node name="FactionComponent" type="Area2D"]
+[node name="FactionComponent" type="Area2D" groups=["FactionCombatant"]]
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("1_e8hy2")
