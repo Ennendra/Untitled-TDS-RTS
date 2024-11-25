@@ -142,8 +142,12 @@ public partial class RTSController : Node2D
                     }
                     else
                     {
-                        //Target is enemy
-                        return "Attack";
+                        //Target is enemy, as long as it's revealed
+                        if (targetComponent.spottedByFaction[playerFaction])
+                        {
+                            return "Attack";
+                        }
+                        
                     }
                 }
             }
