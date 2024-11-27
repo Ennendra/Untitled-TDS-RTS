@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_oebtc")
 unitName = "Miner"
-unitDescription = "Place on mining resource points to generate raw metal"
+unitDescription = "Place on mining resource points to generate metal"
 maxHealth = 120.0
 energyCost = 100.0
 metalCost = 40.0

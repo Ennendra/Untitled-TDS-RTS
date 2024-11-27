@@ -105,7 +105,7 @@ public partial class UI_BuildPlacement : Sprite2D
                     if (colliderCheck)
                     {
                         BaseNetworkController currentControllerPoint = (BaseNetworkController)collidedObject;
-                        if (currentControllerPoint.GetNetworkFaction() != factionLink.GetPlayerFaction()) //Check that this is one of our networks
+                        if (currentControllerPoint.GetNetworkFaction() != factionLink.GetFaction()) //Check that this is one of our networks
                         {
                             return "Cannot place in a hostile network!";
                         }
@@ -145,7 +145,7 @@ public partial class UI_BuildPlacement : Sprite2D
             BlueprintParent newBuilding = (BlueprintParent)currentBuildingInfo.objectToSpawn.Instantiate();
             GetTree().CurrentScene.AddChild(newBuilding);
             newBuilding.GlobalPosition = buildLocation;
-            newBuilding.SetNewFaction(factionLink.GetPlayerFaction());
+            newBuilding.SetNewFaction(factionLink.GetFaction());
             return true;
         }
         return false;

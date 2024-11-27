@@ -52,9 +52,7 @@ shape = SubResource("RectangleShape2D_nh6i5")
 [node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("6_pfpjb")]
 factionComponent = NodePath("../FactionComponent")
 genMetal = 2.0
-stoMetal = 10.0
-conEnergy = 2.0
-conRawMetal = 2.0
+conEnergy = 8.0
 
 [node name="Collider" type="CollisionShape2D" parent="ResourceComponent"]
 shape = SubResource("RectangleShape2D_nh6i5")

@@ -24,6 +24,7 @@ public partial class FactionController
     protected float[] totalVariance = new float[3] { 0, 0, 0 };
     protected float currentNetworkPerformance = 1;
 
+    int faction = 0;
     //Trackers for all buildings and units belonging to this faction
     List<BuildingParent> buildings = new();
     List<BlueprintParent> blueprints = new();
@@ -54,8 +55,8 @@ public partial class FactionController
         }
         if (playerUnit != null)
         {
-            activeResourceComponents.AddRange(playerUnit.GetResourceComponents());
-            activeConstructorComponents.AddRange(playerUnit.GetConstructorComponents());
+            activeResourceComponents.AddRange(playerUnit.GetPlayerResourceComponents());
+            activeConstructorComponents.AddRange(playerUnit.GetPlayerConstructorComponents());
         }
 
 
@@ -252,7 +253,7 @@ public partial class FactionController
         }
         if (playerUnit != null)
         {
-            activeResourceComponents.AddRange(playerUnit.GetResourceComponents());
+            activeResourceComponents.AddRange(playerUnit.GetPlayerResourceComponents());
         }
         foreach (var component in activeResourceComponents)
         {
@@ -321,26 +322,35 @@ public partial class FactionController
     {
         playerUnit = player;
     }
-    public Player GetPlayer()
+    public void RemovePlayer()
     {
-        if (playerUnit != null) 
-            return playerUnit;
-        else
-        {
-            GD.Print("Error: No player unit in this faction controller!");
-            return null;
-        }
+        playerUnit = null;
     }
-    public int GetPlayerFaction()
-    {
-        if (playerUnit != null)
-            return playerUnit.factionComponent.faction;
-        else
-        {
-            GD.Print("Error: No player unit in this faction controller when checking for faction number!");
-            return -1;
-        }
-    }
+
+    //Faction-related functions
+    public int GetFaction() { return faction; }
+    public void SetFaction(int value) { faction = value; }
+
+    //public Player GetPlayer()
+    //{
+    //    if (playerUnit != null) 
+    //        return playerUnit;
+    //    else
+    //    {
+    //        GD.Print("Error: No player unit in this faction controller!");
+    //        return null;
+    //    }
+    //}
+    //public int GetPlayerFaction()
+    //{
+    //    if (playerUnit != null)
+    //        return playerUnit.GetFactionComponent().faction;
+    //    else
+    //    {
+    //        GD.Print("Error: No player unit in this faction controller when checking for faction number!");
+    //        return -1;
+    //    }
+    //}
 
     //Function to get the minimap marker component from all units and buildings
     public void SetAllFactionMinimapMarkerComponents(MinimapMarkerTag buildingTag, MinimapMarkerTag blueprintTag, MinimapMarkerTag unitTag)

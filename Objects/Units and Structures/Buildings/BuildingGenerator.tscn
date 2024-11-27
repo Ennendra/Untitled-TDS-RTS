@@ -51,7 +51,7 @@ shape = SubResource("RectangleShape2D_5aeyx")
 
 [node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("6_a3ctk")]
 factionComponent = NodePath("../FactionComponent")
-genEnergy = 4.0
+genEnergy = 6.0
 stoEnergy = 10.0
 
 [node name="Collider" type="CollisionShape2D" parent="ResourceComponent"]

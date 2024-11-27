@@ -5,8 +5,8 @@
 
 [resource]
 script = ExtResource("1_anwif")
-unitName = "Refinery"
-unitDescription = "Takes raw metal mined from a Miner and converts it into usable metal. One refinery per miner will maintain 100% efficiency"
+unitName = "Converter"
+unitDescription = "Comsumes a large amount of energy to materialise additional metal"
 maxHealth = 400.0
 energyCost = 220.0
 metalCost = 100.0

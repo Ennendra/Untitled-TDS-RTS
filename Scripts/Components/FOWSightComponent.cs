@@ -55,7 +55,7 @@ public partial class FOWSightComponent : Node2D
         }
 
         //Execute the check
-        var collisionResult = spaceState.IntersectShape(areaCast);
+        var collisionResult = spaceState.IntersectShape(areaCast, 100);
 
         List<FactionComponent> componentCollisions = new();
         if (collisionResult.Count > 0)

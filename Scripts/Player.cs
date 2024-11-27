@@ -8,18 +8,11 @@ public enum PlayerState
 	BUILDPLACING,
 }
 
-public partial class Player : Area2D
+public partial class Player : CombatantParent
 {
     PlayerState state = PlayerState.COMBAT;
     public MainLevelController levelController;
     Camera2D camera;
-    [Export] public UnitInfo unitInfo { get; private set; }
-    [Export] public DamageComponent damageComponent { get; private set; }
-    [Export] public AimingComponent aimComponent { get; private set; }
-    [Export] public MovementComponent movementComponent { get; private set; }
-    [Export] public FactionComponent factionComponent { get; private set; }
-    [Export] public ResourceComponent resourceComponent { get; private set; }
-    [Export] public FOWSightComponent sightComponent { get; private set; }
 
     //UI related
     MainUI playerUI;
@@ -44,11 +37,9 @@ public partial class Player : Area2D
 	//General process functions
     public override void _Ready()
 	{
-        camera = GetNode<Camera2D>("Camera");
+        base._Ready();
 
-        damageComponent.SetReclaimValue(unitInfo.energyCost, unitInfo.metalCost);
-        damageComponent.SetMaxHealth(unitInfo.maxHealth);
-        damageComponent.SetHealthPercentage(100);
+        camera = GetNode<Camera2D>("Camera");
 
         factionComponent.SetAsSpotted(factionComponent.faction);
     }
@@ -62,7 +53,8 @@ public partial class Player : Area2D
             aimComponent.SetTargetDirection(GetGlobalMousePosition());
 
             //Slide an indicator for the aiming based on current aim direction and distance from player to cursor
-            mouseDistanceFromPlayer = Mathf.Lerp(mouseDistanceFromPlayer, GlobalPosition.DistanceTo(GetGlobalMousePosition()), 4 * (float)delta);
+            //mouseDistanceFromPlayer = Mathf.Lerp(mouseDistanceFromPlayer, GlobalPosition.DistanceTo(GetGlobalMousePosition()), 4 * (float)delta);
+            mouseDistanceFromPlayer = GlobalPosition.DistanceTo(GetGlobalMousePosition());
             spriteAimCursor.GlobalPosition = GlobalPosition + (Vector2.FromAngle(aimComponent.GlobalRotation) * mouseDistanceFromPlayer);
 
             //Slide the camera based on camera and mouse position from the center of the screen
@@ -102,17 +94,12 @@ public partial class Player : Area2D
             if (Input.IsActionJustReleased("Personal_Use_Fire")) { weaponsDisabled = false; }
         }
     }
-    public float GetResourcePerformance(float generation, float consumption)
+
+    public AimingComponent GetAimComponent()
     {
-        if (consumption > 0)
-        {
-            return generation / consumption;
-        }
-        else
-        {
-            return 1;
-        }
+        return aimComponent;
     }
+
     public void SetPlayerUI(MainUI playerUI)
 	{
 		this.playerUI = playerUI;
@@ -235,7 +222,7 @@ public partial class Player : Area2D
         }
     }
 
-    public List<ResourceComponent> GetResourceComponents()
+    public List<ResourceComponent> GetPlayerResourceComponents()
     {
         List<ResourceComponent> allComponents = new();
         if (IsInstanceValid(resourceComponent)) allComponents.Add(resourceComponent);
@@ -246,7 +233,7 @@ public partial class Player : Area2D
 
         return allComponents;
     }
-    public List<ConstructorComponent> GetConstructorComponents()
+    public List<ConstructorComponent> GetPlayerConstructorComponents()
     {
         List<ConstructorComponent> allComponents = new();
         foreach (ToolParent tool in tools)
@@ -256,4 +243,13 @@ public partial class Player : Area2D
         return allComponents;
     }
 
+    //Slight override of if the player dies, to make sure the game flicks to RTS mode
+    public void OnDamageKill()
+    {
+        CreateExplosion();
+
+        if (levelController.playState == LevelControllerPlayState.PERSONALPLAYER) { levelController.ToggleRTSMode(); }
+
+        QueueFree();
+    }
 }

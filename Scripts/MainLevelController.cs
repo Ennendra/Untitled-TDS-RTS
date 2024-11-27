@@ -105,28 +105,34 @@ public partial class MainLevelController : Node2D
         SetOrderState += OnOrderStatePress;
         SelectControlGroupButton += OnControlGroupSelect;
 
+        //Get global and controller nodes
         globals = GetNode<Globals>("/root/Globals");
-
         globals.mainBattleArea = navigationRegion;
-
-        player = GetNodeOrNull<Player>("Player");
         mainUI = GetNode<MainUI>("MainUIPersonal");
         rtsController = GetNode<RTSController>("RTSController");
 
-        player.levelController = this;
-        rtsController.levelController = this;
+        //Get the player node if it exists
+        player = GetNodeOrNull<Player>("Player");
 
-        
         
 
         //instantiate the faction controllers
         for (int i = 0; i < factionController.Count(); i++)
         {
             factionController[i] = new();
+            factionController[i].SetFaction(i + 1);
         }
 
-        
+        //Set relevant faction info on controllers
+        mainUI.SetPlayerFactionController(factionController[playerFaction - 1]);
+        rtsController.levelController = this;
+        rtsController.SetFaction(playerFaction);
 
+        //Add the player to the list if it exists
+        //If not, make sure we aren't in personal mode at start
+        if (player != null) { AddPlayer(player); }
+        else { CallDeferred("ToggleRTSMode"); }
+        
         //Add all buildings, blueprints and units spawned in the scene into their respective lists
         //Also, Find all misc environment obstacles and add their polygons to a misc obstacle list
         var childNodes = GetChildren();
@@ -158,40 +164,11 @@ public partial class MainLevelController : Node2D
                 Polygon2D childCast = child.GetNode<Polygon2D>("ObstacleBounds");
                 miscObstaclesInScene.Add(childCast);
             }
-            //if (child.IsInGroup("SightBlocker"))
-            //{
-            //    FOWBlockerComponent childCast = (FOWBlockerComponent)child;
-            //    fowController.AddBlockerComponent(childCast);
-            //}
-            if (child.IsInGroup("Player"))
-            {
-                Player childCast = (Player)child;
-                fowController.AddSightComponent(childCast.sightComponent);
-            }
             navMapInitialised = true;
         }
 
         //Init the Fog of War and its textures, and prepare a set of them for the minimap
         fowTextures = fowController.InitFOW(new Vector2(left, top), GetMapSize());
-
-        if (player != null)
-        {
-
-            //Set the player and its resource and contructor components to the relevant faction controller
-            FactionController playerFController = factionController[player.factionComponent.faction - 1];
-            playerFController.AddPlayer(player);
-            playerFaction = player.factionComponent.faction;
-
-            //Initialise the UI and the player's link to it
-            player.SetPlayerUI(mainUI);
-            
-            mainUI.GetPersonalToolbar().SetAimComponentLink(player.aimComponent);
-            mainUI.SetPlayerFactionController(playerFController);
-            
-            //Set the RTS Controller faction to the player, so it checks the correct collision masks
-            rtsController.SetFaction(player.factionComponent.faction);
-            player.SetMainCamera();
-        }
 
         mainUI.SetButtonConnections(this);
 
@@ -621,10 +598,13 @@ public partial class MainLevelController : Node2D
         }
         else
         {
-            playState = LevelControllerPlayState.PERSONALPLAYER;
-            mainUI.SetToolbarVisibility(true);
-            player.SetMainCamera();
-            mainUI.GetMinimap().SetLocalCenterNode(player);
+            if (IsInstanceValid(player))
+            {
+                playState = LevelControllerPlayState.PERSONALPLAYER;
+                mainUI.SetToolbarVisibility(true);
+                player.SetMainCamera();
+                mainUI.GetMinimap().SetLocalCenterNode(player);
+            }
         }
     }
     public void SetPersonalPlayState(PersonalPlayState state)
@@ -665,19 +645,12 @@ public partial class MainLevelController : Node2D
 
     public void UpdateResourceUI(bool forceRefresh)
 	{
-        if (player != null)
-        {
-            //Get the resource values of the current network
-            int[] newValues;
+        //Get the resource values of the current network
+        int[] newValues;
 
-            newValues = factionController[player.factionComponent.faction - 1].GetCurrentTickValues(forceRefresh);
+        newValues = factionController[playerFaction - 1].GetCurrentTickValues(forceRefresh);
 
-            mainUI.GetResourceTracker().GetNewResourceValues(newValues);
-        }
-        else //no player/player is dead, give blank labels
-        {
-            mainUI.GetResourceTracker().ClearResourceLabels();
-        }
+        mainUI.GetResourceTracker().GetNewResourceValues(newValues);
     }
 
     //Functions for the fog of war
@@ -781,6 +754,30 @@ public partial class MainLevelController : Node2D
 
 
     //List manipulation functions
+    public void AddPlayer(Player player)
+    {
+        this.player = player;
+        player.levelController = this;
+
+        //Set the player's link to the UI and elements of the personal toolbar to the player's toolkit
+        player.SetPlayerUI(mainUI);
+        mainUI.GetPersonalToolbar().SetAimComponentLink(player.GetAimComponent());
+
+        //Set the RTS Controller faction to the player, so it checks the correct collision masks
+        player.SetMainCamera();
+
+        //Set the player and its resource and contructor components to the relevant faction controller
+        //(Set as playerfaction - 1 since faction 1 will be index 0 on the controller list)
+        factionController[playerFaction - 1].AddPlayer(player);
+        //Add the player's sight component to the FOW Controller
+        fowController.AddSightComponent(player.GetSightComponent());
+    }
+    public void RemovePlayer(Player player)
+    {
+        fowController.RemoveSightComponent(player.GetSightComponent());
+        factionController[player.GetCurrentFaction() - 1].RemovePlayer();
+        this.player = null;
+    }
     public void AddBuilding(BuildingParent building)
     {
         buildingsInScene.Add(building);
@@ -895,12 +892,17 @@ public partial class MainLevelController : Node2D
                 UnitParent nodeCast = (UnitParent)node;
                 CallDeferred("AddUnit", nodeCast);
             }
+            else if (node.IsInGroup("Player"))
+            {
+                Player playerCast = (Player)node;
+                CallDeferred("AddPlayer", playerCast);
+            }
         }
     }
     public void OnObjectRemovedToScene(Node node)
     {
         //Remove the new node from the respective tracker list if they are part of the right group
-            if (node.IsInGroup("Building"))
+        if (node.IsInGroup("Building"))
         {
             BuildingParent nodeCast = (BuildingParent)node;
             RemoveBuilding(nodeCast);
@@ -914,6 +916,11 @@ public partial class MainLevelController : Node2D
         {
             UnitParent nodeCast = (UnitParent)node;
             RemoveUnit(nodeCast);
+        }
+        else if (node.IsInGroup("Player"))
+        {
+            Player playerCast = (Player)node;
+            RemovePlayer(playerCast);
         }
     }
     //Signal for when a button for placing a building is pressed

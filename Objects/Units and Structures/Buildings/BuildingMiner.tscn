@@ -50,7 +50,8 @@ shape = SubResource("CircleShape2D_2qglq")
 
 [node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("4_sip2a")]
 factionComponent = NodePath("../FactionComponent")
-genRawMetal = 2.0
+genMetal = 3.0
+stoMetal = 10.0
 
 [node name="Collider" type="CollisionShape2D" parent="ResourceComponent"]
 shape = SubResource("CircleShape2D_2qglq")

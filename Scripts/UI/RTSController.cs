@@ -142,12 +142,9 @@ public partial class RTSController : Node2D
                     }
                     else
                     {
-                        //Target is enemy, as long as it's revealed
+                        //Target is enemy, as long as it's spotted
                         if (targetComponent.spottedByFaction[playerFaction])
-                        {
-                            return "Attack";
-                        }
-                        
+                            { return "Attack"; }
                     }
                 }
             }
@@ -206,7 +203,7 @@ public partial class RTSController : Node2D
 
         List<FactionComponent> selectionHits = new();
         //Run the collision check
-        var collisionResult = spaceState.IntersectShape(areaCast);
+        var collisionResult = spaceState.IntersectShape(areaCast, 100);
         if (collisionResult.Count > 0)
         {
             //Generate a temp list which we will then filter out if units are selected
@@ -253,7 +250,7 @@ public partial class RTSController : Node2D
             areaCast.Transform = new Transform2D(0, camera.Position);
             areaCast.Shape = selectionShape;
 
-            collisionResult = spaceState.IntersectShape(areaCast);
+            collisionResult = spaceState.IntersectShape(areaCast, 100);
             if (collisionResult.Count > 0)
             {
                 //Cast each hit to a faction component and add to the list
