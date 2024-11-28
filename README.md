@@ -6,6 +6,7 @@ Pilot Mode
  - WASD: Move vehicle
  - LMB: Fire selected weapon / Deploy selected building
  - RMB: Use selected tool
+
 Strategic Mode
  - LMB: Select units / Deploy selected building
 	- Click and drag to select in a box
@@ -19,3 +20,4 @@ Strategic Mode
  - S: Stop unit's orders
  - H: Hold Position
  - G: Guard
+ - M: Move Command
