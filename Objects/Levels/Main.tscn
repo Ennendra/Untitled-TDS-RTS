@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bvji7q1gdfv36"]
+[gd_scene load_steps=24 format=3 uid="uid://bvji7q1gdfv36"]
 
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
 [ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
@@ -39,15 +39,22 @@ glow_hdr_threshold = 0.9
 vertices = PackedVector2Array(4954.9, -4804.95, 4905.1, 5230, -730, -80, -730, -470, -5305.05, 5230, -820, -80, -5329.95, -4780.04, -1020, -380, -1020, -470, -820, -380)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(2, 1, 4, 5), PackedInt32Array(5, 4, 6, 7), PackedInt32Array(6, 0, 3, 8), PackedInt32Array(7, 9, 5), PackedInt32Array(7, 6, 8)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-5350, -4800, 4975, -4825, 4925, 5250, -5325, 5250), PackedVector2Array(-750, -100, -750, -450, -1000, -450, -1000, -400, -800, -400, -800, -100)])
+parsed_collision_mask = 524295
+source_geometry_mode = 1
+source_geometry_group_name = &"navigation_polygon_source_group"
+agent_radius = 20.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_jf3vq"]
 parsed_collision_mask = 7
 source_geometry_mode = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 20.0
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("navigationRegion", "fowController", "terrainTilemapLayers")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("navigationRegion", "navigationRegion_LowRemoved", "fowController", "terrainTilemapLayers")]
 process_mode = 3
 script = ExtResource("1_slh8m")
 navigationRegion = NodePath("NavigationRegion2D")
+navigationRegion_LowRemoved = NodePath("NavigationRegion2DWithoutLow")
 top = -2000.0
 left = -3000.0
 bottom = 6000.0
@@ -61,6 +68,11 @@ environment = SubResource("Environment_xytmu")
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false
 navigation_polygon = SubResource("NavigationPolygon_eb8bk")
+
+[node name="NavigationRegion2DWithoutLow" type="NavigationRegion2D" parent="."]
+visible = false
+navigation_polygon = SubResource("NavigationPolygon_jf3vq")
+navigation_layers = 7
 
 [node name="MainUIPersonal" parent="." instance=ExtResource("7_3pqy3")]
 

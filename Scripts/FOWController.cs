@@ -6,7 +6,7 @@ public partial class FOWController : Node2D
 {
 	[Export] Sprite2D visionFog, shroudFog;
 	[Export] Texture2D visionTexture;
-    [Export] float calculateScale = 0.05f;
+    [Export] float calculateScale = 0.02f;
 
 	int playerFaction = 1;
 	List<FOWSightComponent> sightComponents = new();

@@ -91,7 +91,9 @@ public partial class MovementComponent : Area2D
 		knockBack = knockBack.MoveToward(Vector2.Zero, knockBackFriction);
 		foreach (var area in collidingPhysicsAreas)
 		{
+
             SetKnockback(area.GlobalPosition.DirectionTo(GlobalPosition) * knockBackAmount);
+			
         }
 
         //Final movements
@@ -182,6 +184,9 @@ public partial class MovementComponent : Area2D
 		{
 			knockBack = knockBack.Normalized() * knockBackAmount;
 		}
+
+		Polygon2D test = new Polygon2D();
+		
     }
 
     public void OnAreaEntered(Area2D area)

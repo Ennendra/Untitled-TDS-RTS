@@ -46,13 +46,13 @@ void fragment()
 {
 	vec4 tex = texture(TEXTURE, UV);
 	vec3 hsv = rgb2hsv(tex.rgb);
-	
+
 	// the .r here represents HUE, .g is SATURATION, .b is LUMINANCE
 	vec4 color;
-	
+
 	if (hsv.b < start_pos) {color = color_start;}
 	if (hsv.b > end_pos) {color = color_end;}
-	
+
 	if (hsv.b > start_pos && hsv.b < end_pos){
 		if (midpos_enabled && mid_pos > start_pos && mid_pos < end_pos){
 			if (hsv.b > mid_pos){
@@ -66,14 +66,14 @@ void fragment()
 			color = mix(color_start, color_end, (hsv.b-start_pos)/(end_pos-start_pos));
 		}
 	}
-	
+
 	tex = to_gray(tex);
 	if (keep_luminance){
 		tex = to_color(tex, color);}
 	else{
 		tex = color;
 	}
-	
+
 	COLOR = mix( texture(TEXTURE, UV), tex, effect_filling);
 	COLOR.a = min( texture(TEXTURE, UV).a, tex.a);
 }

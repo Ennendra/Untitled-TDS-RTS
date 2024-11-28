@@ -73,7 +73,8 @@ public partial class MainLevelController : Node2D
     bool specialOrderJustExecuted = false;
 
     //the main battle area for pathfinding.
-    [Export] NavigationRegion2D navigationRegion;
+    //lowRemoved is the same navregion, but removes the obstacles (like 'water') which will allow for projectiles and hover units to move over
+    [Export] NavigationRegion2D navigationRegion, navigationRegion_LowRemoved;
     [Export] float top = -5000, left = -5000, bottom = 5000, right = 5000;
     Vector2[] mapBounds;
 
@@ -91,7 +92,8 @@ public partial class MainLevelController : Node2D
 
     //Tracker for all misc environment obstacles used when baking new navmeshes
     [Export] TileMapLayer[] terrainTilemapLayers;
-    List<Polygon2D> miscObstaclesInScene = new();
+    List<Polygon2D> miscObstaclesInScene = new(); //walls and high obstacles
+    List<Polygon2D> lowObstaclesInScene = new(); //water and obstacles that hover can go over
     bool navMapInitialised = false;
 
     // Called when the node enters the scene tree for the first time.
@@ -105,9 +107,10 @@ public partial class MainLevelController : Node2D
         SetOrderState += OnOrderStatePress;
         SelectControlGroupButton += OnControlGroupSelect;
 
-        //Get global and controller nodes
+        //Get global and controller nodes, and set the navigation regions
         globals = GetNode<Globals>("/root/Globals");
         globals.mainBattleArea = navigationRegion;
+        globals.mainBattleArena_skipWater = navigationRegion_LowRemoved;
         mainUI = GetNode<MainUI>("MainUIPersonal");
         rtsController = GetNode<RTSController>("RTSController");
 
@@ -163,6 +166,11 @@ public partial class MainLevelController : Node2D
             {
                 Polygon2D childCast = child.GetNode<Polygon2D>("ObstacleBounds");
                 miscObstaclesInScene.Add(childCast);
+            }
+            if (child.IsInGroup("LowEnvironmentObstacles"))
+            {
+                Polygon2D childCast = child.GetNode<Polygon2D>("ObstacleBounds");
+                lowObstaclesInScene.Add(childCast);
             }
             navMapInitialised = true;
         }
@@ -1011,13 +1019,26 @@ public partial class MainLevelController : Node2D
             }
             navGeometryData.AddObstructionOutline(polygonVertices);
         }
-        //Todo: Add obstacle data from tilesets
-        foreach (TileMapLayer layer in terrainTilemapLayers)
+
+        //Todo - add nav outlines for edge of maps
+
+
+        //bake the new region (minus low obtacles) from the mesh
+        NavigationServer2D.BakeFromSourceGeometryData(newNavMesh, navGeometryData);
+        navigationRegion_LowRemoved.NavigationPolygon = newNavMesh;
+
+        //Get obstacle data from 'low' obstacles (water etc)
+        foreach (Polygon2D lowObstacle in lowObstaclesInScene)
         {
-            
+            Vector2[] polygonVertices = lowObstacle.Polygon;
+            for (int i = 0; i < polygonVertices.Length; i++)
+            {
+                polygonVertices[i] += lowObstacle.GlobalPosition;
+            }
+            navGeometryData.AddObstructionOutline(polygonVertices);
         }
 
-        //bake the new region from the mesh
+        //bake the new region from the main mesh
         NavigationServer2D.BakeFromSourceGeometryData(newNavMesh, navGeometryData);
         navigationRegion.NavigationPolygon = newNavMesh;
     }

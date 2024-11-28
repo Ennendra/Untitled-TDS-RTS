@@ -232,7 +232,7 @@ PauseGame={
 
 [layer_names]
 
-2d_physics/layer_1="Environment Obstacles"
+2d_physics/layer_1="Obstacle - Wall"
 2d_physics/layer_2="Buildings"
 2d_physics/layer_3="Wreckage"
 2d_physics/layer_4="Unit Physics Collision"
@@ -251,6 +251,7 @@ PauseGame={
 2d_physics/layer_17="ConstructorComponent"
 2d_physics/layer_18="Blueprint"
 2d_physics/layer_19="MetalMiningNode"
+2d_physics/layer_20="Obstacle - Low"
 avoidance/layer_1="Environment"
 avoidance/layer_2="Buildings"
 
