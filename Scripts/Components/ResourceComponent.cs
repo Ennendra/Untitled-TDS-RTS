@@ -45,7 +45,7 @@ public partial class ResourceComponent : Area2D
     float currentPerformance = 1;
 
     //Whether we are attached to a network
-    public bool isAttachedToNetwork = false;
+    //public bool isAttachedToNetwork = false;
 
     //The bonus from adjacent buildings in percentage (can be production bonus or consumption reduction)
     //float energyAdjacencyBonus = 0, metalAdjacencyBonus = 0;
@@ -92,12 +92,12 @@ public partial class ResourceComponent : Area2D
     public void OnNetworkEntered(Area2D area)
     {
         //Add this component to the network if it isn't already in one.
-        if (!isAttachedToNetwork)
-        {
-            BaseNetworkController controller = (BaseNetworkController)area;
-            isAttachedToNetwork = true;
-            controller.AddResourceComponentToNetwork(this);
-        }
+        //if (!isAttachedToNetwork)
+        //{
+        //    BaseNetworkController controller = (BaseNetworkController)area;
+        //    isAttachedToNetwork = true;
+        //    controller.AddResourceComponentToNetwork(this);
+        //}
         
         
     }
@@ -106,11 +106,11 @@ public partial class ResourceComponent : Area2D
         
         BaseNetworkController controller = (BaseNetworkController)area;
 
-        if (controller.GetResourceComponentList().Contains(this))
-        {
-            isAttachedToNetwork = false;
-            controller.RemoveResourceComponentFromNetwork(this);
-        }
+        //if (controller.GetResourceComponentList().Contains(this))
+        //{
+        //    isAttachedToNetwork = false;
+        //    controller.RemoveResourceComponentFromNetwork(this);
+        //}
         
     }
 }

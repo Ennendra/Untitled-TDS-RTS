@@ -50,11 +50,9 @@ source_geometry_mode = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 20.0
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("navigationRegion", "navigationRegion_LowRemoved", "fowController", "terrainTilemapLayers")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("fowController", "terrainTilemapLayers")]
 process_mode = 3
 script = ExtResource("1_slh8m")
-navigationRegion = NodePath("NavigationRegion2D")
-navigationRegion_LowRemoved = NodePath("NavigationRegion2DWithoutLow")
 top = -2000.0
 left = -3000.0
 bottom = 6000.0
@@ -827,7 +825,6 @@ factionOverride = 2
 
 [node name="BuildingNetworkHub3" parent="." instance=ExtResource("6_ff2od")]
 position = Vector2(1150, 3950)
-priority = 2
 factionOverride = 2
 
 [node name="BuildingRefinery3" parent="." instance=ExtResource("5_oydl6")]

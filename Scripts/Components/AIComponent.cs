@@ -481,7 +481,7 @@ public partial class AIComponent : Node2D
         if (movementComponent.GetMovementType() == MovementType.GROUND)
         {
             float angleDifference = Vector2.FromAngle(movementComponent.GetCurrentDirection()).Dot(GlobalPosition.DirectionTo(newPosition));
-            if (angleDifference > 0.5) //If we're within ~45 degrees of facing the target
+            if (angleDifference > 0.8) //If we're within ~45 degrees of facing the target
                 movementComponent.Accelerate(delta);
             else
                 movementComponent.Decelerate(delta);

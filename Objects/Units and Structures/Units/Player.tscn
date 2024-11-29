@@ -26,9 +26,10 @@ radius = 27.5
 [sub_resource type="CircleShape2D" id="CircleShape2D_0prfk"]
 radius = 25.0
 
-[node name="Player" type="Area2D" node_paths=PackedStringArray("spriteAimCursor", "weaponFolder", "toolFolder", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "movementComponent", "resourceComponent", "sightComponent") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("spriteAimCursor", "weaponFolder", "toolFolder", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "movementComponent", "resourceComponent", "sightComponent") groups=["Player"]]
 collision_layer = 8
-collision_mask = 0
+collision_mask = 11
+motion_mode = 1
 script = ExtResource("1_npw5l")
 spriteAimCursor = NodePath("AimingComponent/AimingCursor")
 weaponFolder = NodePath("AimingComponent/Weapons")
@@ -42,6 +43,9 @@ factionComponent = NodePath("FactionComponent")
 movementComponent = NodePath("MovementComponent")
 resourceComponent = NodePath("ResourceComponent")
 sightComponent = NodePath("SightComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pk0mf")
 
 [node name="HoverEffect" type="Sprite2D" parent="."]
 z_index = -1
@@ -91,16 +95,14 @@ healthBarDisplayed = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamageComponent"]
 shape = SubResource("CircleShape2D_pk0mf")
 
-[node name="MovementComponent" parent="." node_paths=PackedStringArray("legSprite") instance=ExtResource("3_xsw3q")]
+[node name="MovementComponent" parent="." node_paths=PackedStringArray("collisionShape", "legSprite") instance=ExtResource("3_xsw3q")]
 movementType = 1
+collisionShape = NodePath("../CollisionShape2D")
 maxSpeed = 350.0
 timeToMaxSpeed = 0.4
 timeToZeroSpeed = 0.6
 legSprite = NodePath("../BottomSprite")
 rotationSpeedDegrees = 240.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementComponent"]
-shape = SubResource("CircleShape2D_pk0mf")
 
 [node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("8_sj1xu")]
 damageComponent = NodePath("../DamageComponent")

@@ -3,7 +3,7 @@ using System;
 using System.Runtime;
 
 //This class embodies every unit and structure on the map
-public partial class CombatantParent : Area2D
+public partial class CombatantParent : CharacterBody2D
 {
     public MinimapMarkerComponent markerComponent { get; protected set; }
 
@@ -68,6 +68,7 @@ public partial class CombatantParent : Area2D
     {
         factionComponent.faction = newFaction;
     }
+    public MovementComponent GetMovementComponent() { return movementComponent; }
     public DamageComponent GetDamageComponent()
     {
         return damageComponent;

@@ -15,33 +15,49 @@ public enum NavigationCheckResult
 public partial class PathfindingComponent : Node2D
 {
 	Globals globals;
-	//The battle area that this node can move in
-	//NavigationRegion2D navRegion;
+
+	//A reference to the movement component. Used to determine the unit's movement type, which determines which navigation mesh to use.
+	[Export] MovementComponent movement;
 
 	//The currently assigned path.
 	public Vector2[] currentPath;
 	public int currentPathIndex;
-	float pathDesiredDistance = 20;
+	float pathDesiredDistance = 50;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-
 		globals = GetNode<Globals>("/root/Globals");
-
-		
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-		
 	}
 
 	public bool SetNewPath(Vector2 newTargetPosition)
 	{
-		Vector2 safeDestinationPoint = NavigationServer2D.MapGetClosestPoint(GetWorld2D().NavigationMap, newTargetPosition);
-        currentPath = NavigationServer2D.MapGetPath(GetWorld2D().NavigationMap, GlobalPosition, safeDestinationPoint, true);
+		if (!IsInstanceValid(movement)) 
+		{
+			GD.Print("Unit's pathing component does not have movement assigned!: " + GetParent().Name);
+			return false;
+		}
+
+		Rid navToUse;
+		//Determinine which navigation map to use
+		switch (movement.GetMovementType()) 
+		{ 
+			case MovementType.GROUND:
+                navToUse = globals.navigationAreaGround.GetNavigationMap();
+                break;
+			case MovementType.HOVER:
+                navToUse = globals.navigationAreaHover.GetNavigationMap();
+                break;
+            default:
+				GD.Print("Error in pathcomponent with bad movement type");
+				navToUse = globals.navigationAreaGround.GetNavigationMap();
+				break;
+		}
+
+
+		Vector2 safeDestinationPoint = NavigationServer2D.MapGetClosestPoint(navToUse, newTargetPosition);
+        currentPath = NavigationServer2D.MapGetPath(navToUse, GlobalPosition, safeDestinationPoint, true);
+
         if (!currentPath.IsEmpty())
 		{
 			currentPathIndex = 0;

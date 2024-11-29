@@ -74,7 +74,7 @@ public partial class MainLevelController : Node2D
 
     //the main battle area for pathfinding.
     //lowRemoved is the same navregion, but removes the obstacles (like 'water') which will allow for projectiles and hover units to move over
-    [Export] NavigationRegion2D navigationRegion, navigationRegion_LowRemoved;
+    [Export] NavigationRegion2D navigationRegionGround, navigationRegionHover;
     [Export] float top = -5000, left = -5000, bottom = 5000, right = 5000;
     Vector2[] mapBounds;
 
@@ -107,10 +107,21 @@ public partial class MainLevelController : Node2D
         SetOrderState += OnOrderStatePress;
         SelectControlGroupButton += OnControlGroupSelect;
 
-        //Get global and controller nodes, and set the navigation regions
+        //Get the globals node for static use
         globals = GetNode<Globals>("/root/Globals");
-        globals.mainBattleArea = navigationRegion;
-        globals.mainBattleArena_skipWater = navigationRegion_LowRemoved;
+
+        //Initialise the navigation regions and their respective navigation maps
+        navigationRegionGround = new();
+        navigationRegionHover = new();
+        Rid navMapGround = NavigationServer2D.MapCreate();
+        Rid navMapHover = NavigationServer2D.MapCreate();
+        NavigationServer2D.MapSetCellSize(navMapGround, 1);
+        NavigationServer2D.MapSetCellSize(navMapHover, 1);
+        navigationRegionGround.SetNavigationMap(navMapGround);
+        navigationRegionHover.SetNavigationMap(navMapHover);
+        NavigationServer2D.MapSetActive(navMapGround, true);
+        NavigationServer2D.MapSetActive(navMapHover, true);
+
         mainUI = GetNode<MainUI>("MainUIPersonal");
         rtsController = GetNode<RTSController>("RTSController");
 
@@ -986,9 +997,6 @@ public partial class MainLevelController : Node2D
 
         //Create the nav geometry data that will hold all the obstacle data
         NavigationMeshSourceGeometryData2D navGeometryData = new();
-        //TODO: Get geometry data from a tilemap?
-        
-        
 
         //Get the geometry obstacle data from all buildings and blueprints
         foreach (BuildingParent building in buildingsInScene)
@@ -1022,10 +1030,11 @@ public partial class MainLevelController : Node2D
 
         //Todo - add nav outlines for edge of maps
 
-
+        
         //bake the new region (minus low obtacles) from the mesh
         NavigationServer2D.BakeFromSourceGeometryData(newNavMesh, navGeometryData);
-        navigationRegion_LowRemoved.NavigationPolygon = newNavMesh;
+        navigationRegionHover.NavigationPolygon = newNavMesh;
+        globals.navigationAreaHover = navigationRegionHover;
 
         //Get obstacle data from 'low' obstacles (water etc)
         foreach (Polygon2D lowObstacle in lowObstaclesInScene)
@@ -1040,6 +1049,7 @@ public partial class MainLevelController : Node2D
 
         //bake the new region from the main mesh
         NavigationServer2D.BakeFromSourceGeometryData(newNavMesh, navGeometryData);
-        navigationRegion.NavigationPolygon = newNavMesh;
+        navigationRegionGround.NavigationPolygon = newNavMesh;
+        globals.navigationAreaGround = navigationRegionGround;
     }
 }

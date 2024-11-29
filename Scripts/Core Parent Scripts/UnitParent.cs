@@ -11,6 +11,7 @@ public partial class UnitParent : CombatantParent
         aimComponent.SetCurrentAimDirection(directionDegrees);
     }
 
+
     //Defining functions for moving and attacking when they are spawned in via factories
     public void SetMoveOrder(Vector2 targetPosition)
     {

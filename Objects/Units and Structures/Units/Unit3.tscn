@@ -21,18 +21,18 @@
 [ext_resource type="PackedScene" uid="uid://bnss8qnlmgv7" path="res://Objects/Components/PathfindingComponent.tscn" id="16_hotpd"]
 [ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="20_vsu0p"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e35dv"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_xk8um"]
 radius = 30.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_xk8um"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_e35dv"]
 radius = 30.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j4oht"]
 radius = 30.0
 
-[node name="Unit3" type="Area2D" node_paths=PackedStringArray("mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "movementComponent", "sightComponent") groups=["Unit"]]
-collision_layer = 0
-collision_mask = 0
+[node name="Unit3" type="CharacterBody2D" node_paths=PackedStringArray("mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "movementComponent", "sightComponent") groups=["Unit"]]
+collision_layer = 8
+collision_mask = 11
 script = ExtResource("1_ufsob")
 unitInfo = ExtResource("2_i5y1b")
 deathExplosion = ExtResource("3_klews")
@@ -43,6 +43,9 @@ aiComponent = NodePath("AiComponent")
 factionComponent = NodePath("FactionComponent")
 movementComponent = NodePath("MovementComponent")
 sightComponent = NodePath("SightComponent")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xk8um")
 
 [node name="HoverEffect" type="Sprite2D" parent="."]
 z_index = -1
@@ -81,14 +84,12 @@ healthBarOffset = 25.0
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent"]
 shape = SubResource("CircleShape2D_e35dv")
 
-[node name="MovementComponent" parent="." node_paths=PackedStringArray("legSprite") instance=ExtResource("11_luam4")]
+[node name="MovementComponent" parent="." node_paths=PackedStringArray("collisionShape", "legSprite") instance=ExtResource("11_luam4")]
 movementType = 1
+collisionShape = NodePath("../Collider")
 maxSpeed = 120.0
 legSprite = NodePath("../SpriteBottom")
 rotationSpeedDegrees = 240.0
-
-[node name="Collider" type="CollisionShape2D" parent="MovementComponent"]
-shape = SubResource("CircleShape2D_xk8um")
 
 [node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent", "aiComponent") instance=ExtResource("12_a8ynw")]
 damageComponent = NodePath("../DamageComponent")
@@ -109,7 +110,8 @@ factionComponent = NodePath("../FactionComponent")
 movementComponent = NodePath("../MovementComponent")
 aimComponent = NodePath("../AimingComponent")
 
-[node name="PathfindingComponent" parent="." instance=ExtResource("16_hotpd")]
+[node name="PathfindingComponent" parent="." node_paths=PackedStringArray("movement") instance=ExtResource("16_hotpd")]
+movement = NodePath("../MovementComponent")
 
 [node name="SightComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("20_vsu0p")]
 visible = false
