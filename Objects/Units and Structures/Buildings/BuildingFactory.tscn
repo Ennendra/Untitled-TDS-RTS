@@ -21,7 +21,7 @@ size = Vector2(135, 135)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nh6i5"]
 size = Vector2(135, 135)
 
-[node name="BuildingFactory" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "constructorComponent", "factoryComponent", "mainSprite", "damageComponent", "factionComponent", "sightComponent") groups=["Building"]]
+[node name="BuildingFactory" type="CharacterBody2D" node_paths=PackedStringArray("buildingObstacleBounds", "constructorComponent", "factoryComponent", "mainSprite", "damageComponent", "factionComponent", "sightComponent") groups=["Building"]]
 position = Vector2(25, 25)
 collision_layer = 2
 collision_mask = 16384

@@ -19,6 +19,6 @@ void fragment() {
 	else {
 		alpha = clamp(1.-lumen, 0., 1.);
 	}
-	
+
 	COLOR = vec4(vec3(0.0), alpha);
 }

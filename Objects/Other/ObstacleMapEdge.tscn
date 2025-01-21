@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://ds8o4tu8v6lne"]
+
+[ext_resource type="Script" path="res://Objects/Other/ObstacleMapEdge.cs" id="1_3mvky"]
+
+[node name="ObstacleWall" type="StaticBody2D" node_paths=PackedStringArray("polygon")]
+collision_layer = 1048576
+collision_mask = 0
+script = ExtResource("1_3mvky")
+polygon = NodePath("ObstacleBounds")
+
+[node name="ObstacleBounds" type="CollisionPolygon2D" parent="."]

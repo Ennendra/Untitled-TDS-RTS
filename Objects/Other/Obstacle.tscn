@@ -1,17 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://rggmpcd6oh4n"]
+[gd_scene load_steps=3 format=3 uid="uid://rggmpcd6oh4n"]
 
 [ext_resource type="Texture2D" uid="uid://du5yfbmcmag00" path="res://Textures/Tilesets/Obstacle.png" id="1_um838"]
-[ext_resource type="PackedScene" uid="uid://cwy1l156mvmw7" path="res://Objects/Components/FOWBlockerComponent.tscn" id="2_l1btk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nne40"]
 size = Vector2(50, 50)
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_a4l0f"]
-polygon = PackedVector2Array(25, -25, -25, -25, -25, 25, 25, 25)
-
-[node name="Obstacle" type="Area2D" groups=["EnvironmentObstacles"]]
+[node name="Obstacle" type="StaticBody2D" groups=["EnvironmentObstacles"]]
 collision_mask = 0
-monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_nne40")
@@ -22,6 +17,3 @@ texture = ExtResource("1_um838")
 [node name="ObstacleBounds" type="Polygon2D" parent="."]
 color = Color(1, 1, 1, 0)
 polygon = PackedVector2Array(25, 25, 25, -25, -25, -25, -25, 25)
-
-[node name="FowBlockerComponent" parent="." instance=ExtResource("2_l1btk")]
-occluder = SubResource("OccluderPolygon2D_a4l0f")

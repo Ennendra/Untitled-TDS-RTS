@@ -4,8 +4,8 @@ using System;
 public partial class Globals : Node
 {
     //Marking the main battle area for pathfinding purposes
-	public NavigationRegion2D mainBattleArea;
-    public NavigationRegion2D mainBattleArena_skipWater;
+	public NavigationRegion2D navigationAreaGround;
+    public NavigationRegion2D navigationAreaHover;
 
 
 	public Resource cursorImage_Personal = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/Cursor.png");

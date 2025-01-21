@@ -44,6 +44,20 @@ public partial class ProjectileParent : Area2D
         {
             //set the position at the point of contact
             GlobalPosition = (Vector2)collisionResult["position"];
+
+            Variant collidedObject;
+            bool colliderCheck = collisionResult.TryGetValue("collider", out collidedObject);
+
+            if (colliderCheck)
+            {
+                //Attempt to damage if the object hit is an area2D (walls will return as a StaticBody2D)
+                GodotObject colCast = (GodotObject)collidedObject;
+                if (colCast.IsClass("Area2D"))
+                {
+                    Area2D collidedArea = (Area2D)collidedObject;
+                    attackComponent.HitTarget(collidedArea);
+                }            
+            }
         }
         else
         {

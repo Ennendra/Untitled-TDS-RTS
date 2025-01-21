@@ -19,7 +19,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qglq"]
 radius = 43.0
 
-[node name="BuildingTurret" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "sightComponent") groups=["Building"]]
+[node name="BuildingTurret" type="CharacterBody2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "sightComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 16384
 script = ExtResource("1_rlvto")
@@ -35,6 +35,9 @@ sightComponent = NodePath("SightComponent")
 
 [node name="MainSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_hnot5")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2qglq")
 
 [node name="AimingComponent" parent="." node_paths=PackedStringArray("equippedWeapon") instance=ExtResource("3_ouebc")]
 equippedWeapon = NodePath("Weapon")
@@ -52,9 +55,6 @@ position = Vector2(30, 0)
 [node name="WeaponFireSound" parent="AimingComponent/Weapon" index="1"]
 stream = ExtResource("7_3xhd7")
 volume_db = -4.039
-
-[node name="Collider" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_2qglq")
 
 [node name="DamageComponent" parent="." instance=ExtResource("3_ef1lt")]
 healthBarOffset = 50.0

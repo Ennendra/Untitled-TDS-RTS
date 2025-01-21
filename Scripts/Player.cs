@@ -84,6 +84,8 @@ public partial class Player : CombatantParent
                 float directionTo = targetDirection.Angle();
                 movementComponent.SetTargetDirection(directionTo);
 
+                
+
                 movementComponent.Accelerate(delta);
             }
             else
@@ -244,7 +246,7 @@ public partial class Player : CombatantParent
     }
 
     //Slight override of if the player dies, to make sure the game flicks to RTS mode
-    public void OnDamageKill()
+    public new void OnDamageKill()
     {
         CreateExplosion();
 

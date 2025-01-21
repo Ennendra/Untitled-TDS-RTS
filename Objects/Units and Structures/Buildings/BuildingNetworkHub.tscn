@@ -29,7 +29,7 @@ shader_parameter/linesColorIntensity = 2.0
 shader_parameter/hologramTextureTiling = Vector2(1, 0.1)
 shader_parameter/hologramTexture = ExtResource("8_4geie")
 
-[node name="BuildingNetworkHub" type="Area2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent", "sightComponent") groups=["Building"]]
+[node name="BuildingNetworkHub" type="CharacterBody2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent", "sightComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_syvvr")
@@ -61,12 +61,11 @@ unitInfo = ExtResource("5_bkni2")
 [node name="Collider" type="CollisionShape2D" parent="FactionComponent" groups=["Building"]]
 shape = SubResource("CircleShape2D_vg8ap")
 
-[node name="NetworkController" type="Area2D" parent="." node_paths=PackedStringArray("networkFaction", "attachedBuilding")]
+[node name="NetworkController" type="Area2D" parent="." node_paths=PackedStringArray("factionComponent")]
 collision_layer = 16384
-collision_mask = 98304
+collision_mask = 2
 script = ExtResource("7_1g7mt")
-networkFaction = NodePath("../FactionComponent")
-attachedBuilding = NodePath("..")
+factionComponent = NodePath("../FactionComponent")
 
 [node name="NetworkCollider" type="CollisionShape2D" parent="NetworkController"]
 shape = SubResource("RectangleShape2D_tqonb")
@@ -94,3 +93,5 @@ factionComponent = NodePath("../FactionComponent")
 
 [connection signal="area_entered" from="NetworkController" to="NetworkController" method="OnComponentEntered"]
 [connection signal="area_exited" from="NetworkController" to="NetworkController" method="OnComponentExited"]
+[connection signal="body_entered" from="NetworkController" to="." method="OnBodyEntered"]
+[connection signal="body_entered" from="NetworkController" to="NetworkController" method="OnBodyEntered"]

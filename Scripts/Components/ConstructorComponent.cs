@@ -13,7 +13,7 @@ public partial class ConstructorComponent : Area2D
 	float currentPerformance = 1;
 
     //Whether we are attached to a network
-    public bool isAttachedToNetwork = false;
+    //public bool isAttachedToNetwork = false;
 
     public BlueprintParent blueprintTarget; //blueprints that this tool may be supplying to build
 	public FactoryComponent factoryTarget; //factories that this tool may help build units for
@@ -108,23 +108,23 @@ public partial class ConstructorComponent : Area2D
     //Signal functions
     public void OnNetworkEntered(Area2D area)
     {
-		if (!isAttachedToNetwork)
-		{
-            BaseNetworkController controller = (BaseNetworkController)area;
-            isAttachedToNetwork = true;
-            controller.AddConstructorComponentToNetwork(this);
-        }
+		//if (!isAttachedToNetwork)
+		//{
+  //          BaseNetworkController controller = (BaseNetworkController)area;
+  //          isAttachedToNetwork = true;
+  //          controller.AddConstructorComponentToNetwork(this);
+  //      }
     }
     public void OnNetworkExited(Area2D area)
     {
         BaseNetworkController controller = (BaseNetworkController)area;
 
 		//remove self from the network only if this component is part of that specific network
-		if (controller.GetConstructorComponentList().Contains(this))
-		{
-            isAttachedToNetwork = false;
-            controller.RemoveConstructorComponentFromNetwork(this);
-        }
+		//if (controller.GetConstructorComponentList().Contains(this))
+		//{
+  //          isAttachedToNetwork = false;
+  //          controller.RemoveConstructorComponentFromNetwork(this);
+  //      }
         
     }
 }

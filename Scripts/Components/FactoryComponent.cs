@@ -46,8 +46,8 @@ public partial class FactoryComponent : Node2D
         mainSprite.Position = buildOffset;
         scaffoldSprite.Position = buildOffset;
 
+        //Set the initial rally point (For buildings that are placed in the editor rather than constructed in game)
         factionComponent.SetRallyPoint(this.GlobalPosition + initialRallyPoint);
-
 
     }
 
@@ -90,6 +90,11 @@ public partial class FactoryComponent : Node2D
             scaffoldSprite.Visible = false;
         }
         
+    }
+
+    public void SetInitialRallyPoint()
+    {
+        factionComponent.SetRallyPoint(this.GlobalPosition + initialRallyPoint);
     }
 
     //Gets the energy/metal ratio of the unit currently being built
@@ -138,6 +143,7 @@ public partial class FactoryComponent : Node2D
         newUnit.SetInitialDirection(unitStartRotation);
         newUnit.SetNewFaction(factionComponent.faction);
         newUnit.SetMoveOrder(factionComponent.GetRallyPoint());
+        newUnit.motherFactory = (Node2D)GetParent();
         
         buildQueue.RemoveAt(0);
         energySupplied = 0;

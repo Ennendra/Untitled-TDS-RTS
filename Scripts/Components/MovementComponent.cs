@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Reflection.Metadata.Ecma335;
 
 public enum MovementType
 {
@@ -10,12 +11,14 @@ public enum MovementType
 	AIR
 }
 
-public partial class MovementComponent : Area2D
+public partial class MovementComponent : Node2D
 {
 
 	//The movement type (which can dictate how the unit moves and what count as obstacles
 	[Export] MovementType movementType = MovementType.GROUND;
 	public MovementType GetMovementType() { return movementType; }
+
+	[Export] CollisionShape2D collisionShape;
 
 	//Speed variables
 	[Export] float maxSpeed = 60;
@@ -24,12 +27,10 @@ public partial class MovementComponent : Area2D
 	[Export] float timeToZeroSpeed = 0.5f;
     float AccelerateFactor { get => 1 / timeToMaxSpeed; }
     float DecelerateFactor { get => 1 / timeToZeroSpeed; }
-    bool confirmMovement = false;
-    Vector2 knockBack = Vector2.Zero;
-    float knockBackFriction = 1;
-    public float knockBackAmount = 2.25f;
 
-	List<Area2D> collidingPhysicsAreas = new();
+	//Tells us whether the unit is "moving"
+	//This will stop it from pushing units if it's only motion is from being pushed itself
+    public bool isMoving { get; private set; } = false;
 
     //Sprite that will be manipulated by movement rotation if applicable
     [Export] Sprite2D legSprite;
@@ -38,11 +39,14 @@ public partial class MovementComponent : Area2D
 	float targetDirection = 0, groundMoveDirection=0;
 	//Direction of movement (for hover)
 	Vector2 hoverMoveVector = new Vector2(0,0);
+
+	Vector2 currentMoveVector = new Vector2(0,0);
 	//The rotation speed of the unit
+
 	[Export] float rotationSpeedDegrees = 200.0f;
 	
 	//The rotation speed converted to radians for use in the _process function
-	float rotationSpeed;
+	float rotationSpeed { get => Mathf.DegToRad(rotationSpeedDegrees); }
 
 	//The old lerp rotation factor, will remove if confirming to use linear instead
     float rotationFactor = 2.5f;
@@ -51,15 +55,13 @@ public partial class MovementComponent : Area2D
     {
         base._Ready();
 
-		knockBackAmount = maxSpeed / 120 * 2.25f;
-		rotationSpeed = Mathf.DegToRad(rotationSpeedDegrees);
     }
 
     public override void _Process(double delta)
 	{
 		if (movementType == MovementType.HOVER)
 		{
-            if (IsInstanceValid(legSprite) && hoverMoveVector.Length() > 1.0f)
+            if (IsInstanceValid(legSprite) && currentMoveVector.Length() > 1.0f)
             {
 				legSprite.GlobalRotation = Mathf.RotateToward(legSprite.GlobalRotation, targetDirection, rotationSpeed * (float)delta);
             }
@@ -85,30 +87,53 @@ public partial class MovementComponent : Area2D
 	}
     public override void _PhysicsProcess(double delta)
     {
-        Node2D parent = (Node2D)this.GetParent();
+        CharacterBody2D parent = (CharacterBody2D)this.GetParent();
 
-		//Process adding or removing knockback
-		knockBack = knockBack.MoveToward(Vector2.Zero, knockBackFriction);
-		foreach (var area in collidingPhysicsAreas)
+		//Get the base movement vector
+
+		//If we're grounded, rotate the current movement slightly towards the target direction (to reduce the 'slipperiness' of grounded units)
+		if (movementType == MovementType.GROUND) 
 		{
+			float currentMoveAngle = currentMoveVector.Angle();
+			float currentMoveSpeed = currentMoveVector.Length();
+			float angleCorrectionSpeed = Mathf.DegToRad(180);
 
-            SetKnockback(area.GlobalPosition.DirectionTo(GlobalPosition) * knockBackAmount);
-			
-        }
+			float newMoveAngle = Mathf.RotateToward(currentMoveAngle, targetDirection, angleCorrectionSpeed * (float)delta);
 
-        //Final movements
-        if (movementType == MovementType.HOVER)
-        {
-            Vector2 movement = GetMovementVectorHover(delta);
-            movement += knockBack;
-            parent.GlobalPosition += movement;
-        }
-        else //Ground/default
-		{ 
-			Vector2 movement = GetMovementVectorGround(delta);
-            movement += knockBack;
-            parent.GlobalPosition += movement;
-        }
+			currentMoveVector = Vector2.FromAngle(newMoveAngle) * currentMoveSpeed;
+		}
+
+		if (currentMoveVector.Length() > 0) 
+		{
+			parent.Velocity = currentMoveVector;
+			bool isCollision = parent.MoveAndSlide();
+
+			//Process additional physics if there was a collision
+			if (isCollision)
+			{
+				for (int i = 0; i < parent.GetSlideCollisionCount(); i++)
+				{
+					KinematicCollision2D collision = parent.GetSlideCollision(i);
+					Node2D collisionObject = (Node2D)collision.GetCollider();
+					if (collisionObject.IsInGroup("Unit"))
+					{
+						//Get the movement component of this unit
+						UnitParent collidedUnit = (UnitParent)collisionObject;
+						MovementComponent mComponent = collidedUnit.GetMovementComponent();
+
+						//Add a push to the unit's movement vector based on the collision and if it was from this object's movement
+						if (isMoving)
+						{
+							float pushAngle = GlobalPosition.DirectionTo(collision.GetPosition()).Angle();
+							float pushAmount = collision.GetRemainder().Length();
+							Vector2 pushVector = Vector2.FromAngle(pushAngle) * pushAmount;
+							mComponent.AddMovementForce(pushVector, delta);
+							
+						}
+					}
+				}
+			}
+		}
     }
 
     //Movement Functions
@@ -117,33 +142,48 @@ public partial class MovementComponent : Area2D
         float speedAddAmount = maxSpeed * AccelerateFactor * (float)delta;
         if (movementType == MovementType.HOVER)
 		{
-			//Add acceleration to the movement vector, and cap the length to the maxspeed
-			hoverMoveVector += Vector2.FromAngle(targetDirection) * speedAddAmount;
-			if (hoverMoveVector.Length() > maxSpeed)
+            //Add acceleration to the movement vector, and cap the length to the maxspeed
+            currentMoveVector += Vector2.FromAngle(targetDirection) * speedAddAmount;
+			if (currentMoveVector.Length() > maxSpeed)
 			{
-				hoverMoveVector = hoverMoveVector.Normalized() * maxSpeed;
+                currentMoveVector = currentMoveVector.Normalized() * maxSpeed;
 			}
         }
 		else //ground/default
 		{
-			currentSpeed += speedAddAmount;
-            if (currentSpeed > maxSpeed) { currentSpeed = maxSpeed; }
+			currentMoveVector += Vector2.FromAngle(GetCurrentDirection()) * speedAddAmount;
+            if (currentMoveVector.Length() > maxSpeed)
+            {
+                currentMoveVector = currentMoveVector.Normalized() * maxSpeed;
+            }
         }
-		
-	}
+		isMoving = true;
+
+    }
 	public void Decelerate(double delta)
 	{
 		float speedReduceAmount = maxSpeed * DecelerateFactor * (float)delta;
 
         if (movementType == MovementType.HOVER)
 		{
-			hoverMoveVector = hoverMoveVector.MoveToward(Vector2.Zero, speedReduceAmount);
+            currentMoveVector = currentMoveVector.MoveToward(Vector2.Zero, speedReduceAmount);
 		}
 		else //ground/default
 		{
-			currentSpeed -= speedReduceAmount;
-			if (currentSpeed < 0) { currentSpeed = 0; }
+            currentMoveVector = currentMoveVector.MoveToward(Vector2.Zero, speedReduceAmount);
+            //currentSpeed -= speedReduceAmount;
+			//if (currentSpeed < 0) { currentSpeed = 0; }
 		}
+
+		if (currentMoveVector.Length() < 1) { isMoving = false; }
+    }
+	public void AddMovementForce(Vector2 pushForce, double delta)
+	{
+		currentMoveVector += pushForce / (float)delta;
+        if (currentMoveVector.Length() > maxSpeed)
+        {
+            currentMoveVector = currentMoveVector.Normalized() * maxSpeed;
+        }
     }
 	public Vector2 GetMovementVectorHover(double delta)
 	{
@@ -177,43 +217,4 @@ public partial class MovementComponent : Area2D
 		targetDirection = rotation;
 	}
 
-    public void SetKnockback(Vector2 amount)
-    {
-        knockBack += amount;
-		if (knockBack.Length() > knockBackAmount)
-		{
-			knockBack = knockBack.Normalized() * knockBackAmount;
-		}
-
-		Polygon2D test = new Polygon2D();
-		
-    }
-
-    public void OnAreaEntered(Area2D area)
-    {
-        collidingPhysicsAreas.Add(area);
-    }
-	/*
-    public void OnAreaEntered(Area2D area)
-    {
-        var overlappingAreas = GetOverlappingAreas();
-
-        foreach (Area2D a in overlappingAreas)
-        {
-            if (a is MovementComponent)
-            {
-                MovementComponent otherComponent = (MovementComponent)a;
-                otherComponent.SetKnockback(GlobalPosition.DirectionTo(otherComponent.GlobalPosition) * knockBackAmount);
-            }
-			else //The collision is likely the environment or a building, which isn't wanting to get moved
-			{
-				SetKnockback(area.GlobalPosition.DirectionTo(GlobalPosition) * knockBackAmount*2);
-            }
-        }
-    }
-	*/
-	public void OnAreaExited(Area2D area)
-	{
-        collidingPhysicsAreas.Remove(area);
-    }
 }

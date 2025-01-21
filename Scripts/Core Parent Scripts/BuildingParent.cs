@@ -45,10 +45,6 @@ public partial class BuildingParent : CombatantParent
         base._Ready();
 
         mainSprite = GetNode<Sprite2D>("MainSprite");
-
-        //Set signals for colliding with network areas
-        AreaEntered += OnNetworkEntered;
-        AreaExited += OnNetworkExited;
     }
 
     public override void _Process(double delta)
@@ -56,6 +52,14 @@ public partial class BuildingParent : CombatantParent
         base._Process(delta);	
 		ProcessBuildingTick(delta);
     }
+
+	public void SetInitialRallyPoint()
+	{
+		if (IsInstanceValid(factoryComponent))
+		{
+			factoryComponent.SetInitialRallyPoint();
+		}
+	}
 
     public BuildingType GetBuildingType()
 	{
@@ -98,7 +102,7 @@ public partial class BuildingParent : CombatantParent
 		{
 			foreach (BaseNetworkController controller in networksInArea)
 			{
-				if (controller.IsNetworkOnline()) return true;
+				if (controller.isNetworkOnline) return true;
 			}
 		}
 		else if (isOnline) return true;
@@ -106,17 +110,15 @@ public partial class BuildingParent : CombatantParent
         return false;
 	}
 
-    //Signal functions
-    public void OnNetworkEntered(Area2D area)
+    //Network functions (will help dictate if the building is online)
+    public void AddToNetwork(BaseNetworkController network)
     {
 		//Add this network area to the list that this building is in
-        BaseNetworkController controller = (BaseNetworkController)area;
-		networksInArea.Add(controller);
+		networksInArea.Add(network);
     }
-	public void OnNetworkExited(Area2D area)
+	public void RemoveFromNetwork(BaseNetworkController network)
 	{
         //Add this network area to the list that this building is in
-        BaseNetworkController controller = (BaseNetworkController)area;
-        networksInArea.Remove(controller);
+        networksInArea.Remove(network);
     }
 }

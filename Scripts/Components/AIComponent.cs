@@ -374,16 +374,34 @@ public partial class AIComponent : Node2D
 			List<FactionComponent> componentCollisions = new();
 			if (collisionResult.Count > 0)
 			{
-				//Generate a list of all potential targets in range
-				foreach (var collision in collisionResult)
+                PhysicsRayQueryParameters2D lineCast = new();
+                lineCast.CollideWithAreas = true;
+                lineCast.From = centerPosition;
+                lineCast.CollisionMask = 1;
+
+
+                //Generate a list of all potential targets in range
+                foreach (var collision in collisionResult)
 				{
-					Variant collidedObject;
+
+                    Variant collidedObject;
 					bool colliderCheck = collision.TryGetValue("collider", out collidedObject);
 
 					if (colliderCheck)
 					{
-						FactionComponent potentialTarget = (FactionComponent)collidedObject;
-						componentCollisions.Add(potentialTarget);
+                        FactionComponent potentialTarget = (FactionComponent)collidedObject;
+
+                        if (potentialTarget.spottedByFaction[factionComponent.faction])
+                        {
+                            lineCast.To = potentialTarget.GlobalPosition;
+                            var lineCollisionResult = spaceState.IntersectRay(lineCast);
+
+                            if (lineCollisionResult.Count == 0)
+                            {
+                                componentCollisions.Add(potentialTarget);
+                            }
+                        }
+						
 					}
 				}
 			}
@@ -394,7 +412,7 @@ public partial class AIComponent : Node2D
 			foreach (var targetCheck in componentCollisions)
 			{
 				float distanceToTarget = GlobalPosition.DistanceTo(targetCheck.GlobalPosition);
-				if (distanceToTarget < closestDistance || closestTarget == null && targetCheck.spottedByFaction[factionComponent.faction])
+				if (distanceToTarget < closestDistance || closestTarget == null)
 				{
 					closestTarget = targetCheck;
 					closestDistance = distanceToTarget;
@@ -405,6 +423,25 @@ public partial class AIComponent : Node2D
 
 			scanTimer = 0;
 		}
+    }
+
+    public bool IsWithinLOS(Vector2 fromPos, Vector2 toPos)
+    {
+        //Init the space state
+        var spaceState = GetWorld2D().DirectSpaceState;
+        PhysicsRayQueryParameters2D lineCast = new();
+        lineCast.CollideWithAreas = true;
+        lineCast.From = fromPos;
+        lineCast.To = toPos;
+        lineCast.CollisionMask = 1;
+
+        var lineCollisionResult = spaceState.IntersectRay(lineCast);
+
+        if (lineCollisionResult.Count > 0)
+        {
+            return false;
+        }
+        return true;
     }
 
 	//Checks that the current fire target is valid (ie, is not dead or non-existant)
@@ -446,19 +483,20 @@ public partial class AIComponent : Node2D
         }
     }
 
-        //Checks if the weapon is within range of the fire target and fires if so
-        public void FireWeaponIfInRange()
+    //Checks if the weapon is within range of the fire target and fires if so
+    public void FireWeaponIfInRange()
 	{
         hasFireTarget = true;
         if (distanceToFireTarget < standardFireRange)
         {
+            
 			aimComponent.FireWeapons();
         }
     }
 	//Checks if the target is outside a given range and nullify the fire target if it is
 	public void CancelTargetIfOutOfRange(float cancelRange)
 	{
-        if (distanceToFireTarget > cancelRange)
+        if (distanceToFireTarget > cancelRange || !IsWithinLOS(GlobalPosition, fireTarget.GlobalPosition))
         {
             fireTarget = null;
             hasFireTarget = false;
@@ -481,7 +519,7 @@ public partial class AIComponent : Node2D
         if (movementComponent.GetMovementType() == MovementType.GROUND)
         {
             float angleDifference = Vector2.FromAngle(movementComponent.GetCurrentDirection()).Dot(GlobalPosition.DirectionTo(newPosition));
-            if (angleDifference > 0.5) //If we're within ~45 degrees of facing the target
+            if (angleDifference > 0.8) //If we're within ~45 degrees of facing the target
                 movementComponent.Accelerate(delta);
             else
                 movementComponent.Decelerate(delta);

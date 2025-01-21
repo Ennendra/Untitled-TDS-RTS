@@ -74,7 +74,7 @@ public partial class MainLevelController : Node2D
 
     //the main battle area for pathfinding.
     //lowRemoved is the same navregion, but removes the obstacles (like 'water') which will allow for projectiles and hover units to move over
-    [Export] NavigationRegion2D navigationRegion, navigationRegion_LowRemoved;
+    [Export] NavigationRegion2D navigationRegionGround, navigationRegionHover;
     [Export] float top = -5000, left = -5000, bottom = 5000, right = 5000;
     Vector2[] mapBounds;
 
@@ -92,9 +92,13 @@ public partial class MainLevelController : Node2D
 
     //Tracker for all misc environment obstacles used when baking new navmeshes
     [Export] TileMapLayer[] terrainTilemapLayers;
-    List<Polygon2D> miscObstaclesInScene = new(); //walls and high obstacles
-    List<Polygon2D> lowObstaclesInScene = new(); //water and obstacles that hover can go over
+    List<CollisionPolygon2D> miscObstaclesInScene = new(); //walls and high obstacles
+    List<CollisionPolygon2D> lowObstaclesInScene = new(); //water and obstacles that hover can go over
+    
     bool navMapInitialised = false;
+
+    PackedScene mapEdgeScene = ResourceLoader.Load<PackedScene>("res://Objects/Other/ObstacleMapEdge.tscn");
+    ObstacleMapEdge[] obstacleMapEdges = new ObstacleMapEdge[4]; //the edges of the map
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -107,10 +111,21 @@ public partial class MainLevelController : Node2D
         SetOrderState += OnOrderStatePress;
         SelectControlGroupButton += OnControlGroupSelect;
 
-        //Get global and controller nodes, and set the navigation regions
+        //Get the globals node for static use
         globals = GetNode<Globals>("/root/Globals");
-        globals.mainBattleArea = navigationRegion;
-        globals.mainBattleArena_skipWater = navigationRegion_LowRemoved;
+
+        //Initialise the navigation regions and their respective navigation maps
+        navigationRegionGround = new();
+        navigationRegionHover = new();
+        Rid navMapGround = NavigationServer2D.MapCreate();
+        Rid navMapHover = NavigationServer2D.MapCreate();
+        NavigationServer2D.MapSetCellSize(navMapGround, 1);
+        NavigationServer2D.MapSetCellSize(navMapHover, 1);
+        navigationRegionGround.SetNavigationMap(navMapGround);
+        navigationRegionHover.SetNavigationMap(navMapHover);
+        NavigationServer2D.MapSetActive(navMapGround, true);
+        NavigationServer2D.MapSetActive(navMapHover, true);
+
         mainUI = GetNode<MainUI>("MainUIPersonal");
         rtsController = GetNode<RTSController>("RTSController");
 
@@ -164,12 +179,12 @@ public partial class MainLevelController : Node2D
             }
             if (child.IsInGroup("EnvironmentObstacles"))
             {
-                Polygon2D childCast = child.GetNode<Polygon2D>("ObstacleBounds");
+                CollisionPolygon2D childCast = child.GetNode<CollisionPolygon2D>("ObstacleBounds");
                 miscObstaclesInScene.Add(childCast);
             }
             if (child.IsInGroup("LowEnvironmentObstacles"))
             {
-                Polygon2D childCast = child.GetNode<Polygon2D>("ObstacleBounds");
+                CollisionPolygon2D childCast = child.GetNode<CollisionPolygon2D>("ObstacleBounds");
                 lowObstaclesInScene.Add(childCast);
             }
             navMapInitialised = true;
@@ -205,6 +220,50 @@ public partial class MainLevelController : Node2D
         if (IsInstanceValid(player))
         {
             player.SetCameraMapLimits(top, bottom, left, right);
+        }
+
+        //generating the map edge obtacles
+        for (int i = 0; i < obstacleMapEdges.Length; i++) 
+        {
+            //Generate the new object instance if it doesn't already exist
+            if (!IsInstanceValid(obstacleMapEdges[i]))
+            {
+                obstacleMapEdges[i] = (ObstacleMapEdge)mapEdgeScene.Instantiate();
+                GetTree().CurrentScene.AddChild(obstacleMapEdges[i]);
+                obstacleMapEdges[i].GlobalPosition = Vector2.Zero;
+            }
+
+            //Assigning each polygon vertice (always as a 4-vertice rectangle)
+            Vector2[] newCollisionPolygon = new Vector2[4];
+            if (i == 0) //Top
+            {
+                newCollisionPolygon[0] = new Vector2(left - 100, top);
+                newCollisionPolygon[1] = new Vector2(right + 100, top);
+                newCollisionPolygon[2] = new Vector2(right + 100, top - 100);
+                newCollisionPolygon[3] = new Vector2(left - 100, top - 100);
+            }
+            else if (i == 1) //Left
+            {
+                newCollisionPolygon[0] = new Vector2(left, top - 100);
+                newCollisionPolygon[1] = new Vector2(left, bottom + 100);
+                newCollisionPolygon[2] = new Vector2(left - 100, bottom + 100);
+                newCollisionPolygon[3] = new Vector2(left - 100, top - 100);
+            }
+            else if (i == 2) //Bottom
+            {
+                newCollisionPolygon[0] = new Vector2(left - 100, bottom);
+                newCollisionPolygon[1] = new Vector2(right + 100, bottom);
+                newCollisionPolygon[2] = new Vector2(right + 100, bottom + 100);
+                newCollisionPolygon[3] = new Vector2(left - 100, bottom + 100);
+            }
+            else //Right
+            {
+                newCollisionPolygon[0] = new Vector2(right, top - 100);
+                newCollisionPolygon[1] = new Vector2(right, bottom + 100);
+                newCollisionPolygon[2] = new Vector2(right + 100, bottom + 100);
+                newCollisionPolygon[3] = new Vector2(right + 100, top - 100);
+            }
+            obstacleMapEdges[i].SetCollisionPolygon(newCollisionPolygon);
         }
 
         //Set the new navigation pathing based on map bounds
@@ -986,9 +1045,6 @@ public partial class MainLevelController : Node2D
 
         //Create the nav geometry data that will hold all the obstacle data
         NavigationMeshSourceGeometryData2D navGeometryData = new();
-        //TODO: Get geometry data from a tilemap?
-        
-        
 
         //Get the geometry obstacle data from all buildings and blueprints
         foreach (BuildingParent building in buildingsInScene)
@@ -1010,7 +1066,7 @@ public partial class MainLevelController : Node2D
             navGeometryData.AddObstructionOutline(polygonVertices);
         }
         //Get the obstacle data from all other misc environment obstacles
-        foreach (Polygon2D miscObstacle in miscObstaclesInScene)
+        foreach (CollisionPolygon2D miscObstacle in miscObstaclesInScene)
         {
             Vector2[] polygonVertices = miscObstacle.Polygon;
             for (int i = 0; i < polygonVertices.Length; i++)
@@ -1022,13 +1078,14 @@ public partial class MainLevelController : Node2D
 
         //Todo - add nav outlines for edge of maps
 
-
+        
         //bake the new region (minus low obtacles) from the mesh
         NavigationServer2D.BakeFromSourceGeometryData(newNavMesh, navGeometryData);
-        navigationRegion_LowRemoved.NavigationPolygon = newNavMesh;
+        navigationRegionHover.NavigationPolygon = newNavMesh;
+        globals.navigationAreaHover = navigationRegionHover;
 
         //Get obstacle data from 'low' obstacles (water etc)
-        foreach (Polygon2D lowObstacle in lowObstaclesInScene)
+        foreach (CollisionPolygon2D lowObstacle in lowObstaclesInScene)
         {
             Vector2[] polygonVertices = lowObstacle.Polygon;
             for (int i = 0; i < polygonVertices.Length; i++)
@@ -1040,6 +1097,7 @@ public partial class MainLevelController : Node2D
 
         //bake the new region from the main mesh
         NavigationServer2D.BakeFromSourceGeometryData(newNavMesh, navGeometryData);
-        navigationRegion.NavigationPolygon = newNavMesh;
+        navigationRegionGround.NavigationPolygon = newNavMesh;
+        globals.navigationAreaGround = navigationRegionGround;
     }
 }

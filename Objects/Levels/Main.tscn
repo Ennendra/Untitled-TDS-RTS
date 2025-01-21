@@ -1,7 +1,9 @@
-[gd_scene load_steps=24 format=3 uid="uid://bvji7q1gdfv36"]
+[gd_scene load_steps=31 format=4 uid="uid://bvji7q1gdfv36"]
 
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
 [ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
+[ext_resource type="Texture2D" uid="uid://cyvfug66mahru" path="res://Textures/Tilesets/tilemap1.png" id="2_plj7p"]
+[ext_resource type="Texture2D" uid="uid://cxuspvi06ufjx" path="res://Textures/Tilesets/Water.png" id="2_u1au2"]
 [ext_resource type="Texture2D" uid="uid://b5bi526386u1m" path="res://Textures/Tilesets/grasstile.png" id="3_lxxcb"]
 [ext_resource type="PackedScene" uid="uid://po7nu1qpdrka" path="res://Objects/Units and Structures/Buildings/BuildingGenerator.tscn" id="4_k817o"]
 [ext_resource type="PackedScene" uid="uid://dpyxe4fuquhmf" path="res://Objects/Units and Structures/Buildings/BuildingRefinery.tscn" id="5_oydl6"]
@@ -10,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://biil6hteswsdn" path="res://Objects/Units and Structures/Buildings/BuildingMetalStorage.tscn" id="9_qek2b"]
 [ext_resource type="PackedScene" uid="uid://b6n5rl53lqn3g" path="res://Objects/Units and Structures/Buildings/BuildingEnergyStorage.tscn" id="10_2yq5g"]
 [ext_resource type="PackedScene" uid="uid://6akwd6vee46k" path="res://Objects/Units and Structures/Units/Unit1.tscn" id="11_vy2n2"]
-[ext_resource type="PackedScene" uid="uid://rggmpcd6oh4n" path="res://Objects/Other/Obstacle.tscn" id="12_e6phe"]
 [ext_resource type="PackedScene" uid="uid://cn41rvyxe41sf" path="res://Objects/Other/MetalNode.tscn" id="12_sn534"]
 [ext_resource type="PackedScene" uid="uid://bajnlaslouu4e" path="res://Objects/UI/RTSController.tscn" id="13_87ivr"]
 [ext_resource type="PackedScene" uid="uid://b8wtdlbxd7cm6" path="res://Objects/Units and Structures/Buildings/BuildingMiner.tscn" id="14_m5tpb"]
@@ -20,6 +21,8 @@
 [ext_resource type="PackedScene" uid="uid://cbdtq5xcm5v8v" path="res://Objects/Units and Structures/Units/Unit2.tscn" id="18_acaut"]
 [ext_resource type="PackedScene" uid="uid://dde4d5v8fc1f0" path="res://Objects/Units and Structures/Units/Unit3.tscn" id="19_bh5rx"]
 [ext_resource type="PackedScene" uid="uid://dgxbaegip6qd3" path="res://Objects/FOWController.tscn" id="20_hdpsu"]
+[ext_resource type="PackedScene" uid="uid://cybcybto6k8b2" path="res://Objects/Other/ObstacleWall.tscn" id="21_g483n"]
+[ext_resource type="PackedScene" uid="uid://b8vkvmby213gr" path="res://Objects/Other/ObstacleWater.tscn" id="22_7ubiy"]
 
 [sub_resource type="Environment" id="Environment_xytmu"]
 background_mode = 3
@@ -35,6 +38,33 @@ glow_intensity = 2.0
 glow_blend_mode = 1
 glow_hdr_threshold = 0.9
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rv1op"]
+texture = ExtResource("2_u1au2")
+texture_region_size = Vector2i(50, 50)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_5wmer"]
+tile_size = Vector2i(50, 50)
+sources/0 = SubResource("TileSetAtlasSource_rv1op")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r0v2o"]
+texture = ExtResource("2_plj7p")
+separation = Vector2i(1, 1)
+texture_region_size = Vector2i(50, 50)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_vmw86"]
+tile_size = Vector2i(50, 50)
+sources/0 = SubResource("TileSetAtlasSource_r0v2o")
+
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_eb8bk"]
 vertices = PackedVector2Array(4954.9, -4804.95, 4905.1, 5230, -730, -80, -730, -470, -5305.05, 5230, -820, -80, -5329.95, -4780.04, -1020, -380, -1020, -470, -820, -380)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(2, 1, 4, 5), PackedInt32Array(5, 4, 6, 7), PackedInt32Array(6, 0, 3, 8), PackedInt32Array(7, 9, 5), PackedInt32Array(7, 6, 8)])
@@ -42,19 +72,17 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-5350, -4800, 4975, -48
 parsed_collision_mask = 524295
 source_geometry_mode = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
-agent_radius = 20.0
+agent_radius = 30.0
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_jf3vq"]
 parsed_collision_mask = 7
 source_geometry_mode = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
-agent_radius = 20.0
+agent_radius = 30.0
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("navigationRegion", "navigationRegion_LowRemoved", "fowController", "terrainTilemapLayers")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("fowController", "terrainTilemapLayers")]
 process_mode = 3
 script = ExtResource("1_slh8m")
-navigationRegion = NodePath("NavigationRegion2D")
-navigationRegion_LowRemoved = NodePath("NavigationRegion2DWithoutLow")
 top = -2000.0
 left = -3000.0
 bottom = 6000.0
@@ -64,6 +92,16 @@ terrainTilemapLayers = [null]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_xytmu")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="."]
+z_index = -5
+tile_map_data = PackedByteArray("AADt/+7/AAAAAAAAAADt/+//AAAAAAAAAADt//D/AAAAAAAAAADt//H/AAAAAAAAAADt//L/AAAAAAAAAADt//P/AAAAAAAAAADt//T/AAAAAAAAAADt//X/AAAAAAAAAADt//b/AAAAAAAAAADu/+7/AAAAAAAAAADu/+//AAAAAAAAAADu//D/AAAAAAAAAADu//H/AAAAAAAAAADu//L/AAAAAAAAAADu//P/AAAAAAAAAADu//T/AAAAAAAAAADu//X/AAAAAAAAAADu//b/AAAAAAAAAADv/+7/AAAAAAAAAADv/+//AAAAAAAAAADv//D/AAAAAAAAAADv//H/AAAAAAAAAADv//L/AAAAAAAAAADv//P/AAAAAAAAAADv//T/AAAAAAAAAADv//X/AAAAAAAAAADv//b/AAAAAAAAAADw/+7/AAAAAAAAAADw/+//AAAAAAAAAADw//D/AAAAAAAAAADw//H/AAAAAAAAAADw//L/AAAAAAAAAADw//P/AAAAAAAAAADw//T/AAAAAAAAAADw//X/AAAAAAAAAADw//b/AAAAAAAAAADw/xMAAAAAAAAAAADw/xQAAAAAAAAAAADx/xMAAAAAAAAAAADx/xQAAAAAAAAAAADy/xMAAAAAAAAAAADy/xQAAAAAAAAAAADz/xMAAAAAAAAAAADz/xQAAAAAAAAAAAD0/xMAAAAAAAAAAAD0/xQAAAAAAAAAAAD1/xMAAAAAAAAAAAD1/xQAAAAAAAAAAAD2/xMAAAAAAAAAAAD2/xQAAAAAAAAAAAD3/xMAAAAAAAAAAAD3/xQAAAAAAAAAAAD4/xMAAAAAAAAAAAD4/xQAAAAAAAAAAAD5/xMAAAAAAAAAAAD5/xQAAAAAAAAAAAD6/xMAAAAAAAAAAAD6/xQAAAAAAAAAAAAAABMAAAAAAAAAAAAAABQAAAAAAAAAAAABABMAAAAAAAAAAAABABQAAAAAAAAAAAACABMAAAAAAAAAAAACABQAAAAAAAAAAAADABMAAAAAAAAAAAADABQAAAAAAAAAAAAEABMAAAAAAAAAAAAEABQAAAAAAAAAAAAFABMAAAAAAAAAAAAFABQAAAAAAAAAAAAGABMAAAAAAAAAAAAGABQAAAAAAAAAAAAHABMAAAAAAAAAAAAHABQAAAAAAAAAAAAIABMAAAAAAAAAAAAIABQAAAAAAAAAAAAJABMAAAAAAAAAAAAJABQAAAAAAAAAAAAKABMAAAAAAAAAAAAKABQAAAAAAAAAAAALABMAAAAAAAAAAAALABQAAAAAAAAAAAAMABMAAAAAAAAAAAAMABQAAAAAAAAAAAANABMAAAAAAAAAAAANABQAAAAAAAAAAAAOABMAAAAAAAAAAAAOABQAAAAAAAAAAAAPABMAAAAAAAAAAAAPABQAAAAAAAAAAAAQABMAAAAAAAAAAAAQABQAAAAAAAAAAAARABMAAAAAAAAAAAARABQAAAAAAAAAAAASABMAAAAAAAAAAAASABQAAAAAAAAAAAATABMAAAAAAAAAAAATABQAAAAAAAAAAAAUABMAAAAAAAAAAAAUABQAAAAAAAAAAAAVABMAAAAAAAAAAAAVABQAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_5wmer")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+z_index = -5
+tile_map_data = PackedByteArray("AADH/wwAAAACAAAAAADI/wwAAAACAAAAAADJ/wwAAAACAAAAAADK/wwAAAACAAAAAADL/wwAAAACAAAAAADM/wwAAAACAAAAAADN/wwAAAACAAAAAADO/wwAAAACAAAAAADP/wwAAAACAAAAAADQ/wwAAAACAAAAAADR/wwAAAACAAAAAADS/wwAAAACAAAAAADT/wwAAAACAAAAAADU/wwAAAACAAAAAADV/wwAAAACAAAAAADW/wwAAAACAAAAAADX/wwAAAACAAAAAADY/wwAAAACAAAAAADZ/wwAAAACAAAAAADa/wwAAAACAAAAAADb/wwAAAACAAAAAADc/wwAAAACAAAAAADd/wwAAAACAAAAAADe/wwAAAACAAAAAADf/wwAAAACAAAAAADg/wwAAAACAAAAAADh/wwAAAACAAAAAADi/wwAAAACAAAAAADj/wwAAAACAAAAAADk/wwAAAACAAAAAADl/wwAAAACAAAAAADm/wwAAAACAAAAAADn/wwAAAACAAAAAADo/wwAAAACAAAAAADp/wwAAAACAAAAAADq/wwAAAACAAAAAADr/wwAAAACAAAAAADs/wwAAAACAAAAAADt/wwAAAACAAAAAADu/wwAAAACAAAAAADv/wwAAAACAAAAAADw/wwAAAABAAAAAADw/wsAAAABAAAAAADw/woAAAABAAAAAADw/wkAAAABAAAAAADw/wgAAAABAAAAAADw/wcAAAABAAAAAADw/wYAAAABAAAAAADw/wUAAAABAAAAAADw/wQAAAABAAAAAADw/wMAAAABAAAAAADw/wIAAAABAAAAAADw/wEAAAABAAAAAADw/wAAAAABAAAAAADw////AAABAAAAAADw//7/AAABAAAAAADw//3/AAABAAAAAADw//z/AAABAAAAAADw//v/AAABAAAAAADw//r/AAABAAAAAADw//n/AAABAAAAAADw//j/AAABAAAAAADw//f/AAAAAAAAAADv//f/AAAAAAAAAADu//f/AAAAAAAAAADt//f/AAAAAAAAAADs//f/AAAAAAAAAAAfAO7/AAADAAAAAAAfAO//AAADAAAAAAAfAPD/AAADAAAAAAAfAPH/AAADAAAAAAAfAPL/AAADAAAAAAAfAPP/AAADAAAAAAAfAPT/AAADAAAAAAAfAPX/AAADAAAA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")
+tile_set = SubResource("TileSet_vmw86")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false
@@ -105,6 +143,7 @@ position = Vector2(525, -25)
 position = Vector2(675, -25)
 
 [node name="Player" parent="." instance=ExtResource("1_ndp2k")]
+z_index = 6
 position = Vector2(475, 100)
 
 [node name="BuildingGenerator3" parent="." instance=ExtResource("4_k817o")]
@@ -127,564 +166,6 @@ position = Vector2(50, -450)
 
 [node name="MetalNode2" parent="." instance=ExtResource("12_sn534")]
 position = Vector2(50, -650)
-
-[node name="Obstacle" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -275)
-
-[node name="Obstacle2" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -325)
-
-[node name="Obstacle3" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -225)
-
-[node name="Obstacle4" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -175)
-
-[node name="Obstacle5" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -125)
-
-[node name="Obstacle6" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -375)
-
-[node name="Obstacle7" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -425)
-
-[node name="Obstacle12" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -25)
-
-[node name="Obstacle13" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -75)
-
-[node name="Obstacle14" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, 25)
-
-[node name="Obstacle15" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, 75)
-
-[node name="Obstacle16" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, 125)
-
-[node name="Obstacle17" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -125)
-
-[node name="Obstacle18" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -175)
-
-[node name="Obstacle19" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -375)
-
-[node name="Obstacle20" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -425)
-
-[node name="Obstacle21" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -325)
-
-[node name="Obstacle22" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -275)
-
-[node name="Obstacle23" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -225)
-
-[node name="Obstacle24" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -475)
-
-[node name="Obstacle25" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -525)
-
-[node name="Obstacle26" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -725)
-
-[node name="Obstacle27" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -775)
-
-[node name="Obstacle28" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -675)
-
-[node name="Obstacle29" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -625)
-
-[node name="Obstacle30" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -575)
-
-[node name="Obstacle31" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -825)
-
-[node name="Obstacle32" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1575, -875)
-
-[node name="Obstacle33" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 75)
-
-[node name="Obstacle34" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 25)
-
-[node name="Obstacle35" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 125)
-
-[node name="Obstacle36" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 175)
-
-[node name="Obstacle37" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 225)
-
-[node name="Obstacle38" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -25)
-
-[node name="Obstacle39" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, -75)
-
-[node name="Obstacle40" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 425)
-
-[node name="Obstacle41" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 375)
-
-[node name="Obstacle42" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 475)
-
-[node name="Obstacle43" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 525)
-
-[node name="Obstacle44" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 575)
-
-[node name="Obstacle45" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 325)
-
-[node name="Obstacle46" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 275)
-
-[node name="Obstacle47" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3475)
-
-[node name="Obstacle48" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3425)
-
-[node name="Obstacle49" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3525)
-
-[node name="Obstacle50" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3575)
-
-[node name="Obstacle51" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3625)
-
-[node name="Obstacle52" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3375)
-
-[node name="Obstacle53" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3325)
-
-[node name="Obstacle54" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3825)
-
-[node name="Obstacle55" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3775)
-
-[node name="Obstacle56" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3875)
-
-[node name="Obstacle57" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3925)
-
-[node name="Obstacle58" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3975)
-
-[node name="Obstacle59" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3725)
-
-[node name="Obstacle60" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-425, 3675)
-
-[node name="Obstacle75" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1125, 3325)
-
-[node name="Obstacle76" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1075, 3325)
-
-[node name="Obstacle77" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1175, 3325)
-
-[node name="Obstacle78" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1225, 3325)
-
-[node name="Obstacle79" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1275, 3325)
-
-[node name="Obstacle80" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1025, 3325)
-
-[node name="Obstacle81" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-975, 3325)
-
-[node name="Obstacle82" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-875, 3325)
-
-[node name="Obstacle83" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-925, 3325)
-
-[node name="Obstacle84" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-825, 3325)
-
-[node name="Obstacle85" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 3325)
-
-[node name="Obstacle86" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-725, 3325)
-
-[node name="Obstacle87" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1375, 3325)
-
-[node name="Obstacle88" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1325, 3325)
-
-[node name="Obstacle89" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1825, 3325)
-
-[node name="Obstacle90" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1775, 3325)
-
-[node name="Obstacle91" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1875, 3325)
-
-[node name="Obstacle92" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1925, 3325)
-
-[node name="Obstacle93" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1975, 3325)
-
-[node name="Obstacle94" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1725, 3325)
-
-[node name="Obstacle95" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1675, 3325)
-
-[node name="Obstacle96" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1575, 3325)
-
-[node name="Obstacle97" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1625, 3325)
-
-[node name="Obstacle98" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1525, 3325)
-
-[node name="Obstacle99" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1475, 3325)
-
-[node name="Obstacle100" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1425, 3325)
-
-[node name="Obstacle101" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2075, 3325)
-
-[node name="Obstacle102" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2025, 3325)
-
-[node name="Obstacle103" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2525, 3325)
-
-[node name="Obstacle104" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2475, 3325)
-
-[node name="Obstacle105" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2575, 3325)
-
-[node name="Obstacle106" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2625, 3325)
-
-[node name="Obstacle107" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2675, 3325)
-
-[node name="Obstacle108" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2425, 3325)
-
-[node name="Obstacle109" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2375, 3325)
-
-[node name="Obstacle110" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2275, 3325)
-
-[node name="Obstacle111" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2325, 3325)
-
-[node name="Obstacle112" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2225, 3325)
-
-[node name="Obstacle113" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2175, 3325)
-
-[node name="Obstacle114" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2125, 3325)
-
-[node name="Obstacle115" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2775, 3325)
-
-[node name="Obstacle116" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2725, 3325)
-
-[node name="Obstacle145" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1175, 625)
-
-[node name="Obstacle146" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1125, 625)
-
-[node name="Obstacle147" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1225, 625)
-
-[node name="Obstacle148" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1275, 625)
-
-[node name="Obstacle149" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1325, 625)
-
-[node name="Obstacle150" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1075, 625)
-
-[node name="Obstacle151" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1025, 625)
-
-[node name="Obstacle152" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-925, 625)
-
-[node name="Obstacle153" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-975, 625)
-
-[node name="Obstacle154" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-875, 625)
-
-[node name="Obstacle155" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-825, 625)
-
-[node name="Obstacle156" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-775, 625)
-
-[node name="Obstacle157" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1425, 625)
-
-[node name="Obstacle158" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1375, 625)
-
-[node name="Obstacle159" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1875, 625)
-
-[node name="Obstacle160" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1825, 625)
-
-[node name="Obstacle161" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1925, 625)
-
-[node name="Obstacle162" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1975, 625)
-
-[node name="Obstacle163" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2025, 625)
-
-[node name="Obstacle164" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1775, 625)
-
-[node name="Obstacle165" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1725, 625)
-
-[node name="Obstacle166" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1625, 625)
-
-[node name="Obstacle167" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1675, 625)
-
-[node name="Obstacle168" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1575, 625)
-
-[node name="Obstacle169" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1525, 625)
-
-[node name="Obstacle170" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-1475, 625)
-
-[node name="Obstacle171" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2125, 625)
-
-[node name="Obstacle172" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2075, 625)
-
-[node name="Obstacle173" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2575, 625)
-
-[node name="Obstacle174" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2525, 625)
-
-[node name="Obstacle175" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2625, 625)
-
-[node name="Obstacle176" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2675, 625)
-
-[node name="Obstacle177" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2725, 625)
-
-[node name="Obstacle178" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2475, 625)
-
-[node name="Obstacle179" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2425, 625)
-
-[node name="Obstacle180" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2325, 625)
-
-[node name="Obstacle181" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2375, 625)
-
-[node name="Obstacle182" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2275, 625)
-
-[node name="Obstacle183" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2225, 625)
-
-[node name="Obstacle184" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2175, 625)
-
-[node name="Obstacle185" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2825, 625)
-
-[node name="Obstacle186" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-2775, 625)
-
-[node name="Obstacle117" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(275, 2625)
-
-[node name="Obstacle118" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(325, 2625)
-
-[node name="Obstacle119" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(225, 2625)
-
-[node name="Obstacle120" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(175, 2625)
-
-[node name="Obstacle121" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(125, 2625)
-
-[node name="Obstacle122" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(375, 2625)
-
-[node name="Obstacle123" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(425, 2625)
-
-[node name="Obstacle124" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(525, 2625)
-
-[node name="Obstacle125" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(475, 2625)
-
-[node name="Obstacle126" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(575, 2625)
-
-[node name="Obstacle127" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(625, 2625)
-
-[node name="Obstacle128" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(675, 2625)
-
-[node name="Obstacle129" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(25, 2625)
-
-[node name="Obstacle130" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(75, 2625)
-
-[node name="Obstacle131" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(975, 2625)
-
-[node name="Obstacle132" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1025, 2625)
-
-[node name="Obstacle133" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(925, 2625)
-
-[node name="Obstacle134" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(875, 2625)
-
-[node name="Obstacle135" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(825, 2625)
-
-[node name="Obstacle136" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1075, 2625)
-
-[node name="Obstacle137" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1125, 2625)
-
-[node name="Obstacle138" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1225, 2625)
-
-[node name="Obstacle139" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1175, 2625)
-
-[node name="Obstacle140" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1275, 2625)
-
-[node name="Obstacle141" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1325, 2625)
-
-[node name="Obstacle142" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1375, 2625)
-
-[node name="Obstacle143" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(725, 2625)
-
-[node name="Obstacle144" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(775, 2625)
-
-[node name="Obstacle61" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3525)
-
-[node name="Obstacle62" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3475)
-
-[node name="Obstacle63" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3575)
-
-[node name="Obstacle64" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3625)
-
-[node name="Obstacle65" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3675)
-
-[node name="Obstacle66" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3425)
-
-[node name="Obstacle67" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3375)
-
-[node name="Obstacle68" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3875)
-
-[node name="Obstacle69" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3825)
-
-[node name="Obstacle70" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3925)
-
-[node name="Obstacle71" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3975)
-
-[node name="Obstacle72" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 4025)
-
-[node name="Obstacle73" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3775)
-
-[node name="Obstacle74" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(1675, 3725)
-
-[node name="Obstacle8" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-825, -425)
-
-[node name="Obstacle9" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-875, -425)
-
-[node name="Obstacle10" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-925, -425)
-
-[node name="Obstacle11" parent="." instance=ExtResource("12_e6phe")]
-position = Vector2(-975, -425)
 
 [node name="Unit1" parent="." instance=ExtResource("11_vy2n2")]
 position = Vector2(1900, -300)
@@ -827,7 +308,6 @@ factionOverride = 2
 
 [node name="BuildingNetworkHub3" parent="." instance=ExtResource("6_ff2od")]
 position = Vector2(1150, 3950)
-priority = 2
 factionOverride = 2
 
 [node name="BuildingRefinery3" parent="." instance=ExtResource("5_oydl6")]
@@ -978,5 +458,85 @@ position = Vector2(-600, 175)
 [node name="FowController" parent="." instance=ExtResource("20_hdpsu")]
 z_index = 5
 
+[node name="ObstacleWall" parent="." instance=ExtResource("21_g483n")]
+position = Vector2(-2850, 600)
+
+[node name="ObstacleBounds" parent="ObstacleWall" index="0"]
+polygon = PackedVector2Array(0, 0, 0, 50, 2100, 50, 2100, -1050, 1850, -1050, 1850, -1000, 2050, -1000, 2050, 0)
+
+[node name="ObstacleWall2" parent="." instance=ExtResource("21_g483n")]
+
+[node name="ObstacleBounds" parent="ObstacleWall2" index="0"]
+polygon = PackedVector2Array(1550, -900, 1550, 150, 2100, 700, 2600, 700, 2600, 650, 2100, 650, 1600, 150, 1600, -900)
+
+[node name="ObstacleWall3" parent="." instance=ExtResource("21_g483n")]
+
+[node name="ObstacleBounds" parent="ObstacleWall3" index="0"]
+polygon = PackedVector2Array(-2800, 2100, -2800, 2200, -1450, 2200, -500, 3150, -500, 4000, -400, 4000, -400, 3150, -1450, 2100)
+
+[node name="ObstacleWall4" parent="." instance=ExtResource("21_g483n")]
+
+[node name="ObstacleBounds" parent="ObstacleWall4" index="0"]
+polygon = PackedVector2Array(-2800, 3300, -2800, 3350, -700, 3350, -700, 3300)
+
+[node name="ObstacleWall5" parent="." instance=ExtResource("21_g483n")]
+
+[node name="ObstacleBounds" parent="ObstacleWall5" index="0"]
+polygon = PackedVector2Array(1650, 3350, 1650, 4050, 2300, 4700, 2300, 4900, 2350, 4900, 2350, 4700, 1700, 4050, 1700, 3350)
+
+[node name="ObstacleWall6" parent="." instance=ExtResource("21_g483n")]
+
+[node name="ObstacleBounds" parent="ObstacleWall6" index="0"]
+polygon = PackedVector2Array(-100, 2600, -100, 2650, 1550, 2650, 1550, 2600)
+
+[node name="ObstacleWater2" parent="." instance=ExtResource("22_7ubiy")]
+
+[node name="ObstacleBounds" parent="ObstacleWater2" index="0"]
+polygon = PackedVector2Array(-800, 950, -250, 950, -250, 1050, -800, 1050)
+
+[node name="ObstacleWater3" parent="." instance=ExtResource("22_7ubiy")]
+
+[node name="ObstacleBounds" parent="ObstacleWater3" index="0"]
+polygon = PackedVector2Array(1100, 1050, 1100, 950, 0, 950, 0, 1050)
+
+[node name="ObstacleWater" parent="." instance=ExtResource("22_7ubiy")]
+
+[node name="ObstacleBounds" parent="ObstacleWater" index="0"]
+polygon = PackedVector2Array(-950, -450, -950, -900, -750, -900, -750, -450)
+
+[node name="BuildingMiner7" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(-1700, -100)
+
+[node name="BuildingMiner8" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(-1550, -150)
+
+[node name="BuildingMiner9" parent="." instance=ExtResource("14_m5tpb")]
+position = Vector2(-1150, 100)
+
+[node name="BuildingNetworkHub4" parent="." instance=ExtResource("6_ff2od")]
+position = Vector2(-1400, 0)
+
+[node name="BuildingGenerator11" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(-1625, -325)
+
+[node name="BuildingGenerator12" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(-1475, -325)
+
+[node name="BuildingGenerator13" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(-1325, -325)
+
+[node name="BuildingGenerator14" parent="." instance=ExtResource("4_k817o")]
+position = Vector2(-1325, -175)
+
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]
+
+[editable path="ObstacleWall"]
+[editable path="ObstacleWall2"]
+[editable path="ObstacleWall3"]
+[editable path="ObstacleWall4"]
+[editable path="ObstacleWall5"]
+[editable path="ObstacleWall6"]
+[editable path="ObstacleWater2"]
+[editable path="ObstacleWater3"]
+[editable path="ObstacleWater"]
