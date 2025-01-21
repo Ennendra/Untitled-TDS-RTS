@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cybcybto6k8b2"]
+
+[node name="ObstacleWall" type="StaticBody2D" groups=["EnvironmentObstacles"]]
+collision_mask = 0
+
+[node name="ObstacleBounds" type="CollisionPolygon2D" parent="."]

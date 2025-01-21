@@ -76,7 +76,7 @@ public partial class UI_BuildPlacement : Sprite2D
         areaCast.CollideWithAreas = true; //set collide with areas to true, so it will register building areas
         areaCast.Shape = ghostCheckShape;
         areaCast.Transform = new Transform2D(0, buildLocation);
-        areaCast.CollisionMask = 10; //The collision layers for buildings and unit physics
+        areaCast.CollisionMask = 1572879; //The collision layers for buildings and unit physics
 
         var collisionResult = spaceState.IntersectShape(areaCast);
         if (collisionResult.Count > 0)

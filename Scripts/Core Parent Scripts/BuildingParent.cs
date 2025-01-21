@@ -53,6 +53,14 @@ public partial class BuildingParent : CombatantParent
 		ProcessBuildingTick(delta);
     }
 
+	public void SetInitialRallyPoint()
+	{
+		if (IsInstanceValid(factoryComponent))
+		{
+			factoryComponent.SetInitialRallyPoint();
+		}
+	}
+
     public BuildingType GetBuildingType()
 	{
 		return buildingType;

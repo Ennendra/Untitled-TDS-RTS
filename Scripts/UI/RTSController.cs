@@ -227,7 +227,7 @@ public partial class RTSController : Node2D
                 }
             }
 
-            if (isAUnitSelected && !isAdditive)
+            if (isAUnitSelected)
             {
                 List<FactionComponent> filteredSelection = new();
                 foreach (FactionComponent selectComp in selectionHits)
@@ -423,19 +423,76 @@ public partial class RTSController : Node2D
         orderConfirm.Texture = orderTexture;
     }
 
+    //Function related for move and attackmove orders
+    //Spaces the movement locations for multiple units
+    public List<Vector2> GetMovePositionArray(Vector2 firstPosition, int maxPositions)
+    {
+        List<Vector2> newOrderPositions = new();
+
+        int currentPositionsFilled = 0; //How many positions have been prepared for the selected units
+        int positionRotationAmount = 6, positionRotationIndex = 0, positionLength = 60; //Used to prepare positions around the center point
+        while (currentPositionsFilled < maxPositions)
+        {
+            //Set the first order position
+            if (currentPositionsFilled == 0)
+            {
+                newOrderPositions.Add(firstPosition);
+                currentPositionsFilled++;
+            }
+            else
+            {
+                //prepare positions rotated in a circle centered at the first order position
+                //It rotates at the specified 'length' an amount of times (positionRotationAmount) to run a full circle, then moves to a new layer (wider circle)
+                float rotationAmount = Mathf.DegToRad(positionRotationIndex * (360 / positionRotationAmount));
+                Vector2 newPositionOffset = new Vector2(positionLength, 0);
+                newPositionOffset = newPositionOffset.Rotated(rotationAmount);
+                newOrderPositions.Add(firstPosition + newPositionOffset);
+                CreateMoveConfirmationUI(firstPosition + newPositionOffset, orderConfirmationTextures[0]);
+
+                //increment the rotation on this layer
+                positionRotationIndex++;
+
+                //If we've done one full circle, prepare the next layer
+                if (positionRotationIndex >= positionRotationAmount)
+                {
+                    positionLength += 60;
+                    positionRotationAmount += 6;
+                    positionRotationIndex = 0;
+                }
+
+                currentPositionsFilled++;
+            }
+
+        }
+
+        return newOrderPositions;
+    }
+
     //Functions that relay the order to the AI components themselves
     public void AIExecuteOrder_Move(Vector2 orderPosition)
     {
+        List<FactionComponent> movingUnits = new();
+
+        //Set building rally points and filter all moving units
         foreach (FactionComponent component in selectedItems)
         {
             if (component.GetAIComponent() != null)
             {
-                component.GetAIComponent().SetNewMoveOrder(orderPosition);
+                //component.GetAIComponent().SetNewMoveOrder(orderPosition);
+                movingUnits.Add(component);
             }
             else if (component.CanSetRallyPoint)
             {
                 component.SetRallyPoint(orderPosition);
             }
+        }
+
+        //Get the positions for all the moving units to go to
+        List<Vector2> newOrderPositions = GetMovePositionArray(orderPosition,movingUnits.Count);
+        
+        for (int i = 0; i < movingUnits.Count; i++)
+        {
+            movingUnits[i].GetAIComponent().SetNewMoveOrder(newOrderPositions[i]);
         }
 
         CreateMoveConfirmationUI(orderPosition, orderConfirmationTextures[0]);
@@ -466,12 +523,23 @@ public partial class RTSController : Node2D
     }
     public void AIExecuteOrder_AttackMove(Vector2 orderPosition)
     {
+        List<FactionComponent> movingUnits = new();
+
         foreach (FactionComponent component in selectedItems)
         {
             if (component.GetAIComponent() != null)
             {
-                component.GetAIComponent().SetNewAttackMoveOrder(orderPosition);
+                movingUnits.Add(component);
+                //component.GetAIComponent().SetNewAttackMoveOrder(orderPosition);
             }
+        }
+
+        //Get the positions for all the moving units to go to
+        List<Vector2> newOrderPositions = GetMovePositionArray(orderPosition, movingUnits.Count);
+
+        for (int i = 0; i < movingUnits.Count; i++)
+        {
+            movingUnits[i].GetAIComponent().SetNewAttackMoveOrder(newOrderPositions[i]);
         }
 
         CreateMoveConfirmationUI(orderPosition, orderConfirmationTextures[1]);

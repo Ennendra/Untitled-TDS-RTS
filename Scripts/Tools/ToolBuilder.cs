@@ -10,7 +10,9 @@ public partial class ToolBuilder : ToolParent
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-	}
+		if (particles != null) { particles.Restart(); }
+		
+    }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -20,7 +22,7 @@ public partial class ToolBuilder : ToolParent
 			if (particles != null) 
 			{
 				particles.GlobalRotation = GlobalRotation;
-				particles.Emitting = true; 
+				particles.Emitting = true;
 			}
 		}
 		else
@@ -59,6 +61,7 @@ public partial class ToolBuilder : ToolParent
 					BlueprintParent targetBlueprint = (BlueprintParent)collidedObject;
 					if (targetBlueprint.GlobalPosition.DistanceTo(GlobalPosition)<=(toolRange + targetBlueprint.GetBuildingRadius()) && targetBlueprint.GetCurrentFaction() == factionComponent.faction)
 					{
+						GD.Print(GlobalPosition);
 						isActive = true;
                         constructorComponent.blueprintTarget = targetBlueprint;
                         constructorComponent.isActive = true;

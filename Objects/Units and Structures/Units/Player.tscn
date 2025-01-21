@@ -28,7 +28,7 @@ radius = 25.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("spriteAimCursor", "weaponFolder", "toolFolder", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "movementComponent", "resourceComponent", "sightComponent") groups=["Player"]]
 collision_layer = 8
-collision_mask = 11
+collision_mask = 1048587
 motion_mode = 1
 script = ExtResource("1_npw5l")
 spriteAimCursor = NodePath("AimingComponent/AimingCursor")

@@ -252,6 +252,7 @@ PauseGame={
 2d_physics/layer_18="Blueprint"
 2d_physics/layer_19="MetalMiningNode"
 2d_physics/layer_20="Obstacle - Low"
+2d_physics/layer_21="Obstacle - Map Edge"
 avoidance/layer_1="Environment"
 avoidance/layer_2="Buildings"
 

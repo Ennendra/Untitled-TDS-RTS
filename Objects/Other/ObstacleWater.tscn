@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b8vkvmby213gr"]
+
+[node name="ObstacleWater" type="StaticBody2D" groups=["LowEnvironmentObstacles"]]
+collision_layer = 524288
+collision_mask = 0
+
+[node name="ObstacleBounds" type="CollisionPolygon2D" parent="."]

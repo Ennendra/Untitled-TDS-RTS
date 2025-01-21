@@ -40,15 +40,32 @@ public partial class AttackComponent : Area2D
 
         CollisionMask = (uint)maskResult;
     }
-    //Collision function ---
-    public void OnAreaEntered(Area2D area)
-	{
-		if (area.IsInGroup("DamageComponent"))
+
+    public void HitTarget(Area2D area)
+    {
+        if (area.IsInGroup("DamageComponent"))
 		{
 			DamageComponent component = (DamageComponent)area;
 
 			DealDamage(component);
 		}
+        GetParent().EmitSignal("ProjectileHit");
+    }
+    //Collision functions ---
+    //Areas - damage component
+    public void OnAreaEntered(Area2D area)
+	{
+		//if (area.IsInGroup("DamageComponent"))
+		//{
+		//	DamageComponent component = (DamageComponent)area;
+
+		//	DealDamage(component);
+		//}
+  //      GetParent().EmitSignal("ProjectileHit");
+    }
+    //Body - obtsacles etc
+    public void OnBodyEntered(Node2D body)
+    {
         GetParent().EmitSignal("ProjectileHit");
     }
 }

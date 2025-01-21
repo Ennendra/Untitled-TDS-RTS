@@ -11,3 +11,4 @@ input_pickable = false
 script = ExtResource("1_24py1")
 
 [connection signal="area_entered" from="." to="." method="OnAreaEntered"]
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

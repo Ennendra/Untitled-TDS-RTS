@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://t2es6slkip7b"]
+[gd_scene load_steps=9 format=3 uid="uid://t2es6slkip7b"]
 
 [ext_resource type="Script" path="res://Scripts/Tools/ToolBuilder.cs" id="1_jqk74"]
 [ext_resource type="Texture2D" uid="uid://d4diwxvqhd8c8" path="res://Textures/UI/Icons/Tools/ToolIconBuilder.png" id="2_lgj6m"]
 [ext_resource type="PackedScene" uid="uid://c5o73c7qclacc" path="res://Objects/Components/ConstructorComponent.tscn" id="2_slgdd"]
 [ext_resource type="PackedScene" uid="uid://ovj2w7pkni6w" path="res://Objects/Components/FactionComponent.tscn" id="3_e176i"]
 [ext_resource type="Texture2D" uid="uid://bayjj2gyl26sn" path="res://Textures/FX/ParticleTeleportEffect.png" id="4_rhvnr"]
+[ext_resource type="Material" uid="uid://l43wus1nxn31" path="res://Objects/Tools/testparticleemitter.tres" id="5_tfont"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wbwb8"]
 radius = 5.0
@@ -14,21 +15,6 @@ particles_animation = true
 particles_anim_h_frames = 5
 particles_anim_v_frames = 1
 particles_anim_loop = false
-
-[sub_resource type="Gradient" id="Gradient_silg8"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_03adk"]
-gradient = SubResource("Gradient_silg8")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_52n8a"]
-lifetime_randomness = 0.3
-particle_flag_disable_z = true
-spread = 15.0
-initial_velocity_min = 80.0
-initial_velocity_max = 150.0
-gravity = Vector3(0, 0, 0)
-color_ramp = SubResource("GradientTexture1D_03adk")
 
 [node name="ToolBuilder1" type="Node2D" node_paths=PackedStringArray("particles", "constructorComponent", "factionComponent")]
 script = ExtResource("1_jqk74")
@@ -48,10 +34,12 @@ shape = SubResource("CircleShape2D_wbwb8")
 [node name="FactionComponent" parent="." instance=ExtResource("3_e176i")]
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+light_mask = 7
+visibility_layer = 7
 material = SubResource("CanvasItemMaterial_rsdkh")
 rotation = 6.28319
-emitting = false
 amount = 60
-process_material = SubResource("ParticleProcessMaterial_52n8a")
+process_material = ExtResource("5_tfont")
 texture = ExtResource("4_rhvnr")
 lifetime = 1.6
+preprocess = 5.0

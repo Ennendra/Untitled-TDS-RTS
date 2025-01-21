@@ -14,13 +14,13 @@ vec2 tilingAndOffset(vec2 uv, vec2 tiling, vec2 offset) {
 void fragment() {
     vec2 offset = vec2(TIME * speed / 100.0);
     vec2 tiling = tilingAndOffset(UV, hologramTextureTiling, offset);
-    
+
     vec4 noise = texture(hologramTexture, tiling);
-    
+
     float fresnel = 0.71;
     vec4 colorLines = linesColor * vec4(vec3(linesColorIntensity), 1.0);
     vec4 emission = colorLines * fresnel * noise;
-    
+
     vec4 albedo = baseColor;
     float alpha = dot(noise.rgb, vec3(1.0));
     vec4 hologram;

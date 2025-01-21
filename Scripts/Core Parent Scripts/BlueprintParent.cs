@@ -145,6 +145,7 @@ public partial class BlueprintParent : Area2D
         newBuilding.GlobalPosition = GlobalPosition;
         newBuilding.SetNewFaction(factionComponent.faction);
         newBuilding.GetDamageComponent().SetHealthPercentage(damageComponent.GetCurrentHealthPercent());
+        newBuilding.SetInitialRallyPoint();
         QueueFree();
     }
     public float GetBuildingRadius()
