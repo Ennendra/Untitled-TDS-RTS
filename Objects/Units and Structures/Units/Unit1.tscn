@@ -33,7 +33,6 @@ collision_mask = 1572875
 motion_mode = 1
 script = ExtResource("1_yklge")
 physicsCollider = NodePath("Collider")
-unitInfo = ExtResource("10_g22ja")
 deathExplosion = ExtResource("3_b1px4")
 mainSprite = NodePath("SpriteBottom")
 damageComponent = NodePath("DamageComponent")

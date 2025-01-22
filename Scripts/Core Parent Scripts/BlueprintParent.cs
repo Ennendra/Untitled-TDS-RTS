@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Reflection.Metadata.Ecma335;
 
-public partial class BlueprintParent : Area2D
+public partial class BlueprintParent : CharacterBody2D
 {
     [ExportCategory("Unit Information Resource")]
     [Export] UnitInfo unitInfo;

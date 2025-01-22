@@ -1,7 +1,7 @@
 [gd_scene load_steps=21 format=3 uid="uid://cbdtq5xcm5v8v"]
 
-[ext_resource type="Script" path="res://Scripts/Units/Unit1.cs" id="1_snd2c"]
-[ext_resource type="Resource" uid="uid://bb2ewtpnqjdv1" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_Unit1.tres" id="2_4l8cc"]
+[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/UnitParent.cs" id="1_n73h5"]
+[ext_resource type="Resource" uid="uid://duy336cphqkam" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_Unit2.tres" id="2_ldeif"]
 [ext_resource type="PackedScene" uid="uid://bcoihity33l5c" path="res://Objects/Other/ExplosionSmall.tscn" id="3_kbnna"]
 [ext_resource type="Texture2D" uid="uid://dbsrn765ov75" path="res://Textures/Units/Unit2/Unit2Bottom.png" id="4_d75m4"]
 [ext_resource type="PackedScene" uid="uid://dog0l7qteqwmk" path="res://Objects/Components/AimingComponent.tscn" id="5_x148b"]
@@ -31,9 +31,8 @@ radius = 30.0
 collision_layer = 8
 collision_mask = 1572875
 motion_mode = 1
-script = ExtResource("1_snd2c")
+script = ExtResource("1_n73h5")
 physicsCollider = NodePath("Collider")
-unitInfo = ExtResource("2_4l8cc")
 deathExplosion = ExtResource("3_kbnna")
 mainSprite = NodePath("SpriteBottom")
 damageComponent = NodePath("DamageComponent")
@@ -87,7 +86,7 @@ damageComponent = NodePath("../DamageComponent")
 aiComponent = NodePath("../AiComponent")
 isAUnit = true
 selectedTexture = ExtResource("13_symev")
-unitInfo = ExtResource("2_4l8cc")
+unitInfo = ExtResource("2_ldeif")
 
 [node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
 shape = SubResource("CircleShape2D_j4oht")

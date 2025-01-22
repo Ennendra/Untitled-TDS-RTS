@@ -1,7 +1,7 @@
 [gd_scene load_steps=24 format=3 uid="uid://dde4d5v8fc1f0"]
 
 [ext_resource type="Script" path="res://Scripts/Units/Unit1.cs" id="1_ufsob"]
-[ext_resource type="Resource" uid="uid://bb2ewtpnqjdv1" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_Unit1.tres" id="2_i5y1b"]
+[ext_resource type="Resource" uid="uid://cg21k5ki3ef57" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_Unit3.tres" id="2_5jl1p"]
 [ext_resource type="PackedScene" uid="uid://bcoihity33l5c" path="res://Objects/Other/ExplosionSmall.tscn" id="3_klews"]
 [ext_resource type="Texture2D" uid="uid://hkotgqc1olk7" path="res://Textures/FX/HoverEffect.png" id="4_dcyeg"]
 [ext_resource type="Texture2D" uid="uid://tpkpp8ile1pg" path="res://Textures/Units/Unit3/Unit3Bottom.png" id="4_f8v6p"]
@@ -33,9 +33,9 @@ radius = 30.0
 [node name="Unit3" type="CharacterBody2D" node_paths=PackedStringArray("physicsCollider", "mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "movementComponent", "sightComponent") groups=["Unit"]]
 collision_layer = 8
 collision_mask = 1048587
+motion_mode = 1
 script = ExtResource("1_ufsob")
 physicsCollider = NodePath("Collider")
-unitInfo = ExtResource("2_i5y1b")
 deathExplosion = ExtResource("3_klews")
 mainSprite = NodePath("SpriteBottom")
 damageComponent = NodePath("DamageComponent")
@@ -98,7 +98,7 @@ damageComponent = NodePath("../DamageComponent")
 aiComponent = NodePath("../AiComponent")
 isAUnit = true
 selectedTexture = ExtResource("13_hkog0")
-unitInfo = ExtResource("2_i5y1b")
+unitInfo = ExtResource("2_5jl1p")
 
 [node name="Collider" type="CollisionShape2D" parent="FactionComponent"]
 shape = SubResource("CircleShape2D_j4oht")

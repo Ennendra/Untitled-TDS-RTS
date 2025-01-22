@@ -34,7 +34,6 @@ script = ExtResource("1_npw5l")
 spriteAimCursor = NodePath("AimingComponent/AimingCursor")
 weaponFolder = NodePath("AimingComponent/Weapons")
 toolFolder = NodePath("AimingComponent/Tools")
-unitInfo = ExtResource("2_g2wy7")
 deathExplosion = ExtResource("3_ttisl")
 mainSprite = NodePath("BottomSprite")
 damageComponent = NodePath("DamageComponent")
@@ -108,6 +107,7 @@ rotationSpeedDegrees = 240.0
 damageComponent = NodePath("../DamageComponent")
 isAUnit = true
 isPlayer = true
+unitInfo = ExtResource("2_g2wy7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FactionComponent"]
 shape = SubResource("CircleShape2D_pk0mf")

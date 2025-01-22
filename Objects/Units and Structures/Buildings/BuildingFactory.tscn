@@ -32,7 +32,6 @@ buildingType = 6
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
 constructorComponent = NodePath("ConstructorComponent")
 factoryComponent = NodePath("FactoryComponent")
-unitInfo = ExtResource("5_sg0tp")
 deathExplosion = ExtResource("4_nut8k")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")

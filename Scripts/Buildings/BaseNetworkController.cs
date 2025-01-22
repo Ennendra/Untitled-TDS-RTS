@@ -17,21 +17,30 @@ public partial class BaseNetworkController : Area2D
 
     public void OnBodyEntered(Node2D body)
     {
-        BuildingParent buildingCast = (BuildingParent)body;
+        //check that the collision is a building (it could otherwise be a blueprint, which we want to ignore)
+        if (body.IsInGroup("Building")) {
+            BuildingParent buildingCast = (BuildingParent)body;
 
-        if (buildingCast.GetFactionComponent().faction == GetNetworkFaction())
-        {
-            buildingCast.AddToNetwork(this);
+            if (buildingCast.GetFactionComponent().faction == GetNetworkFaction())
+            {
+                buildingCast.AddToNetwork(this);
+            }
         }
+
+        
     }
 
     public void OnBodyExited(Node2D body)
     {
-        BuildingParent buildingCast = (BuildingParent)body;
-
-        if (buildingCast.GetFactionComponent().faction == GetNetworkFaction())
+        //check that the collision is a building (it could otherwise be a blueprint, which we want to ignore)
+        if (body.IsInGroup("Building"))
         {
-            buildingCast.RemoveFromNetwork(this);
+            BuildingParent buildingCast = (BuildingParent)body;
+
+            if (buildingCast.GetFactionComponent().faction == GetNetworkFaction())
+            {
+                buildingCast.RemoveFromNetwork(this);
+            }
         }
     }
 }

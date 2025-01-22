@@ -7,9 +7,6 @@ public partial class CombatantParent : CharacterBody2D
 {
     public MinimapMarkerComponent markerComponent { get; protected set; }
 
-    [ExportCategory("Unit Information Resource")]
-    [Export] protected UnitInfo unitInfo;
-
     [ExportCategory("Death Items")]
     [Export] protected PackedScene deathExplosion;
 
@@ -39,9 +36,8 @@ public partial class CombatantParent : CharacterBody2D
         if (factionOverride != 0) { factionComponent.faction = factionOverride; }
 
         //Define damagecomponent values
-        damageComponent.SetReclaimValue(unitInfo.energyCost, unitInfo.metalCost);
-        damageComponent.SetMaxHealth(unitInfo.maxHealth);
-        damageComponent.SetHealthPercentage(100);
+
+        CallDeferred("SetUnitInfo");
         damageComponent.SetHealthbarOffset(GetUnitRadius());
         damageComponent.toolRangeGrace = GetUnitRadius();
 
@@ -50,6 +46,13 @@ public partial class CombatantParent : CharacterBody2D
         Connect("OnDamageKill", new Callable(this, "OnDamageKill"));
         AddUserSignal("OnReclaimKill");
         Connect("OnReclaimKill", new Callable(this, "OnReclaimKill"));
+    }
+
+    public void SetUnitInfo()
+    {
+        damageComponent.SetReclaimValue(factionComponent.unitInfo.energyCost, factionComponent.unitInfo.metalCost);
+        damageComponent.SetMaxHealth(factionComponent.unitInfo.maxHealth);
+        damageComponent.SetHealthPercentage(100);
     }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
