@@ -8,6 +8,29 @@ public enum PlayerState
 	BUILDPLACING,
 }
 
+//A reference to buildings in the players build queue and how much they have been supplied
+public struct BuildingQueue 
+{
+    UnitInfo building;
+    float energySupplied;
+    float metalSupplied;
+
+    public BuildingQueue(UnitInfo building, float energySupplied, float metalSupplied)
+    {
+        this.building = building;
+        this.energySupplied = energySupplied;
+        this.metalSupplied = metalSupplied;
+    }
+
+    public BuildingQueue(UnitInfo building)
+    {
+        this.building = building;
+        this.energySupplied = 0;
+        this.metalSupplied = 0;
+    }
+}
+
+
 public partial class Player : CombatantParent
 {
     PlayerState state = PlayerState.COMBAT;
@@ -24,15 +47,21 @@ public partial class Player : CombatantParent
     //0=energy generation, 1=metal generation
     public int[] resourceUITick { get; protected set; } = new int[6];
 
-	//nodes for tools and weapons
-	[Export] Node2D weaponFolder, toolFolder;
+    //The buildings the player has queued
+    public BuildingQueue[] buildingQueue = new BuildingQueue[5];
+
+    //nodes for tools and weapons
+    [Export] Node2D weaponFolder, toolFolder;
 	List<WeaponParent> weapons = new();
     List<ToolParent> tools = new();
+    
     //Determines whether we can't shoot weapons. Used to prevent weapons firing after placing a building
     public bool weaponsDisabled = false;
     //Determines whether the mouse is over the UI while the LMB is *not* pressed. This should allow for the player weapon to fire if they were holding the button down
     //when starting to hover over UI
     bool uiInputCheck = false;
+
+
     
 	//General process functions
     public override void _Ready()
