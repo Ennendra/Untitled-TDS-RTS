@@ -12,9 +12,10 @@ public partial class ConstructorComponent : Area2D
 	float currentMetalConsumptionRate, currentEnergyConsumptionRate;
 	float currentPerformance = 1;
 
-    //Whether we are attached to a network
-    //public bool isAttachedToNetwork = false;
+	//Whether we are attached to a network
+	//public bool isAttachedToNetwork = false;
 
+	public BuildingQueue buildQueueTarget; //Any items in a players building queue that the tool may supply to
     public BlueprintParent blueprintTarget; //blueprints that this tool may be supplying to build
 	public FactoryComponent factoryTarget; //factories that this tool may help build units for
 	public FactionComponent miscUnitTarget;
@@ -39,6 +40,10 @@ public partial class ConstructorComponent : Area2D
         else if (IsInstanceValid(miscUnitTarget) && isActive)
         {
             SupplyMiscUnit((float)delta);
+        }
+        else if (buildQueueTarget!=null && isActive)
+        {
+            SupplyBuildQueue((float)delta);
         }
         else
 		{
@@ -83,6 +88,16 @@ public partial class ConstructorComponent : Area2D
         currentMetalConsumptionRate = maxSupplyRate * supplyRatio[1];
 
         miscUnitTarget.ReceiveHealingSupply(currentEnergyConsumptionRate * currentPerformance * delta, currentMetalConsumptionRate * currentPerformance * delta);
+    }
+	public void SupplyBuildQueue(float delta)
+	{
+		float[] supplyRatio = buildQueueTarget.GetEnergyMetalRatio();
+
+        currentEnergyConsumptionRate = maxSupplyRate * supplyRatio[0];
+        currentMetalConsumptionRate = maxSupplyRate * supplyRatio[1];
+
+		buildQueueTarget.SupplyResources(currentEnergyConsumptionRate * currentPerformance * delta, currentMetalConsumptionRate * currentPerformance * delta);
+
     }
     //Sets new performance multiplier, returns the change in energy and metal consumption as a result of the change
     public float[] SetNewPerformance(float newPerformance)

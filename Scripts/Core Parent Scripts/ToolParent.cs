@@ -27,7 +27,7 @@ public partial class ToolParent : Node2D
 	[Export] protected FactionComponent factionComponent;
     [ExportCategory("Tool Traits")]
     [Export] public ToolType toolType { get; private set; }
-	[Export] protected float toolRange;
+	[Export] public  float toolRange { get; private set; }
 
     protected bool isActive;
 
@@ -38,15 +38,17 @@ public partial class ToolParent : Node2D
 	public virtual void UseTool()
 	{
 		//Change code here for each respective tool
-		isActive = true;
+	}
+	public virtual void ToggleToolActivation()
+	{
+		if (isActive)
+			{ isActive = false; }
+		else 
+			{ isActive = true; }
 	}
 	public virtual void StopTool()
 	{
 		isActive = false;
-	}
-	public virtual void SetToolTarget(Node2D target)
-	{
-		//Change code here for child tools. Can cast the target to the needed class there
 	}
 
 	//Gets the layer that the linked faction component is linked to

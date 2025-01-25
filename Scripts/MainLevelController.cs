@@ -65,6 +65,8 @@ public partial class MainLevelController : Node2D
     int playerFaction = 1;
 	MainUI mainUI;
     RTSController rtsController;
+    //Which building in the player's build queue is selected to deploy between 0-4. -1 = none selected
+    int buildQueueSelected = -1;
 
     //Timer-based variables to prevent certain items ticking every frame
     //Minimap update timer
@@ -494,6 +496,7 @@ public partial class MainLevelController : Node2D
         }
     }
 
+
     //Setting the pause state
     public void PauseGame()
     {
@@ -526,6 +529,7 @@ public partial class MainLevelController : Node2D
     }
 
     //Input functions
+    //Control Group interaction in RTS mode
     public void ProcessControlGroupInputs()
     {
         int controlGroupSelected = -1;
@@ -573,9 +577,40 @@ public partial class MainLevelController : Node2D
         if (Input.IsActionJustPressed("MinimapZoomIncrease")) mainUI.GetMinimap().IncreaseZoomLevel();
         if (Input.IsActionJustPressed("MinimapZoomDecrease")) mainUI.GetMinimap().DecreaseZoomLevel();
     }
+    public void ProcessBuildingQueueInputs()
+    {
+        //TODO - Setting/Rebinding inputs in inputmap for selecting 1-5
+        //When hitting the button, run the OnBuildQueueSelect function on their repective index
+    }
+
+    //Selecting a building in the build queue (including button signals)
+    public void OnBuildQueueSelect(int index)
+    {
+        //TODO - Toggle which building is selected for deployment
+        //First, check whether that building index is already selected. If it is, deselect it (set value to -1)
+        //If not, then check that the building is ready to deploy (via a function in the player script)
+        //If so, select that building index
+
+        //Deselect the building to deploy if it's already selected
+        if (buildQueueSelected == index) 
+        { 
+            ResetBuildQueueSelect(); 
+        }
+        else
+        {
+            if (player.IsBuildingReady(index))
+            {
+                buildQueueSelected = index;
+            }
+        }
+    }
+
+    public void ResetBuildQueueSelect()
+    {
+        buildQueueSelected = -1;
+    }
 
     //Selecting a control group (And the control group button signal)
-
     public void OnControlGroupSelect(int index)
     {
         bool isAdditive = false;

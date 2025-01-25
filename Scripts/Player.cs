@@ -9,11 +9,13 @@ public enum PlayerState
 }
 
 //A reference to buildings in the players build queue and how much they have been supplied
-public struct BuildingQueue 
+public class BuildingQueue 
 {
-    UnitInfo building;
-    float energySupplied;
-    float metalSupplied;
+    public UnitInfo building;
+    public float energySupplied;
+    public float metalSupplied;
+    public float totalSupplied { get => energySupplied + metalSupplied; }
+    public float totalCost { get => building.energyCost + building.metalCost; }
 
     public BuildingQueue(UnitInfo building, float energySupplied, float metalSupplied)
     {
@@ -28,7 +30,30 @@ public struct BuildingQueue
         this.energySupplied = 0;
         this.metalSupplied = 0;
     }
+
+    public float[] GetEnergyMetalRatio()
+    {
+        float[] ratio = new float[2] { 1, 1 };
+        float energyAmount, metalAmount;
+        if (building.metalCost > 0) { energyAmount = building.energyCost / building.metalCost; } else { energyAmount = 1; }
+        if (building.energyCost > 0) { metalAmount = building.metalCost / building.energyCost; } else { metalAmount = 1; }
+
+        if (energyAmount < 1) { ratio[0] = energyAmount; }
+        if (metalAmount < 1) { ratio[1] = metalAmount; }
+
+        return ratio;
+    }
+    public void SupplyResources(float energy, float metal)
+    {
+        energySupplied += energy;
+        metalSupplied += metal;
+
+        float costPercentSupplied = (energy + metal) / totalCost;
+    }
 }
+
+
+
 
 
 public partial class Player : CombatantParent
@@ -153,6 +178,18 @@ public partial class Player : CombatantParent
             }
             else aimComponent.StopTool();
         }
+    }
+    //Checks the buildingQueue item at the specified index and checks that it's ready to deploy (ie. all resources supplied)
+    public bool IsBuildingReady(int index)
+    {
+        if (buildingQueue[index] != null)
+        {
+            if (buildingQueue[index].totalSupplied >= buildingQueue[index].totalCost)
+            {
+                return true;
+            }
+        }
+        return false;
     }
     public bool IsLevelControllerSet()
     {

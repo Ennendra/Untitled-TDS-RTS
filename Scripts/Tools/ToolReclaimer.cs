@@ -17,31 +17,48 @@ public partial class ToolReclaimer : ToolParent
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        //Reset the target in case the target changes or dies
+        resourceComponent.SetNewGenerationValues(new float[2] { 0, 0 });
+
         if (isActive)
         {
-            if (particles != null)
+            if (IsInstanceValid(toolTarget))
             {
-                particles.GlobalRotation = GlobalRotation;
-                particles.Emitting = true;
-            }
+                if (toolTarget.GlobalPosition.DistanceTo(GlobalPosition) <= (toolRange + toolTarget.toolRangeGrace))
+                {
+                    //Set the resource generation from the target's cost values
+                    float[] ratio = toolTarget.GetEnergyMetalRatio();
+                    float[] resourceReclaimRate = new float[2] { maxReclaimRate * ratio[0], maxReclaimRate * ratio[1] };
+                    resourceComponent.SetNewGenerationValues(resourceReclaimRate);
 
-            //Set the damage the component we are reclaiming takes
-            float targetDamagePerSecond = 0;
-            if (resourceComponent.GenEnergy > 0) //If we are generating energy from the reclaiming (ie. the target has an energy reclaim value)
-            {
-                float healthToResourceRatio = toolTarget.maxHealth / toolTarget.energyReclaimValue;
-                targetDamagePerSecond = resourceComponent.GenEnergy * healthToResourceRatio;
+                    //Set the damage the component we are reclaiming takes
+                    float targetDamagePerSecond = 0;
+                    if (resourceComponent.GenEnergy > 0) //If we are generating energy from the reclaiming (ie. the target has an energy reclaim value)
+                    {
+                        float healthToResourceRatio = toolTarget.maxHealth / toolTarget.energyReclaimValue;
+                        targetDamagePerSecond = resourceComponent.GenEnergy * healthToResourceRatio;
+                    }
+                    else //If no energy to reclaim, there must be metal instead
+                    {
+                        float healthToResourceRatio = toolTarget.maxHealth / toolTarget.metalReclaimValue;
+                        targetDamagePerSecond = resourceComponent.GenMetal * healthToResourceRatio;
+                    }
+                    toolTarget.TakeDamage(targetDamagePerSecond * (float)delta, DamageType.RECLAIMING);
+
+                    //Emit particles from the tool if applicable
+                    if (particles != null)
+                    {
+                        particles.GlobalRotation = GlobalRotation;
+                        particles.Emitting = true;
+                    }
+                }
+                else { ResetTarget(); } //Target out of range, reset
             }
-            else //If no energy to reclaim, there must be metal instead
-            {
-                float healthToResourceRatio = toolTarget.maxHealth / toolTarget.metalReclaimValue;
-                targetDamagePerSecond = resourceComponent.GenMetal * healthToResourceRatio;
-            }
-            toolTarget.TakeDamage(targetDamagePerSecond * (float)delta, DamageType.RECLAIMING);
+            else { ResetTarget(); } //Target no longer valid (ie, dead), reset
         }
-        else
+        else //Tool disabled, reset
         {
-            if (particles != null) { particles.Emitting = false; }
+            ResetTarget();
         }
     }
 
@@ -56,7 +73,6 @@ public partial class ToolReclaimer : ToolParent
         //If hitting something, set resourceComponent values to a new amount (check ratios on damagecomponent values)
         //Have the entity take reclaim damage porportional to resources taken
 
-
         //reset the values, in case the tool is being used but the target is different or no longer available
         StopTool();
 
@@ -67,7 +83,7 @@ public partial class ToolReclaimer : ToolParent
         var spaceState = GetWorld2D().DirectSpaceState;
         PhysicsPointQueryParameters2D pointCast = new();
         pointCast.Position = targetPoint;
-        pointCast.CollisionMask = 896; //The collision mask for all 3 faction damage components
+        pointCast.CollisionMask = GetAlliedFactionLayer() + 4; //The collision mask for allied components and 'wreckage'
         pointCast.CollideWithAreas = true;
 
         var collisionResult = spaceState.IntersectPoint(pointCast);
@@ -86,19 +102,19 @@ public partial class ToolReclaimer : ToolParent
                     {
                         isActive = true;
                         toolTarget = targetComponent;
-
-                        float[] ratio = targetComponent.GetEnergyMetalRatio();
-                        float[] resourceReclaimRate = new float[2] { maxReclaimRate * ratio[0], maxReclaimRate * ratio[1] };
-                        resourceComponent.SetNewGenerationValues(resourceReclaimRate);
                     }
 
                 }
             }
         }
     }
-    public override void StopTool()
+
+    public void ResetTarget()
     {
-        isActive = false;
+        toolTarget = null;
         resourceComponent.SetNewGenerationValues(new float[2] { 0, 0 });
+
+        //Disable particles
+        if (particles != null) { particles.Emitting = false; }
     }
 }
