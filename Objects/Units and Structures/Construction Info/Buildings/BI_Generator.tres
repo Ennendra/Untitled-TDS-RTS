@@ -1,12 +1,12 @@
 [gd_resource type="Resource" load_steps=4 format=3 uid="uid://yjs4iloqmg2i"]
 
-[ext_resource type="PackedScene" uid="uid://300ve28l4onj" path="res://Objects/Units and Structures/Buildings/Blueprints/BlueprintGenerator.tscn" id="2_2uk7c"]
+[ext_resource type="PackedScene" uid="uid://po7nu1qpdrka" path="res://Objects/Units and Structures/Buildings/BuildingGenerator.tscn" id="1_djgba"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/Construction Info/ConstructInfo.cs" id="3_l335b"]
 [ext_resource type="Resource" uid="uid://b2wria38uo7gh" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Generator.tres" id="3_r8hh0"]
 
 [resource]
 script = ExtResource("3_l335b")
-objectToSpawn = ExtResource("2_2uk7c")
+objectToSpawn = ExtResource("1_djgba")
 type = 2
 objectGridSize = Vector2(3, 3)
 unitInfo = ExtResource("3_r8hh0")

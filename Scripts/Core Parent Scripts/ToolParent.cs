@@ -29,7 +29,7 @@ public partial class ToolParent : Node2D
     [Export] public ToolType toolType { get; private set; }
 	[Export] public  float toolRange { get; private set; }
 
-    protected bool isActive;
+	protected bool isActive = true;
 
 	public ResourceComponent GetResourceComponent() { return resourceComponent; }
 	public ConstructorComponent GetConstructorComponent() { return constructorComponent; }

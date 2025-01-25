@@ -20,7 +20,6 @@ collision_mask = 16384
 script = ExtResource("1_6f487")
 buildingType = 1
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
-unitInfo = ExtResource("5_2oyh4")
 deathExplosion = ExtResource("3_vqyc0")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")

@@ -81,12 +81,16 @@ public partial class ToolBuilder : ToolParent
             }
             else //No direct target, see about working on the build queue instead
             {
-				//Only supply if the building still requires supply
-                if (buildQueueTarget.totalSupplied < buildQueueTarget.totalCost)
+				if (buildQueueTarget!=null)
 				{
-					constructorComponent.buildQueueTarget = buildQueueTarget;
-                    constructorComponent.isActive = true;
+                    //Only supply if the building still requires supply
+                    if (buildQueueTarget.totalSupplied < buildQueueTarget.totalCost)
+                    {
+                        constructorComponent.buildQueueTarget = buildQueueTarget;
+                        constructorComponent.isActive = true;
+                    }
                 }
+				
             }
         }
 		else //tool is disabled, reset
@@ -142,6 +146,12 @@ public partial class ToolBuilder : ToolParent
             }
         }
     }
+
+	public void SetBuildQueueTarget(BuildingQueue target)
+	{
+		buildQueueTarget = target;
+    }
+
 
 	public void ResetConstructorComponent()
 	{

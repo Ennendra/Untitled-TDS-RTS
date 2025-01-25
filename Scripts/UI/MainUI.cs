@@ -14,6 +14,8 @@ public partial class MainUI : CanvasLayer
 	UI_ResourceTracker resourceTracker;
 	//PersonalToolbar
 	UI_PersonalToolbar personalToolbar;
+    //Build Queue bar
+    UI_BuildQueueBar buildQueueBar;
 	//Build Placement Ghost
 	[Export] PackedScene ghostPlacementScene;
 	UI_BuildPlacement buildPlacementGhost;
@@ -32,6 +34,7 @@ public partial class MainUI : CanvasLayer
 	public override void _Ready()
 	{
 		resourceTracker = GetNode<UI_ResourceTracker>("UI_ResourceTracker");
+		buildQueueBar = GetNode<UI_BuildQueueBar>("UI_BuildQueueBar");
 		personalToolbar = GetNode<UI_PersonalToolbar>("UI_PersonalToolbar");
 		rtsToolbar = GetNode<UI_RTSToolbar>("UI_RTSToolbar");
 		controlGroupBar = GetNode<UI_RTSControlGroupBar>("UI_ControlGroupBar");
@@ -82,6 +85,7 @@ public partial class MainUI : CanvasLayer
 		//The buttons to select a building to place
         personalToolbar.SetBuildButtonConnection(connection);
         rtsToolbar.SetBuildButtonConnection(connection);
+		buildQueueBar.SetBuildButtonConnection(connection);
 		//The buttons to select a unit to build when a factory is selected
         rtsToolbar.SetFactoryBuildButtonConnection(connection);
 		//The buttons that display the selected units
@@ -125,6 +129,7 @@ public partial class MainUI : CanvasLayer
 
 	//Functions for other scripts to get the specific UI modules
 	public UI_ResourceTracker GetResourceTracker() { return resourceTracker; }
+	public UI_BuildQueueBar GetBuildQueueBar() { return buildQueueBar; }
 	public UI_PersonalToolbar GetPersonalToolbar() { return personalToolbar; }
 	public UI_RTSToolbar GetRTSToolbar() { return rtsToolbar; }
 	public UI_RTSControlGroupBar GetControlGroupBar() { return controlGroupBar; }

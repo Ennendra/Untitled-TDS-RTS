@@ -1,12 +1,12 @@
 [gd_resource type="Resource" load_steps=4 format=3 uid="uid://uuwgt6j15354"]
 
-[ext_resource type="PackedScene" uid="uid://bln8plmd8bvml" path="res://Objects/Units and Structures/Buildings/Blueprints/BlueprintMiner.tscn" id="2_ufsmo"]
+[ext_resource type="PackedScene" uid="uid://b8wtdlbxd7cm6" path="res://Objects/Units and Structures/Buildings/BuildingMiner.tscn" id="1_o6b2d"]
 [ext_resource type="Resource" uid="uid://bko37qjwa3b3t" path="res://Objects/Units and Structures/Unit Info/Buildings/UInfo_Miner.tres" id="3_dc04p"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/Construction Info/ConstructInfo.cs" id="3_x3rtj"]
 
 [resource]
 script = ExtResource("3_x3rtj")
-objectToSpawn = ExtResource("2_ufsmo")
+objectToSpawn = ExtResource("1_o6b2d")
 type = 1
 objectGridSize = Vector2(2, 2)
 unitInfo = ExtResource("3_dc04p")

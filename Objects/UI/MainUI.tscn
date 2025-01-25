@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://de2gm8ancssa7"]
+[gd_scene load_steps=19 format=3 uid="uid://de2gm8ancssa7"]
 
 [ext_resource type="Script" path="res://Scripts/UI/MainUI.cs" id="1_jtxnd"]
 [ext_resource type="PackedScene" uid="uid://c5n86pfqwpxsp" path="res://Objects/UI/UI_BuildPlacement.tscn" id="2_1hj84"]
@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://cu2w63r68fdkm" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus_Hover.png" id="13_4uj1k"]
 [ext_resource type="Texture2D" uid="uid://bbjg2kwgfvp38" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus_Disabled.png" id="14_8v02w"]
 [ext_resource type="Texture2D" uid="uid://c5t3yasw17eje" path="res://Textures/UI/MainUIFramework/UI_Paused.png" id="16_637u1"]
+[ext_resource type="Script" path="res://Scripts/UI/UI_BuildQueueBar.cs" id="17_y4gxy"]
+[ext_resource type="PackedScene" uid="uid://c61mvnpso8205" path="res://Objects/UI/BuildQueueButton.tscn" id="18_2ya44"]
 
 [node name="MainUI" type="CanvasLayer"]
 process_mode = 3
@@ -69,55 +71,6 @@ texture_hover = ExtResource("13_4uj1k")
 texture_disabled = ExtResource("14_8v02w")
 
 [node name="UI_Minimap" parent="." instance=ExtResource("7_oqt4b")]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 2
-auto_translate_mode = 0
-editor_description = ""
-visible = true
-modulate = Color(1, 1, 1, 1)
-self_modulate = Color(1, 1, 1, 1)
-show_behind_parent = false
-top_level = false
-clip_children = 0
-light_mask = 1
-visibility_layer = 1
-z_index = 0
-z_as_relative = true
-y_sort_enabled = false
-texture_filter = 0
-texture_repeat = 0
-material = null
-use_parent_material = false
-clip_contents = false
-custom_minimum_size = Vector2(0, 0)
-layout_direction = 0
-layout_mode = 3
-offset_bottom = 0.0
-rotation = 0.0
-scale = Vector2(1, 1)
-pivot_offset = Vector2(0, 0)
-size_flags_horizontal = 1
-size_flags_vertical = 1
-size_flags_stretch_ratio = 1.0
-localize_numeral_system = true
-tooltip_text = ""
-focus_neighbor_left = NodePath("")
-focus_neighbor_top = NodePath("")
-focus_neighbor_right = NodePath("")
-focus_neighbor_bottom = NodePath("")
-focus_next = NodePath("")
-focus_previous = NodePath("")
-focus_mode = 0
-mouse_filter = 1
-mouse_force_pass_scroll_events = true
-mouse_default_cursor_shape = 0
-theme = null
-theme_type_variation = &""
 
 [node name="UI_Paused" type="TextureRect" parent="."]
 anchors_preset = 5
@@ -129,6 +82,39 @@ offset_right = 75.0
 offset_bottom = 300.0
 grow_horizontal = 2
 texture = ExtResource("16_637u1")
+
+[node name="UI_BuildQueueBar" type="Control" parent="." node_paths=PackedStringArray("buttons")]
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 70.0
+offset_bottom = 355.0
+grow_vertical = 2
+script = ExtResource("17_y4gxy")
+buttons = [NodePath("VBoxContainer/BuildQueueButton1"), NodePath("VBoxContainer/BuildQueueButton2"), NodePath("VBoxContainer/BuildQueueButton3"), NodePath("VBoxContainer/BuildQueueButton4"), NodePath("VBoxContainer/BuildQueueButton5")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI_BuildQueueBar"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="BuildQueueButton1" parent="UI_BuildQueueBar/VBoxContainer" instance=ExtResource("18_2ya44")]
+layout_mode = 2
+
+[node name="BuildQueueButton2" parent="UI_BuildQueueBar/VBoxContainer" instance=ExtResource("18_2ya44")]
+layout_mode = 2
+
+[node name="BuildQueueButton3" parent="UI_BuildQueueBar/VBoxContainer" instance=ExtResource("18_2ya44")]
+layout_mode = 2
+
+[node name="BuildQueueButton4" parent="UI_BuildQueueBar/VBoxContainer" instance=ExtResource("18_2ya44")]
+layout_mode = 2
+
+[node name="BuildQueueButton5" parent="UI_BuildQueueBar/VBoxContainer" instance=ExtResource("18_2ya44")]
+layout_mode = 2
 
 [connection signal="mouse_entered" from="UI_ResourceTracker" to="." method="OnMouseEntered"]
 [connection signal="mouse_exited" from="UI_ResourceTracker" to="." method="OnMouseExited"]

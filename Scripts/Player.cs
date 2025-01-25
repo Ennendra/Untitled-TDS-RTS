@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 public enum PlayerState
 {
@@ -11,20 +12,20 @@ public enum PlayerState
 //A reference to buildings in the players build queue and how much they have been supplied
 public class BuildingQueue 
 {
-    public UnitInfo building;
+    public ConstructInfo building;
     public float energySupplied;
     public float metalSupplied;
     public float totalSupplied { get => energySupplied + metalSupplied; }
-    public float totalCost { get => building.energyCost + building.metalCost; }
+    public float totalCost { get => building.unitInfo.energyCost + building.unitInfo.metalCost; }
 
-    public BuildingQueue(UnitInfo building, float energySupplied, float metalSupplied)
+    public BuildingQueue(ConstructInfo building, float energySupplied, float metalSupplied)
     {
         this.building = building;
         this.energySupplied = energySupplied;
         this.metalSupplied = metalSupplied;
     }
 
-    public BuildingQueue(UnitInfo building)
+    public BuildingQueue(ConstructInfo building)
     {
         this.building = building;
         this.energySupplied = 0;
@@ -35,8 +36,8 @@ public class BuildingQueue
     {
         float[] ratio = new float[2] { 1, 1 };
         float energyAmount, metalAmount;
-        if (building.metalCost > 0) { energyAmount = building.energyCost / building.metalCost; } else { energyAmount = 1; }
-        if (building.energyCost > 0) { metalAmount = building.metalCost / building.energyCost; } else { metalAmount = 1; }
+        if (building.unitInfo.metalCost > 0) { energyAmount = building.unitInfo.energyCost / building.unitInfo.metalCost; } else { energyAmount = 1; }
+        if (building.unitInfo.energyCost > 0) { metalAmount = building.unitInfo.metalCost / building.unitInfo.energyCost; } else { metalAmount = 1; }
 
         if (energyAmount < 1) { ratio[0] = energyAmount; }
         if (metalAmount < 1) { ratio[1] = metalAmount; }
@@ -51,10 +52,6 @@ public class BuildingQueue
         float costPercentSupplied = (energy + metal) / totalCost;
     }
 }
-
-
-
-
 
 public partial class Player : CombatantParent
 {
@@ -73,12 +70,13 @@ public partial class Player : CombatantParent
     public int[] resourceUITick { get; protected set; } = new int[6];
 
     //The buildings the player has queued
-    public BuildingQueue[] buildingQueue = new BuildingQueue[5];
-
+    public List<BuildingQueue> buildingQueue = new();
     //nodes for tools and weapons
     [Export] Node2D weaponFolder, toolFolder;
 	List<WeaponParent> weapons = new();
     List<ToolParent> tools = new();
+    //Define the build tool that is used for general buildqueue use
+    [Export] ToolBuilder buildTool;
     
     //Determines whether we can't shoot weapons. Used to prevent weapons firing after placing a building
     public bool weaponsDisabled = false;
@@ -91,6 +89,7 @@ public partial class Player : CombatantParent
 	//General process functions
     public override void _Ready()
 	{
+
         base._Ready();
 
         camera = GetNode<Camera2D>("Camera");
@@ -99,6 +98,7 @@ public partial class Player : CombatantParent
     }
 	public override void _Process(double delta)
 	{
+        //If not currently firing, disable mouse interactions if the mouse is over the player UI
         if (!Input.IsActionPressed("Personal_Use_Fire")) { uiInputCheck = playerUI.mouseOverUI; }
 
         if (IsLevelControllerSet())
@@ -118,7 +118,13 @@ public partial class Player : CombatantParent
             camera.Position = camera.Position.MoveToward(viewportTargetPos, cameraMovementAmount);
             
             SendHealthBarData();
+
+            
         }
+
+        //Check which building is currently active and send that object data to the building tool
+        BuildingQueue currentQueueItem = DetermineCurrentBuildQueueItem();
+        buildTool.SetBuildQueueTarget(currentQueueItem);
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -155,7 +161,6 @@ public partial class Player : CombatantParent
     {
         return aimComponent;
     }
-
     public void SetPlayerUI(MainUI playerUI)
 	{
 		this.playerUI = playerUI;
@@ -171,26 +176,58 @@ public partial class Player : CombatantParent
                 aimComponent.FireWeapons();
             }
 
-            if (Input.IsActionPressed("Personal_UseTool") && !uiInputCheck)
+            //if (Input.IsActionPressed("Personal_UseTool") && !uiInputCheck)
+            //{
+            //    //TODO: Check whether player UI is in the mouse point, and not fire if so
+            //    aimComponent.UseTool();
+            //}
+            if (Input.IsActionJustPressed("Personal_UseTool") && !uiInputCheck)
             {
-                //TODO: Check whether player UI is in the mouse point, and not fire if so
                 aimComponent.UseTool();
             }
-            else aimComponent.StopTool();
+            //else aimComponent.StopTool();
         }
+    }
+
+    //Functions related to the building queue ----
+    //Goes through each building in the queue in order to see if they are not ready to deploy and return that item
+    public BuildingQueue DetermineCurrentBuildQueueItem()
+    {
+        if (buildingQueue.Count == 0) { return null; }
+
+        for (int i = 0; i<buildingQueue.Count; i++)
+        {
+            if (buildingQueue[i] != null)
+            {
+                if (!IsBuildingReady(i)) { return buildingQueue[i]; }
+            }
+        }
+        return null;
     }
     //Checks the buildingQueue item at the specified index and checks that it's ready to deploy (ie. all resources supplied)
     public bool IsBuildingReady(int index)
     {
-        if (buildingQueue[index] != null)
+        if (buildingQueue[index].totalSupplied >= buildingQueue[index].totalCost)
         {
-            if (buildingQueue[index].totalSupplied >= buildingQueue[index].totalCost)
-            {
-                return true;
-            }
+            return true;
         }
         return false;
+    } 
+    public void AddBuildingToQueue(ConstructInfo newitem)
+    {
+        BuildingQueue newQueueItem = new BuildingQueue(newitem);
+        buildingQueue.Add(newQueueItem);
     }
+    public void RemoveBuildingFromQueue(BuildingQueue item)
+    {
+        buildingQueue.Remove(item);
+    }
+    public void RemoveBuildingQueueAtIndex(int index)
+    {
+        buildingQueue.RemoveAt(index);
+    }
+
+
     public bool IsLevelControllerSet()
     {
         if (IsInstanceValid(levelController))
@@ -220,6 +257,11 @@ public partial class Player : CombatantParent
     public FactionController GetFactionController()
     {
         return levelController.GetFactionController(factionComponent.faction - 1);
+    }
+
+    public void SetMainBuildTool(ToolBuilder buildTool)
+    {
+        this.buildTool = buildTool;
     }
 
     #region Signal Functions

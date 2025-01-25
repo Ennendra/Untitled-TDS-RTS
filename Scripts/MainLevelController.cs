@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using static Godot.WebSocketPeer;
 
 public enum LevelControllerPlayState
@@ -45,6 +46,7 @@ public partial class MainLevelController : Node2D
 
     //signals
     [Signal] public delegate void GetNewBuildInfoEventHandler(ConstructInfo buildInfo);
+    [Signal] public delegate void GetBuildQueueItemEventHandler(int index);
     //Signals when the select unit UI button on the RTS toolbar is pressed
     [Signal] public delegate void SelectThisUnitEventHandler(UnitInfo unitInfo);
     [Signal] public delegate void DeselectThisUnitEventHandler(UnitInfo unitInfo);
@@ -107,6 +109,7 @@ public partial class MainLevelController : Node2D
 	{
         //Set signal functions
         GetNewBuildInfo += OnNewBuildInfo;
+        GetBuildQueueItem += OnBuildQueueSelect;
         SelectThisUnit += SelectUnitOfType;
         DeselectThisUnit += DeselectUnitOfType;
         NewFactoryBuild += OnNewFactoryBuild;
@@ -305,19 +308,25 @@ public partial class MainLevelController : Node2D
 
         //Check whether we are in a build-placement state and set the UI to be visible accordingly
         CheckBuildPlacementVisibility();
+        
 
         //General inputs when in personal player mode
         if (playState == LevelControllerPlayState.PERSONALPLAYER)
         {
             globals.SetNewCustomCursor("Personal");
 
-            if (Input.IsActionJustPressed("Personal_SelectTool1")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(0); }
-            if (Input.IsActionJustPressed("Personal_SelectTool2")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(1); }
-            if (Input.IsActionJustPressed("Personal_SelectTool3")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(2); }
+            //Deprecating the equipment inputs. These will be replaced with building queue inputs
+            //if (Input.IsActionJustPressed("Personal_SelectTool1")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(0); }
+            //if (Input.IsActionJustPressed("Personal_SelectTool2")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(1); }
+            //if (Input.IsActionJustPressed("Personal_SelectTool3")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(2); }
 
-            if (Input.IsActionJustPressed("Personal_SelectWeapon1")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(3); }
-            if (Input.IsActionJustPressed("Personal_SelectWeapon2")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(4); }
-            if (Input.IsActionJustPressed("Personal_SelectWeapon3")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(5); }
+            //if (Input.IsActionJustPressed("Personal_SelectWeapon1")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(3); }
+            //if (Input.IsActionJustPressed("Personal_SelectWeapon2")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(4); }
+            //if (Input.IsActionJustPressed("Personal_SelectWeapon3")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(5); }
+
+            ProcessBuildingQueueInputs();
+
+
             if (personalPlayState == PersonalPlayState.STANDARD)
             {
                 if (!GetTree().Paused) { player.CheckMouseInputs(); }
@@ -496,6 +505,10 @@ public partial class MainLevelController : Node2D
         }
     }
 
+    public void SetBuildPlacementItem()
+    {
+
+    }
 
     //Setting the pause state
     public void PauseGame()
@@ -581,33 +594,54 @@ public partial class MainLevelController : Node2D
     {
         //TODO - Setting/Rebinding inputs in inputmap for selecting 1-5
         //When hitting the button, run the OnBuildQueueSelect function on their repective index
+
+        int buildQueueInputIndex = -1;
+        if (Input.IsActionJustPressed("Personal_SelectBQ1")) { buildQueueInputIndex = 0; }
+        if (Input.IsActionJustPressed("Personal_SelectBQ2")) { buildQueueInputIndex = 1; }
+        if (Input.IsActionJustPressed("Personal_SelectBQ3")) { buildQueueInputIndex = 2; }
+        if (Input.IsActionJustPressed("Personal_SelectBQ4")) { buildQueueInputIndex = 3; }
+        if (Input.IsActionJustPressed("Personal_SelectBQ5")) { buildQueueInputIndex = 4; }
+
+        if (buildQueueInputIndex!=-1)
+        {
+            //Execute the signal function for selecting the build queue item
+            OnBuildQueueSelect(buildQueueInputIndex);
+        }
+
     }
 
-    //Selecting a building in the build queue (including button signals)
+    //Selecting a building in the build queue
+    //This can be triggered either by hotkeys or the build queue buttons
     public void OnBuildQueueSelect(int index)
     {
-        //TODO - Toggle which building is selected for deployment
-        //First, check whether that building index is already selected. If it is, deselect it (set value to -1)
-        //If not, then check that the building is ready to deploy (via a function in the player script)
-        //If so, select that building index
 
-        //Deselect the building to deploy if it's already selected
-        if (buildQueueSelected == index) 
-        { 
-            ResetBuildQueueSelect(); 
-        }
-        else
+        //Only set building placement if in the personal player mode
+        if (playState == LevelControllerPlayState.PERSONALPLAYER)
         {
-            if (player.IsBuildingReady(index))
+            //Deselect the item if it was already selected
+            if (buildQueueSelected == index || index > player.buildingQueue.Count-1)
             {
-                buildQueueSelected = index;
+                ResetBuildQueueSelect();
+            }
+            else
+            {
+                //Prepare the building for placement if it is ready
+                if (player.IsBuildingReady(index))
+                {
+                    buildQueueSelected = index;
+                    mainUI.GetBuildPlacementGhost().SetNewBuildInfo(player.buildingQueue[index]);
+                    SetPersonalPlayState(PersonalPlayState.BUILDPLACEMENT);
+                }
             }
         }
+        
     }
 
     public void ResetBuildQueueSelect()
     {
         buildQueueSelected = -1;
+        mainUI.GetBuildQueueBar().UpdateButtonQueueInfo(player.buildingQueue);
+        SetStateToStandard();
     }
 
     //Selecting a control group (And the control group button signal)
@@ -643,27 +677,29 @@ public partial class MainLevelController : Node2D
             else mainUI.SetBuildGhostVisibility(false);
         }
     }
+
     public void ProcessBuildPlacementChecks()
     {
+        //TODO: Ensure this function places the building 
         mainUI.ProcessBuildingPlacement(GetGlobalMousePosition());
 
         if (!mainUI.mouseOverUI)
         {
             if (Input.IsActionJustPressed("PlaceBuilding"))
             {
+                //If returning true, the building will be placed in that function
                 if (mainUI.AttemptBuildingPlacement())
                 {
-                    UpdateResourceUI(true);
-                    if (!Input.IsKeyPressed(Key.Shift))
-                    {
-                        SetStateToStandard();
-                    }
+                    //Remove the building from the build queue now that it is placed
+                    //POSSIBLE TODO - When pressing shift, will find the next item in the queue that is ready
+                    player.RemoveBuildingQueueAtIndex(buildQueueSelected);
+                    ResetBuildQueueSelect();
                 }
             }
         }
         if (Input.IsActionJustPressed("CancelBuildPlacement"))
         {
-            SetStateToStandard();
+            ResetBuildQueueSelect();
         }
     }
     public void SetStateToStandard()
@@ -717,7 +753,6 @@ public partial class MainLevelController : Node2D
             case PersonalPlayState.STANDARD: { player.SetPlayerState(PlayerState.COMBAT); break; }
             case PersonalPlayState.BUILDPLACEMENT: { player.SetPlayerState(PlayerState.BUILDPLACING); break; }
         }
-
     }
     public void SetRTSPlayState(RTSPlayState state)
     {
@@ -1028,15 +1063,26 @@ public partial class MainLevelController : Node2D
     //Signal for when a button for placing a building is pressed
     public void OnNewBuildInfo(ConstructInfo buildInfo)
     {
-        mainUI.GetBuildPlacementGhost().SetNewBuildInfo(buildInfo);
-        if (playState == LevelControllerPlayState.PERSONALPLAYER)
+        //Add an item to the player's build queue if able
+        if (IsInstanceValid(player))
         {
-            SetPersonalPlayState(PersonalPlayState.BUILDPLACEMENT);
+            if (player.buildingQueue.Count < 5)
+            {
+                player.AddBuildingToQueue(buildInfo);
+                mainUI.GetBuildQueueBar().UpdateButtonQueueInfo(player.buildingQueue);
+            }
         }
-        else if (playState == LevelControllerPlayState.RTSCOMMAND)
-        {
-            SetRTSPlayState(RTSPlayState.BUILDPLACEMENT);
-        }
+
+        //Old deprecated build function
+        //mainUI.GetBuildPlacementGhost().SetNewBuildInfo(buildInfo);
+        //if (playState == LevelControllerPlayState.PERSONALPLAYER)
+        //{
+        //    SetPersonalPlayState(PersonalPlayState.BUILDPLACEMENT);
+        //}
+        //else if (playState == LevelControllerPlayState.RTSCOMMAND)
+        //{
+        //    SetRTSPlayState(RTSPlayState.BUILDPLACEMENT);
+        //}
     }
     //Signals to relay to the RTS controller when selecting or deselecting units from the UI
     public void SelectUnitOfType(UnitInfo unitType)

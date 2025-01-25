@@ -4,7 +4,7 @@ using System;
 public partial class UI_BuildPlacement : Sprite2D
 {
     //Variables related to building
-    ConstructInfo currentBuildingInfo;
+    BuildingQueue currentBuildingInfo;
     Vector2 buildLocation = new Vector2(-1, -1);
     Vector2 gridOffset = new Vector2(0, 0);
     BaseNetworkController buildingPlacementNetwork;
@@ -30,7 +30,7 @@ public partial class UI_BuildPlacement : Sprite2D
     {
         string buildPlacementStatus = CheckBuildingPlacement(factionLink, buildLocationCheck);
 
-        SetBuildGhostPosition(buildLocation, new Vector2(0, 25 + ((currentBuildingInfo.objectGridSize.Y - 1) * 25)));
+        SetBuildGhostPosition(buildLocation, new Vector2(0, 25 + ((currentBuildingInfo.building.objectGridSize.Y - 1) * 25)));
         SetBuildGhostText(buildPlacementStatus);
 
         if (isBuildPlacementValid)
@@ -51,25 +51,24 @@ public partial class UI_BuildPlacement : Sprite2D
         //Checks a collision rectangle based on the radius for buildings and compiles them
         var spaceState = GetWorld2D().DirectSpaceState;
 
-        //Check that we have enough resources on hand to place the building
-        float[] costRequired = new float[2] { currentBuildingInfo.unitInfo.energyCost / 10, currentBuildingInfo.unitInfo.metalCost / 10 };
-        float[] storageOnHand;
-
-        storageOnHand = factionLink.GetCurrentStorage();
-
-        if (storageOnHand[0] < costRequired[0] && storageOnHand[1] < costRequired[1])
-            return "More Energy and Metal required!";
-        else if (storageOnHand[0] < costRequired[0])
-            return "More Energy required!";
-        else if (storageOnHand[1] < costRequired[1])
-            return "More Metal required!";
+        //Deprecated section -- Used in old building and used 10% of cost when placing
+        ////Check that we have enough resources on hand to place the building
+        //float[] costRequired = new float[2] { currentBuildingInfo.building.unitInfo.energyCost / 10, currentBuildingInfo.building.unitInfo.metalCost / 10 };
+        //float[] storageOnHand;
+        //storageOnHand = factionLink.GetCurrentStorage();
+        //if (storageOnHand[0] < costRequired[0] && storageOnHand[1] < costRequired[1])
+        //    return "More Energy and Metal required!";
+        //else if (storageOnHand[0] < costRequired[0])
+        //    return "More Energy required!";
+        //else if (storageOnHand[1] < costRequired[1])
+        //    return "More Metal required!";
 
         //Create the point where the building ghost will be placed
         gridOffset = Vector2.Zero;
         RectangleShape2D ghostCheckShape = new();
-        ghostCheckShape.Size = new Vector2(currentBuildingInfo.objectGridSize.X, currentBuildingInfo.objectGridSize.Y) * 50;
-        if (currentBuildingInfo.objectGridSize.X % 2 > 0) { buildLocation.X += 25; gridOffset.X = -25; }
-        if (currentBuildingInfo.objectGridSize.Y % 2 > 0) { buildLocation.Y += 25; gridOffset.Y = -25; }
+        ghostCheckShape.Size = new Vector2(currentBuildingInfo.building.objectGridSize.X, currentBuildingInfo.building.objectGridSize.Y) * 50;
+        if (currentBuildingInfo.building.objectGridSize.X % 2 > 0) { buildLocation.X += 25; gridOffset.X = -25; }
+        if (currentBuildingInfo.building.objectGridSize.Y % 2 > 0) { buildLocation.Y += 25; gridOffset.Y = -25; }
 
         //Check that there is nothing blocking the placement of the building (environment, units, other buildings etc)
         PhysicsShapeQueryParameters2D areaCast = new();
@@ -85,7 +84,7 @@ public partial class UI_BuildPlacement : Sprite2D
         }
 
         //Check that the building, if not a network pylon, is within a network, and that it isn't a hostile network
-        if (currentBuildingInfo.type != ConstructType.NETWORK)
+        if (currentBuildingInfo.building.type != ConstructType.NETWORK)
         {
             //change the areacasts mask to the network area layer
             areaCast.CollisionMask = 16384;
@@ -115,7 +114,7 @@ public partial class UI_BuildPlacement : Sprite2D
         }
 
         //Last check for miners, make sure they are on top of a mining node
-        if (currentBuildingInfo.type == ConstructType.MINER)
+        if (currentBuildingInfo.building.type == ConstructType.MINER)
         {
             PhysicsPointQueryParameters2D pointCheck = new();
             pointCheck.CollideWithAreas = true;
@@ -134,26 +133,33 @@ public partial class UI_BuildPlacement : Sprite2D
     }
     public bool PlaceBuilding(FactionController factionLink)
     {
+        //TODO - Redo this to place the building itself and send info back to the controller so it removes the building from the build queue
         if (isBuildPlacementValid)
         {
-            float[] costRequired = new float[2] { currentBuildingInfo.unitInfo.energyCost / 10, currentBuildingInfo.unitInfo.metalCost / 10 };
+            //float[] costRequired = new float[2] { currentBuildingInfo.building.unitInfo.energyCost / 10, currentBuildingInfo.building.unitInfo.metalCost / 10 };
 
-            factionLink.RemoveFromStorage(0, costRequired[0]);
-            factionLink.RemoveFromStorage(1, costRequired[1]);
+            //factionLink.RemoveFromStorage(0, costRequired[0]);
+            //factionLink.RemoveFromStorage(1, costRequired[1]);
 
             //place the blueprint
-            BlueprintParent newBuilding = (BlueprintParent)currentBuildingInfo.objectToSpawn.Instantiate();
+            //BlueprintParent newBuilding = (BlueprintParent)currentBuildingInfo.building.objectToSpawn.Instantiate();
+            //GetTree().CurrentScene.AddChild(newBuilding);
+            //newBuilding.GlobalPosition = buildLocation;
+            //newBuilding.SetNewFaction(factionLink.GetFaction());
+
+            BuildingParent newBuilding = (BuildingParent)currentBuildingInfo.building.objectToSpawn.Instantiate();
             GetTree().CurrentScene.AddChild(newBuilding);
             newBuilding.GlobalPosition = buildLocation;
             newBuilding.SetNewFaction(factionLink.GetFaction());
+
             return true;
         }
         return false;
     }
-    public void SetNewBuildInfo(ConstructInfo buildInfo)
+    public void SetNewBuildInfo(BuildingQueue buildInfo)
     {
         currentBuildingInfo = buildInfo;
-        Texture = buildInfo.unitInfo.iconTex;
+        Texture = buildInfo.building.unitInfo.iconTex;
     }
 
     public void SetBuildGhostTexture(Texture2D texture)
