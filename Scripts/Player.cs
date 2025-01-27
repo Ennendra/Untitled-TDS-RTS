@@ -222,8 +222,14 @@ public partial class Player : CombatantParent
     {
         buildingQueue.Remove(item);
     }
-    public void RemoveBuildingQueueAtIndex(int index)
+    public void RemoveBuildingQueueAtIndex(int index, bool isCancelled)
     {
+        //Refund the resources spent on the building back if it was cancelled (false=it was placed on the field)
+        if (isCancelled)
+        {
+            GetFactionController().AddToStorage(0, buildingQueue[index].energySupplied);
+            GetFactionController().AddToStorage(1, buildingQueue[index].metalSupplied);
+        }
         buildingQueue.RemoveAt(index);
     }
 

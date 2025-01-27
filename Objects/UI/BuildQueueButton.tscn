@@ -7,6 +7,7 @@
 clip_contents = true
 custom_minimum_size = Vector2(70, 70)
 mouse_filter = 1
+button_mask = 3
 script = ExtResource("1_4rclm")
 
 [node name="ButtonTex" type="TextureRect" parent="."]
@@ -33,7 +34,8 @@ custom_minimum_size = Vector2(70, 70)
 layout_mode = 0
 offset_right = 4.0
 offset_bottom = 27.0
+mouse_filter = 1
 value = 28.68
 show_percentage = false
 
-[connection signal="pressed" from="." to="." method="OnButtonPressed"]
+[connection signal="gui_input" from="." to="." method="OnButtonPressed"]

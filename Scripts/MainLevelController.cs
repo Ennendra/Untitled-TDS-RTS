@@ -47,6 +47,7 @@ public partial class MainLevelController : Node2D
     //signals
     [Signal] public delegate void GetNewBuildInfoEventHandler(ConstructInfo buildInfo);
     [Signal] public delegate void GetBuildQueueItemEventHandler(int index);
+    [Signal] public delegate void CancelBuildQueueItemEventHandler(int index);
     //Signals when the select unit UI button on the RTS toolbar is pressed
     [Signal] public delegate void SelectThisUnitEventHandler(UnitInfo unitInfo);
     [Signal] public delegate void DeselectThisUnitEventHandler(UnitInfo unitInfo);
@@ -110,6 +111,7 @@ public partial class MainLevelController : Node2D
         //Set signal functions
         GetNewBuildInfo += OnNewBuildInfo;
         GetBuildQueueItem += OnBuildQueueSelect;
+        CancelBuildQueueItem += OnBuildQueueCancel;
         SelectThisUnit += SelectUnitOfType;
         DeselectThisUnit += DeselectUnitOfType;
         NewFactoryBuild += OnNewFactoryBuild;
@@ -592,9 +594,7 @@ public partial class MainLevelController : Node2D
     }
     public void ProcessBuildingQueueInputs()
     {
-        //TODO - Setting/Rebinding inputs in inputmap for selecting 1-5
-        //When hitting the button, run the OnBuildQueueSelect function on their repective index
-
+        //When hitting the button, run the OnBuildQueueSelect function on their respective index
         int buildQueueInputIndex = -1;
         if (Input.IsActionJustPressed("Personal_SelectBQ1")) { buildQueueInputIndex = 0; }
         if (Input.IsActionJustPressed("Personal_SelectBQ2")) { buildQueueInputIndex = 1; }
@@ -637,6 +637,15 @@ public partial class MainLevelController : Node2D
         
     }
 
+    public void OnBuildQueueCancel(int index)
+    {
+        //Check whether there is an item to cancel at this index (checked by seeing if the buildqueue array is within bounds
+        if (!(index > player.buildingQueue.Count - 1))
+        {
+            player.RemoveBuildingQueueAtIndex(index, true);
+            ResetBuildQueueSelect();
+        }
+    }
     public void ResetBuildQueueSelect()
     {
         buildQueueSelected = -1;
@@ -681,7 +690,7 @@ public partial class MainLevelController : Node2D
     public void ProcessBuildPlacementChecks()
     {
         //TODO: Ensure this function places the building 
-        mainUI.ProcessBuildingPlacement(GetGlobalMousePosition());
+        mainUI.ProcessBuildingPlacement(GetGlobalMousePosition(), player.GetFactionComponent());
 
         if (!mainUI.mouseOverUI)
         {
@@ -692,7 +701,7 @@ public partial class MainLevelController : Node2D
                 {
                     //Remove the building from the build queue now that it is placed
                     //POSSIBLE TODO - When pressing shift, will find the next item in the queue that is ready
-                    player.RemoveBuildingQueueAtIndex(buildQueueSelected);
+                    player.RemoveBuildingQueueAtIndex(buildQueueSelected, false);
                     ResetBuildQueueSelect();
                 }
             }

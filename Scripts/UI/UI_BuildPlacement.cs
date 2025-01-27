@@ -26,9 +26,9 @@ public partial class UI_BuildPlacement : Sprite2D
 
 	}
 
-    public void ProcessBuildingPlacement(FactionController factionLink, Vector2 buildLocationCheck)
+    public void ProcessBuildingPlacement(FactionController factionLink, Vector2 buildLocationCheck, FactionComponent builder)
     {
-        string buildPlacementStatus = CheckBuildingPlacement(factionLink, buildLocationCheck);
+        string buildPlacementStatus = CheckBuildingPlacement(factionLink, buildLocationCheck, builder);
 
         SetBuildGhostPosition(buildLocation, new Vector2(0, 25 + ((currentBuildingInfo.building.objectGridSize.Y - 1) * 25)));
         SetBuildGhostText(buildPlacementStatus);
@@ -43,7 +43,7 @@ public partial class UI_BuildPlacement : Sprite2D
         }
     }
 
-    public string CheckBuildingPlacement(FactionController factionLink, Vector2 buildLocationCheck)
+    public string CheckBuildingPlacement(FactionController factionLink, Vector2 buildLocationCheck, FactionComponent builder)
     {
         isBuildPlacementValid = false;
         //Snap mouse position to 50x50 grid
@@ -69,6 +69,12 @@ public partial class UI_BuildPlacement : Sprite2D
         ghostCheckShape.Size = new Vector2(currentBuildingInfo.building.objectGridSize.X, currentBuildingInfo.building.objectGridSize.Y) * 50;
         if (currentBuildingInfo.building.objectGridSize.X % 2 > 0) { buildLocation.X += 25; gridOffset.X = -25; }
         if (currentBuildingInfo.building.objectGridSize.Y % 2 > 0) { buildLocation.Y += 25; gridOffset.Y = -25; }
+
+        //Check that we are close enough to the player to place the building
+        if (buildLocation.DistanceTo(builder.GlobalPosition) > 500)
+        {
+            return "Build location not within proximity!";
+        }
 
         //Check that there is nothing blocking the placement of the building (environment, units, other buildings etc)
         PhysicsShapeQueryParameters2D areaCast = new();

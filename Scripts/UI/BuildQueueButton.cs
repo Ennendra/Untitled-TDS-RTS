@@ -47,11 +47,23 @@ public partial class BuildQueueButton : Button
         this.buildIndex = index;
     }
 
-    public void OnButtonPressed()
+    public void OnButtonPressed(InputEvent @event)
     {
+        
         if (inputConnection != null)
         {
-            inputConnection.EmitSignal("GetBuildQueueItem", buildIndex);
+            if (@event is InputEventMouseButton mb)
+            {
+                if (mb.ButtonIndex == MouseButton.Left && mb.Pressed)
+                {
+                    inputConnection.EmitSignal("GetBuildQueueItem", buildIndex);
+                }
+                else if (mb.ButtonIndex == MouseButton.Right && mb.Pressed)
+                {
+                    inputConnection.EmitSignal("CancelBuildQueueItem", buildIndex);
+                }
+            }
+            //inputConnection.EmitSignal("GetBuildQueueItem", buildIndex);
         }
     }
 

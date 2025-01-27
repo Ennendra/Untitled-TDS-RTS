@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://7k68ub1drccj"]
+
+[ext_resource type="Script" path="res://Scripts/UI/UI_BuildQueueBar.cs" id="1_b7y0p"]
+[ext_resource type="PackedScene" uid="uid://c61mvnpso8205" path="res://Objects/UI/BuildQueueButton.tscn" id="2_mlskd"]
+
+[node name="UI_BuildQueueBar" type="Control" node_paths=PackedStringArray("buttons")]
+layout_mode = 3
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+script = ExtResource("1_b7y0p")
+buttons = [NodePath("VBoxContainer/BuildQueueButton1"), NodePath("VBoxContainer/BuildQueueButton2"), NodePath("VBoxContainer/BuildQueueButton3"), NodePath("VBoxContainer/BuildQueueButton4"), NodePath("VBoxContainer/BuildQueueButton5")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -183.0
+offset_right = 70.0
+offset_bottom = 183.0
+grow_vertical = 2
+alignment = 1
+
+[node name="BuildQueueButton1" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+layout_mode = 2
+
+[node name="BuildQueueButton2" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+layout_mode = 2
+
+[node name="BuildQueueButton3" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+layout_mode = 2
+
+[node name="BuildQueueButton4" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+layout_mode = 2
+
+[node name="BuildQueueButton5" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+layout_mode = 2

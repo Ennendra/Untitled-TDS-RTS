@@ -84,6 +84,8 @@ public partial class ToolReclaimer : ToolParent
         PhysicsPointQueryParameters2D pointCast = new();
         pointCast.Position = targetPoint;
         pointCast.CollisionMask = GetAlliedFactionLayer() + 4; //The collision mask for allied components and 'wreckage'
+        
+        GD.Print(pointCast.CollisionMask);
         pointCast.CollideWithAreas = true;
 
         var collisionResult = spaceState.IntersectPoint(pointCast);
@@ -97,7 +99,9 @@ public partial class ToolReclaimer : ToolParent
 
                 if (colliderCheck)
                 {
-                    DamageComponent targetComponent = (DamageComponent)collidedObject;
+                    FactionComponent collidedFactionComp = (FactionComponent)collidedObject;
+                    DamageComponent targetComponent = collidedFactionComp.GetDamageComponent();
+                    
                     if (targetComponent.GlobalPosition.DistanceTo(GlobalPosition) <= (toolRange + targetComponent.toolRangeGrace) && targetComponent != componentToIgnore)
                     {
                         isActive = true;

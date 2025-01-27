@@ -118,9 +118,9 @@ public partial class MainUI : CanvasLayer
     {
         buildPlacementGhost.Visible = visibility;
     }
-    public void ProcessBuildingPlacement(Vector2 buildLocationCheck)
+    public void ProcessBuildingPlacement(Vector2 buildLocationCheck, FactionComponent builder)
 	{
-        buildPlacementGhost.ProcessBuildingPlacement(GetPlayerFactionController(), buildLocationCheck);
+        buildPlacementGhost.ProcessBuildingPlacement(GetPlayerFactionController(), buildLocationCheck, builder);
     }
 	public bool AttemptBuildingPlacement()
 	{
