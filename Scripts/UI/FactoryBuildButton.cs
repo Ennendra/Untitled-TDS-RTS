@@ -47,11 +47,34 @@ public partial class FactoryBuildButton : Button
         this.inputConnection = inputConnection;
     }
 
-    public void OnButtonPressed()
+    //public void OnButtonPressed()
+    //{
+    //    if (inputConnection != null)
+    //    {
+    //        inputConnection.EmitSignal("NewFactoryBuild", buildInfo, 1);
+    //    }
+    //}
+
+    public void OnButtonPressed(InputEvent @event)
     {
+
         if (inputConnection != null)
         {
-            inputConnection.EmitSignal("NewFactoryBuild", buildInfo, 1);
+            if (@event is InputEventMouseButton mb)
+            {
+                int buildAmount = 1;
+                if (Input.IsKeyPressed(Key.Shift)) { buildAmount = 5; }
+
+                if (mb.ButtonIndex == MouseButton.Left && mb.Pressed)
+                {
+                    inputConnection.EmitSignal("NewFactoryBuild", buildInfo, buildAmount);
+                }
+                else if (mb.ButtonIndex == MouseButton.Right && mb.Pressed)
+                {
+                    inputConnection.EmitSignal("CancelFactoryBuild", buildInfo, buildAmount);
+                }
+            }
+            //inputConnection.EmitSignal("GetBuildQueueItem", buildIndex);
         }
     }
 }

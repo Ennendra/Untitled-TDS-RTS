@@ -35,4 +35,4 @@ offset_bottom = 70.0
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[connection signal="pressed" from="." to="." method="OnButtonPressed"]
+[connection signal="gui_input" from="." to="." method="OnButtonPressed"]

@@ -45,6 +45,8 @@ public partial class ToolParent : Node2D
 			{ isActive = false; }
 		else 
 			{ isActive = true; }
+
+		
 	}
 	public virtual void StopTool()
 	{

@@ -120,7 +120,33 @@ public partial class FactoryComponent : Node2D
 	}
 	public void RemoveFromBuildQueue(ConstructInfo itemToRemove)
 	{
-		buildQueue.Remove(itemToRemove);
+        //Get all the indexes in the build queue that are of the item we want to remove
+        List<int> filteredIndexSet = new();
+        for (int i = 0; i < buildQueue.Count; i++) 
+        { 
+            if (buildQueue[i] == itemToRemove)
+            {
+                filteredIndexSet.Add(i);
+            }
+        }
+        //Remove the respective item from queue if it is there, taking into consideration:
+        // - If it is the only item of that type and at the front of the queue, reset the energy and metal supplied
+        // - If there are multiple of this item in queue, do *not* remove the item at the front
+        if (filteredIndexSet.Count == 1 && GetCurrentBuildItem() == itemToRemove)
+        {
+            buildQueue.Remove(itemToRemove);
+            energySupplied = 0;
+            metalSupplied = 0;
+        }
+        else if(filteredIndexSet.Count > 1)
+        {
+            buildQueue.RemoveAt(filteredIndexSet[1]);
+        }
+        else if (filteredIndexSet.Count == 1 && GetCurrentBuildItem() != itemToRemove)
+        {
+            buildQueue.Remove(itemToRemove);
+        }
+
 	}
 	public List<ConstructInfo> GetBuildQueue()
 	{

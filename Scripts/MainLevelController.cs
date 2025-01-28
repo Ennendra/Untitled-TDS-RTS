@@ -55,6 +55,7 @@ public partial class MainLevelController : Node2D
     [Signal] public delegate void SetOrderStateEventHandler(string buttonCode);
     //Signals for factory build buttons
     [Signal] public delegate void NewFactoryBuildEventHandler(ConstructInfo buildInfo, int amount);
+    [Signal] public delegate void CancelFactoryBuildEventHandler(ConstructInfo buildInfo, int amount);
     //Signal for when a Control Group button is pressed
     [Signal] public delegate void SelectControlGroupButtonEventHandler(int index);
 
@@ -112,9 +113,14 @@ public partial class MainLevelController : Node2D
         GetNewBuildInfo += OnNewBuildInfo;
         GetBuildQueueItem += OnBuildQueueSelect;
         CancelBuildQueueItem += OnBuildQueueCancel;
+
         SelectThisUnit += SelectUnitOfType;
         DeselectThisUnit += DeselectUnitOfType;
+
         NewFactoryBuild += OnNewFactoryBuild;
+        CancelFactoryBuild += OnRemoveFactoryBuild;
+
+
         SetOrderState += OnOrderStatePress;
         SelectControlGroupButton += OnControlGroupSelect;
 
