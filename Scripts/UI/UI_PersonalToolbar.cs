@@ -5,7 +5,7 @@ public partial class UI_PersonalToolbar : Control
 {
     [Export] BuildButton[] buildingButtons;
     [Export] ToolbarButton[] toolbarButtons;
-    ProgressBar healthBar;
+    TextureProgressBar healthBar;
 
 	//The list of items that the building buttons will be linked to
     [Export] ConstructInfo[] buildingList_tier1;
@@ -14,7 +14,7 @@ public partial class UI_PersonalToolbar : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-        healthBar = GetNode<ProgressBar>("HealthBar");
+        healthBar = GetNode<TextureProgressBar>("HealthBar");
 
         SetBuildingButtons(buildingList_tier1);
     }

@@ -25,12 +25,10 @@ ghostPlacementScene = ExtResource("2_1hj84")
 
 [node name="UI_ResourceTracker" parent="." instance=ExtResource("3_agdkk")]
 
-[node name="UI_PersonalToolbar" parent="." instance=ExtResource("4_miht8")]
-offset_left = -377.5
-offset_right = 377.5
-
 [node name="UI_RTSToolbar" parent="." instance=ExtResource("5_272as")]
 visible = false
+
+[node name="UI_PersonalToolbar" parent="." instance=ExtResource("4_miht8")]
 
 [node name="UI_ControlGroupBar" parent="." instance=ExtResource("6_243ub")]
 visible = false
@@ -38,40 +36,50 @@ visible = false
 [node name="UI_BuildQueueBar" parent="." instance=ExtResource("7_i6mpu")]
 
 [node name="UI_MinimapZoomPlus" type="TextureButton" parent="."]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 541.0
-offset_top = -299.0
-offset_right = 651.0
-offset_bottom = -269.0
+offset_left = 550.0
+offset_top = -281.0
+offset_right = 640.0
+offset_bottom = -263.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 1
 texture_normal = ExtResource("8_r2gcq")
 texture_pressed = ExtResource("9_pmnhy")
 texture_hover = ExtResource("10_qrmeq")
 texture_disabled = ExtResource("11_uh58t")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="UI_MinimapZoomMinus" type="TextureButton" parent="."]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 420.0
-offset_top = -299.0
-offset_right = 530.0
-offset_bottom = -269.0
+offset_left = 430.0
+offset_top = -280.0
+offset_right = 520.0
+offset_bottom = -262.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 1
 texture_normal = ExtResource("11_3h37u")
 texture_pressed = ExtResource("12_fcr7g")
 texture_hover = ExtResource("13_4uj1k")
 texture_disabled = ExtResource("14_8v02w")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="UI_Minimap" parent="." instance=ExtResource("7_oqt4b")]
+offset_left = 465.0
+offset_right = 735.0
 
 [node name="UI_Paused" type="TextureRect" parent="."]
 anchors_preset = 5
@@ -86,10 +94,10 @@ texture = ExtResource("16_637u1")
 
 [connection signal="mouse_entered" from="UI_ResourceTracker" to="." method="OnMouseEntered"]
 [connection signal="mouse_exited" from="UI_ResourceTracker" to="." method="OnMouseExited"]
-[connection signal="mouse_entered" from="UI_PersonalToolbar" to="." method="OnMouseEntered"]
-[connection signal="mouse_exited" from="UI_PersonalToolbar" to="." method="OnMouseExited"]
 [connection signal="mouse_entered" from="UI_RTSToolbar" to="." method="OnMouseEntered"]
 [connection signal="mouse_exited" from="UI_RTSToolbar" to="." method="OnMouseExited"]
+[connection signal="mouse_entered" from="UI_PersonalToolbar" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="UI_PersonalToolbar" to="." method="OnMouseExited"]
 [connection signal="mouse_entered" from="UI_ControlGroupBar" to="." method="OnMouseEntered"]
 [connection signal="mouse_exited" from="UI_ControlGroupBar" to="." method="OnMouseExited"]
 [connection signal="mouse_entered" from="UI_BuildQueueBar" to="." method="OnMouseEntered"]

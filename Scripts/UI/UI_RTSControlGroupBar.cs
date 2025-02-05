@@ -26,14 +26,18 @@ public partial class UI_RTSControlGroupBar : Control
 
 	public void SetControlGroupButtonInfo(int index, ControlGroup group)
 	{
+		//GD.Print(group.frontUnit);
+		
 		if (group.units.Count > 0)
 		{
-            cgButtons[index].SetIcon(group.frontUnit.iconTex);
+            cgButtons[index].SetControlGroupData(group.frontUnit.iconTex, group.units.Count);
+            //cgButtons[index].SetIcon(group.frontUnit.iconTex);
             cgButtons[index].Disabled = false;
         }
 		else
 		{
-            cgButtons[index].SetIcon(null);
+            cgButtons[index].SetControlGroupData(null, 0);
+            //cgButtons[index].SetIcon(null);
             cgButtons[index].Disabled = true;
         }
         

@@ -152,6 +152,12 @@ public partial class ToolBuilder : ToolParent
 		buildQueueTarget = target;
     }
 
+	public bool ToggleActive()
+	{
+		isActive = !isActive;
+		return isActive;
+	}
+
 
 	public void ResetConstructorComponent()
 	{

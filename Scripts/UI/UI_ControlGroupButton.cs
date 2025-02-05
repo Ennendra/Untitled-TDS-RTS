@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public partial class UI_ControlGroupButton : TextureButton
+public partial class UI_ControlGroupButton : Button
 {
 	TextureRect icon;
-	Label group;
+	Label groupSize;
 	int index;
 	Node2D connection;
 
@@ -12,7 +12,9 @@ public partial class UI_ControlGroupButton : TextureButton
 	public override void _Ready()
 	{
 		icon = GetNode<TextureRect>("CGIcon");
-		group = GetNode<Label>("CGGroup");
+        groupSize = GetNode<Label>("CGGroup");
+
+		groupSize.Text = "";
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,9 +34,23 @@ public partial class UI_ControlGroupButton : TextureButton
 
 	public void SetGroupIndex(int index)
 	{
-		if (index == 9) group.Text = "0";
-		else group.Text = (index+1).ToString();
+		//if (index == 9) group.Text = "0";
+		//else group.Text = (index+1).ToString();
 		this.index = index;
+	}
+
+	public void SetControlGroupData(Texture2D tex, int size)
+	{
+        icon.Texture = tex;
+		if (size > 0)
+		{
+			groupSize.Text = size.ToString();
+		}
+		else
+		{
+			groupSize.Text = "";
+		}
+
 	}
 
 	public void OnButtonPressed()

@@ -1,6 +1,5 @@
-[gd_scene load_steps=21 format=3 uid="uid://c2tt6j6mlckwl"]
+[gd_scene load_steps=24 format=3 uid="uid://c2tt6j6mlckwl"]
 
-[ext_resource type="Texture2D" uid="uid://dmpxxm1byp76d" path="res://Textures/UI/MainUIFramework/RTSBuildMenu.png" id="1_0dq4w"]
 [ext_resource type="Script" path="res://Scripts/UI/UI_RTSToolbar.cs" id="1_7pdph"]
 [ext_resource type="PackedScene" uid="uid://bsyfqrrdmvel1" path="res://Objects/UI/UISelectedUnitInfo.tscn" id="2_qn0ml"]
 [ext_resource type="Resource" uid="uid://dcxhrv06cdy4i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_NetworkHub.tres" id="2_tdbig"]
@@ -11,20 +10,30 @@
 [ext_resource type="Resource" uid="uid://3yiscuiw5o3t" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_MetalStorage.tres" id="7_hxr0n"]
 [ext_resource type="Resource" uid="uid://cu5mfbycdnot5" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Factory.tres" id="8_701pj"]
 [ext_resource type="Resource" uid="uid://dclclw6hqdrx7" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Turret.tres" id="9_v0ken"]
-[ext_resource type="Texture2D" uid="uid://dfhpwcgt1mxxq" path="res://Textures/UI/MainUIFramework/RTSOrderHotbar.png" id="10_007am"]
+[ext_resource type="Texture2D" uid="uid://dhaax5as2o7sm" path="res://Textures/UI/MainUIFramework/MainToolbar.png" id="10_80qu6"]
 [ext_resource type="PackedScene" uid="uid://8gchljq3igyy" path="res://Objects/UI/BuildButton.tscn" id="11_2sted"]
+[ext_resource type="Texture2D" uid="uid://82psik41q73u" path="res://Textures/UI/MainUIFramework/ActionHotbar.png" id="11_vp826"]
 [ext_resource type="PackedScene" uid="uid://dodaethcf3kfh" path="res://Objects/UI/FactoryBuildButton.tscn" id="12_gos2n"]
 [ext_resource type="PackedScene" uid="uid://bsmo2cyvc5lwh" path="res://Objects/UI/OrderButton.tscn" id="14_80dfs"]
 [ext_resource type="Texture2D" uid="uid://cl6fh2l3g244m" path="res://Textures/UI/Icons/Orders/UICommandMove.png" id="15_h7bxi"]
 [ext_resource type="Texture2D" uid="uid://bgcwpokqubdwa" path="res://Textures/UI/Icons/Orders/UICommandAttack.png" id="16_pvwpg"]
 [ext_resource type="Texture2D" uid="uid://cdaxhtixp68j7" path="res://Textures/UI/Icons/Orders/UICommandStop.png" id="17_bt6fg"]
 [ext_resource type="Texture2D" uid="uid://ckuf4gdg3bub2" path="res://Textures/UI/Icons/Orders/UICommandHold.png" id="18_3smou"]
+[ext_resource type="Texture2D" uid="uid://cao327lqmoymq" path="res://Textures/UI/MainUIFramework/MainHealthbar.png" id="20_sa6m3"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lbi0b"]
 font_size = 40
 font_color = Color(1, 0.694118, 1, 1)
 outline_size = 5
 outline_color = Color(1, 0, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_k0f7e"]
+font_size = 20
+font_color = Color(0, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fwipt"]
+font_size = 24
+font_color = Color(0, 1, 1, 1)
 
 [node name="UI_RTSToolbar" type="Control" node_paths=PackedStringArray("buildingButtons", "factoryBuildingButtons", "selectedUnitButtons", "orderButtons")]
 layout_mode = 3
@@ -33,10 +42,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -527.5
-offset_top = -187.605
-offset_right = 307.5
-offset_bottom = -7.60498
+offset_left = -460.0
+offset_top = -220.0
+offset_right = 460.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_7pdph")
@@ -53,14 +62,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -295.0
-offset_top = -180.0
-offset_right = 515.0
-offset_bottom = 50.0
+offset_left = -465.0
+offset_top = -210.0
+offset_right = 465.0
+offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(1, 0.8)
-texture = ExtResource("1_0dq4w")
+texture = ExtResource("10_80qu6")
 
 [node name="OrderToolbar" type="TextureRect" parent="."]
 layout_mode = 1
@@ -69,23 +77,23 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -517.5
-offset_top = -147.0
-offset_right = -297.5
-offset_bottom = -27.0
+offset_left = -745.0
+offset_top = -210.0
+offset_right = -455.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("10_007am")
+texture = ExtResource("11_vp826")
 
 [node name="LabelOrder" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -153.0
-offset_top = -80.0
-offset_right = 153.0
-offset_bottom = -25.0
+offset_left = -154.5
+offset_top = -61.0
+offset_right = 154.5
+offset_bottom = -6.0
 grow_horizontal = 2
 mouse_filter = 1
 text = "Designate Move"
@@ -94,21 +102,21 @@ horizontal_alignment = 1
 
 [node name="SelectionButtonContainer" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 617.0
-offset_top = 168.0
-offset_right = 657.0
-offset_bottom = 208.0
+offset_left = 505.0
+offset_top = 50.0
+offset_right = 895.0
+offset_bottom = 200.0
 mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SelectionButtonContainer"]
 layout_mode = 0
-offset_left = -80.0
-offset_top = -140.0
-offset_right = 286.0
-offset_bottom = 4.0
+offset_right = 390.0
+offset_bottom = 150.0
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SelectionButtonContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="UnitInfo1" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_qn0ml")]
 layout_mode = 2
@@ -127,6 +135,7 @@ layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="SelectionButtonContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="UnitInfo6" parent="SelectionButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_qn0ml")]
 layout_mode = 2
@@ -145,21 +154,21 @@ layout_mode = 2
 
 [node name="BuildButtonContainer" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 617.0
-offset_top = 168.0
-offset_right = 657.0
-offset_bottom = 208.0
+offset_left = 75.0
+offset_top = 50.0
+offset_right = 465.0
+offset_bottom = 200.0
 mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BuildButtonContainer"]
 layout_mode = 0
-offset_left = -460.0
-offset_top = -140.0
-offset_right = -94.0
-offset_bottom = 4.0
+offset_right = 390.0
+offset_bottom = 150.0
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="BuildButtonContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="BuildButton1" parent="BuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("11_2sted")]
 layout_mode = 2
@@ -183,6 +192,7 @@ buildInfo = ExtResource("2_tdbig")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="BuildButtonContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="BuildButton6" parent="BuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("11_2sted")]
 layout_mode = 2
@@ -205,23 +215,22 @@ layout_mode = 2
 buildInfo = ExtResource("2_tdbig")
 
 [node name="FactoryBuildButtonContainer" type="Control" parent="."]
-visible = false
 anchors_preset = 0
-offset_left = 617.0
-offset_top = 168.0
-offset_right = 657.0
-offset_bottom = 208.0
+offset_left = 75.0
+offset_top = 50.0
+offset_right = 465.0
+offset_bottom = 200.0
 mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FactoryBuildButtonContainer"]
 layout_mode = 0
-offset_left = -460.0
-offset_top = -140.0
-offset_right = -94.0
-offset_bottom = 4.0
+offset_right = 390.0
+offset_bottom = 150.0
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FactoryBuildButtonContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="FactoryBuildButton1" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer" instance=ExtResource("12_gos2n")]
 layout_mode = 2
@@ -240,6 +249,7 @@ layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="FactoryBuildButtonContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="FactoryBuildButton6" parent="FactoryBuildButtonContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("12_gos2n")]
 layout_mode = 2
@@ -258,10 +268,10 @@ layout_mode = 2
 
 [node name="OrderHotbarContainer" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 257.0
-offset_top = -17.0
-offset_right = 297.0
-offset_bottom = 23.0
+offset_left = -255.0
+offset_top = 50.0
+offset_right = -15.0
+offset_bottom = 170.0
 mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OrderHotbarContainer"]
@@ -271,15 +281,17 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -380.0
-offset_top = 42.0
-offset_right = -188.0
-offset_bottom = 136.0
+offset_left = -240.0
+offset_top = -60.0
+offset_right = -10.0
+offset_bottom = 50.0
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="OrderHotbarContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="OrderButtonMove" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer" instance=ExtResource("14_80dfs")]
 layout_mode = 2
@@ -306,6 +318,7 @@ buttonCode = 3
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="OrderHotbarContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="OrderButtonSpecial1" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("14_80dfs")]
 layout_mode = 2
@@ -322,3 +335,53 @@ mouse_filter = 1
 [node name="OrderButtonSpecial4" parent="OrderHotbarContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("14_80dfs")]
 layout_mode = 2
 mouse_filter = 1
+
+[node name="Label" type="Label" parent="OrderHotbarContainer"]
+layout_mode = 0
+offset_left = 78.5
+offset_top = -40.0
+offset_right = 150.5
+offset_bottom = -12.0
+text = "Actions"
+label_settings = SubResource("LabelSettings_k0f7e")
+
+[node name="BuildLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 8.0
+offset_right = 134.0
+offset_bottom = 42.0
+text = "Build"
+label_settings = SubResource("LabelSettings_fwipt")
+
+[node name="ToolbarLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 8.0
+offset_right = 574.0
+offset_bottom = 42.0
+text = "Strategic Mode"
+label_settings = SubResource("LabelSettings_fwipt")
+
+[node name="HealthBarOLD" type="ProgressBar" parent="."]
+visible = false
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 30.0
+offset_right = 40.0
+offset_bottom = 180.0
+mouse_filter = 1
+value = 100.0
+fill_mode = 3
+show_percentage = false
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 48.0
+offset_right = 45.0
+offset_bottom = 203.0
+value = 100.0
+fill_mode = 3
+texture_progress = ExtResource("20_sa6m3")

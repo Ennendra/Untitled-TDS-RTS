@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b1tc2knsc0m5e"]
+[gd_scene load_steps=13 format=3 uid="uid://b1tc2knsc0m5e"]
 
 [ext_resource type="Script" path="res://Scripts/UI/UI_Minimap.cs" id="1_1s8hk"]
 [ext_resource type="Texture2D" uid="uid://cmp8omxw1mvj0" path="res://Textures/UI/MainUIFramework/UIMinimap.png" id="2_mbfd7"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://ce5wsujjrujxu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_EnemyUnit.png" id="7_6miv6"]
 [ext_resource type="Texture2D" uid="uid://lfm103isinqu" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_MetalNode.png" id="7_us3im"]
 [ext_resource type="Texture2D" uid="uid://cqqvdhookah3a" path="res://Textures/UI/MainUIFramework/MinimapMarkers/UIMarker_EnemyBuilding.png" id="8_0ysu1"]
+[ext_resource type="Texture2D" uid="uid://cu0ppkubov80a" path="res://Textures/UI/MainUIFramework/Minimap.png" id="8_sx17w"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vuibp"]
 blend_mode = 3
@@ -23,21 +24,29 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = 400.0
-offset_top = -270.0
+offset_top = -290.0
 offset_right = 670.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_1s8hk")
 fogSprite = NodePath("Fog")
 shroudSprite = NodePath("Shroud")
-initialMinimapDrawSize = Vector2(250, 250)
-initialMinimapDrawOffset = Vector2(10, 10)
+initialMinimapDrawSize = Vector2(220, 220)
+initialMinimapDrawOffset = Vector2(25, 45)
 markerPlayer = ExtResource("4_wi2sf")
 markerAllyUnit = ExtResource("5_4kfjx")
 markerAllyBuilding = ExtResource("6_ids5h")
 markerEnemyUnit = ExtResource("7_6miv6")
 markerEnemyBuilding = ExtResource("8_0ysu1")
 markerMetalNode = ExtResource("7_us3im")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -3
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("8_sx17w")
+stretch_mode = 2
 
 [node name="Fog" type="TextureRect" parent="."]
 z_index = -1
@@ -54,9 +63,12 @@ layout_mode = 2
 expand_mode = 1
 
 [node name="BackgroundFrame" type="NinePatchRect" parent="."]
+visible = false
 z_index = -2
-custom_minimum_size = Vector2(260, 260)
+custom_minimum_size = Vector2(220, 220)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture = ExtResource("2_mbfd7")
 region_rect = Rect2(8, 8, 254, 254)
 patch_margin_left = 40
@@ -72,6 +84,7 @@ theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
 [node name="Grid" type="TextureRect" parent="MapSpace"]
+visible = false
 z_index = -2
 layout_mode = 2
 texture = ExtResource("3_70fdk")

@@ -232,6 +232,10 @@ public partial class Player : CombatantParent
         }
         buildingQueue.RemoveAt(index);
     }
+    public bool ToggleBuildToolActive()
+    {
+        return buildTool.ToggleActive();
+    }
 
 
     public bool IsLevelControllerSet()
@@ -335,6 +339,7 @@ public partial class Player : CombatantParent
         if (playerUI != null)
         {
             playerUI.GetPersonalToolbar().GetNewHealthData(damageComponent.GetCurrentHealthPercent());
+            playerUI.GetRTSToolbar().GetNewHealthData(damageComponent.GetCurrentHealthPercent());
         }
     }
 

@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://7k68ub1drccj"]
+[gd_scene load_steps=9 format=3 uid="uid://7k68ub1drccj"]
 
 [ext_resource type="Script" path="res://Scripts/UI/UI_BuildQueueBar.cs" id="1_b7y0p"]
+[ext_resource type="Texture2D" uid="uid://cci71isw23rdb" path="res://Textures/UI/MainUIFramework/BuildQueueBar/BuildQueueBar.png" id="2_buptg"]
 [ext_resource type="PackedScene" uid="uid://c61mvnpso8205" path="res://Objects/UI/BuildQueueButton.tscn" id="2_mlskd"]
+[ext_resource type="Texture2D" uid="uid://dyk785u81oax7" path="res://Textures/UI/MainUIFramework/BuildQueueBar/BQRedInactive.png" id="4_egqo7"]
+[ext_resource type="Texture2D" uid="uid://vbxnmefli2u2" path="res://Textures/UI/MainUIFramework/BuildQueueBar/BQRedActive.png" id="5_met0i"]
+[ext_resource type="Texture2D" uid="uid://cmn44cy04vssl" path="res://Textures/UI/MainUIFramework/BuildQueueBar/BQGreenInactive.png" id="6_21an7"]
+[ext_resource type="Texture2D" uid="uid://cdyl2p3r2xmt2" path="res://Textures/UI/MainUIFramework/BuildQueueBar/BQGreenActive.png" id="7_wwvda"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxydr"]
+font_size = 20
+font_color = Color(0.196036, 1, 0.959061, 1)
 
 [node name="UI_BuildQueueBar" type="Control" node_paths=PackedStringArray("buttons")]
 layout_mode = 3
@@ -9,30 +18,90 @@ anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
 script = ExtResource("1_b7y0p")
-buttons = [NodePath("VBoxContainer/BuildQueueButton1"), NodePath("VBoxContainer/BuildQueueButton2"), NodePath("VBoxContainer/BuildQueueButton3"), NodePath("VBoxContainer/BuildQueueButton4"), NodePath("VBoxContainer/BuildQueueButton5")]
+buttons = [NodePath("MainTex/VBoxContainer/BuildQueueButton1"), NodePath("MainTex/VBoxContainer/BuildQueueButton2"), NodePath("MainTex/VBoxContainer/BuildQueueButton3"), NodePath("MainTex/VBoxContainer/BuildQueueButton4"), NodePath("MainTex/VBoxContainer/BuildQueueButton5")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MainTex" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -183.0
-offset_right = 70.0
-offset_bottom = 183.0
+offset_top = -230.0
+offset_right = 150.0
+offset_bottom = 230.0
 grow_vertical = 2
+texture = ExtResource("2_buptg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainTex"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 50.0
+offset_right = 90.0
+offset_bottom = 416.0
+theme_override_constants/separation = 10
 alignment = 1
 
-[node name="BuildQueueButton1" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+[node name="BuildQueueButton1" parent="MainTex/VBoxContainer" instance=ExtResource("2_mlskd")]
 layout_mode = 2
 
-[node name="BuildQueueButton2" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+[node name="BuildQueueButton2" parent="MainTex/VBoxContainer" instance=ExtResource("2_mlskd")]
 layout_mode = 2
 
-[node name="BuildQueueButton3" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+[node name="BuildQueueButton3" parent="MainTex/VBoxContainer" instance=ExtResource("2_mlskd")]
 layout_mode = 2
 
-[node name="BuildQueueButton4" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+[node name="BuildQueueButton4" parent="MainTex/VBoxContainer" instance=ExtResource("2_mlskd")]
 layout_mode = 2
 
-[node name="BuildQueueButton5" parent="VBoxContainer" instance=ExtResource("2_mlskd")]
+[node name="BuildQueueButton5" parent="MainTex/VBoxContainer" instance=ExtResource("2_mlskd")]
 layout_mode = 2
+
+[node name="queueLabel" type="Label" parent="MainTex"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 10.0
+offset_right = 99.0
+offset_bottom = 44.0
+text = "Queue"
+label_settings = SubResource("LabelSettings_vxydr")
+
+[node name="RedLightBack" type="TextureRect" parent="MainTex"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 260.0
+offset_right = 140.0
+offset_bottom = 300.0
+texture = ExtResource("4_egqo7")
+
+[node name="RedLight" type="TextureRect" parent="MainTex"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 260.0
+offset_right = 140.0
+offset_bottom = 300.0
+texture = ExtResource("5_met0i")
+
+[node name="GreenLightBack" type="TextureRect" parent="MainTex"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 190.0
+offset_right = 140.0
+offset_bottom = 230.0
+texture = ExtResource("6_21an7")
+
+[node name="GreenLight" type="TextureRect" parent="MainTex"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 190.0
+offset_right = 140.0
+offset_bottom = 230.0
+texture = ExtResource("7_wwvda")
+
+[node name="ToggleButton" type="Button" parent="MainTex"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 230.0
+offset_right = 130.0
+offset_bottom = 260.0
+mouse_filter = 1
+
+[connection signal="pressed" from="MainTex/ToggleButton" to="." method="OnToggleButtonPressed"]

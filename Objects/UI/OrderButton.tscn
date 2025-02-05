@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/OrderButton.cs" id="1_uef15"]
 
 [node name="OrderButton" type="Button"]
-custom_minimum_size = Vector2(45, 45)
+custom_minimum_size = Vector2(50, 50)
 expand_icon = true
 script = ExtResource("1_uef15")
 

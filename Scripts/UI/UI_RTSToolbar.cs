@@ -13,6 +13,7 @@ public partial class UI_RTSToolbar : Control
     Control buildingButtonContainer;
     Control factoryButtonContainer;
     Label orderDesignationLabel;
+    TextureProgressBar healthBar;
 
     //The list of items that the building buttons will be linked to
     [Export] ConstructInfo[] buildingList_tier1;
@@ -36,6 +37,7 @@ public partial class UI_RTSToolbar : Control
         buildingButtonContainer = GetNode<Control>("BuildButtonContainer");
         factoryButtonContainer = GetNode<Control>("FactoryBuildButtonContainer");
         orderDesignationLabel = GetNode<Label>("LabelOrder");
+        healthBar = GetNode<TextureProgressBar>("HealthBar");
     }
 
     //Functions for selected unit info
@@ -201,6 +203,13 @@ public partial class UI_RTSToolbar : Control
                 factoryBuildingButtons[i].SetButtonConstructAmount(0);
             }
         }
+    }
+
+
+    //Functions for the healthbar
+    public void GetNewHealthData(float healthPercent)
+    {
+        healthBar.Value = healthPercent;
     }
 
 }

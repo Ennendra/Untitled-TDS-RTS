@@ -58,6 +58,8 @@ public partial class MainLevelController : Node2D
     [Signal] public delegate void CancelFactoryBuildEventHandler(ConstructInfo buildInfo, int amount);
     //Signal for when a Control Group button is pressed
     [Signal] public delegate void SelectControlGroupButtonEventHandler(int index);
+    //Signal for toggling the builder on or off
+    [Signal] public delegate void ToggleBuildActivityEventHandler();
 
     FactionController[] factionController = new FactionController[3];
 
@@ -124,6 +126,8 @@ public partial class MainLevelController : Node2D
         SetOrderState += OnOrderStatePress;
         SelectControlGroupButton += OnControlGroupSelect;
 
+        ToggleBuildActivity += OnToggleActivity;
+
         //Get the globals node for static use
         globals = GetNode<Globals>("/root/Globals");
 
@@ -161,8 +165,16 @@ public partial class MainLevelController : Node2D
 
         //Add the player to the list if it exists
         //If not, make sure we aren't in personal mode at start
-        if (player != null) { AddPlayer(player); }
-        else { CallDeferred("ToggleRTSMode"); }
+        if (player != null) 
+        { 
+            AddPlayer(player);
+            mainUI.GetBuildQueueBar().ToggleToolActivity(true);
+        }
+        else 
+        {
+            mainUI.GetBuildQueueBar().ToggleToolActivity(false);
+            CallDeferred("ToggleRTSMode"); 
+        }
         
         //Add all buildings, blueprints and units spawned in the scene into their respective lists
         //Also, Find all misc environment obstacles and add their polygons to a misc obstacle list
@@ -762,11 +774,14 @@ public partial class MainLevelController : Node2D
     }
     public void SetPersonalPlayState(PersonalPlayState state)
     {
-        personalPlayState = state;
-        switch (state) 
+        if (IsInstanceValid(player))
         {
-            case PersonalPlayState.STANDARD: { player.SetPlayerState(PlayerState.COMBAT); break; }
-            case PersonalPlayState.BUILDPLACEMENT: { player.SetPlayerState(PlayerState.BUILDPLACING); break; }
+            personalPlayState = state;
+            switch (state)
+            {
+                case PersonalPlayState.STANDARD: { player.SetPlayerState(PlayerState.COMBAT); break; }
+                case PersonalPlayState.BUILDPLACEMENT: { player.SetPlayerState(PlayerState.BUILDPLACING); break; }
+            }
         }
     }
     public void SetRTSPlayState(RTSPlayState state)
@@ -1128,6 +1143,17 @@ public partial class MainLevelController : Node2D
             rtsController.RemoveFactoryItemFromQueue(buildInfo);
         }
         UpdateFactoryButtonQueueInfo();
+    }
+
+    //Signal for build active toggle
+    public void OnToggleActivity()
+    {
+        //is the player alive?
+        if (IsInstanceValid(player))
+        {
+            bool buildToggle = player.ToggleBuildToolActive();
+            mainUI.GetBuildQueueBar().ToggleToolActivity(buildToggle);
+        }
     }
     
 

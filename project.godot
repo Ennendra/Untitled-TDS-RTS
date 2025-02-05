@@ -21,8 +21,8 @@ Globals="*res://Scripts/Globals.cs"
 
 [display]
 
-window/size/viewport_width=1600
-window/size/viewport_height=1000
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 mouse_cursor/custom_image="res://Textures/UI/Icons/CustomCursors/Cursor.png"
 mouse_cursor/custom_image_hotspot=Vector2(7.5, 7.5)
 
