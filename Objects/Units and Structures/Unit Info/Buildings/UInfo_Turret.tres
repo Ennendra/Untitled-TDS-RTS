@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://bc3s0wejn2g7a"]
 
-[ext_resource type="Texture2D" uid="uid://8wyhdq20l5o2" path="res://Textures/Buildings/Turret1/Turret1Full.png" id="1_4848m"]
+[ext_resource type="Texture2D" uid="uid://dyhhrs3j1hdcm" path="res://Textures/UI/UnitOverlays/UIOverlay_Turret1.png" id="1_ksyo5"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_72gls"]
 
 [resource]
@@ -10,5 +10,5 @@ unitDescription = "Static defense for your base"
 maxHealth = 130.0
 energyCost = 250.0
 metalCost = 100.0
-iconTex = ExtResource("1_4848m")
+iconTex = ExtResource("1_ksyo5")
 unitInfoType = 2

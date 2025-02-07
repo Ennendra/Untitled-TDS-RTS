@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://blfkxocwevg1k"]
 
-[ext_resource type="Texture2D" uid="uid://b4vrc26p1ys6q" path="res://Textures/Buildings/Factory.png" id="1_3uyt4"]
+[ext_resource type="Texture2D" uid="uid://bn5ux0nflrcgd" path="res://Textures/UI/UnitOverlays/UIOverlay_Factory.png" id="1_ov6ny"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_sw5kk"]
 
 [resource]
@@ -10,5 +10,5 @@ unitDescription = "Builds simple ground units"
 maxHealth = 500.0
 energyCost = 500.0
 metalCost = 260.0
-iconTex = ExtResource("1_3uyt4")
+iconTex = ExtResource("1_ov6ny")
 unitInfoType = 3

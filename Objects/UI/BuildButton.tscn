@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://8gchljq3igyy"]
 
 [ext_resource type="Script" path="res://Scripts/UI/BuildButton.cs" id="1_5q24g"]
-[ext_resource type="Texture2D" uid="uid://fdos3cgmbhrl" path="res://Textures/Buildings/MinerTest.png" id="1_yxulo"]
+[ext_resource type="Texture2D" uid="uid://cus2441edraya" path="res://Textures/UI/UnitOverlays/UIOverlay_Miner.png" id="2_340ks"]
 
 [node name="BuildButton" type="Button"]
 clip_contents = true
@@ -24,7 +24,7 @@ offset_right = 35.0
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_yxulo")
+texture = ExtResource("2_340ks")
 expand_mode = 1
 stretch_mode = 4
 

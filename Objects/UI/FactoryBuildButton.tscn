@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dodaethcf3kfh"]
 
 [ext_resource type="Script" path="res://Scripts/UI/FactoryBuildButton.cs" id="1_et0vp"]
-[ext_resource type="Texture2D" uid="uid://fdos3cgmbhrl" path="res://Textures/Buildings/MinerTest.png" id="2_yd60w"]
+[ext_resource type="Texture2D" uid="uid://dartehyuy3yl5" path="res://Textures/UI/UnitOverlays/UIOverlay_Unit1.png" id="2_nfcke"]
 
 [node name="FactoryBuildButton" type="Button"]
 clip_contents = true
@@ -24,7 +24,7 @@ offset_right = 35.0
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_yd60w")
+texture = ExtResource("2_nfcke")
 expand_mode = 1
 stretch_mode = 4
 

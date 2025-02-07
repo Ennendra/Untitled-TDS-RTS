@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://cg21k5ki3ef57"]
 
-[ext_resource type="Texture2D" uid="uid://cufvr5f516b8l" path="res://Textures/Units/Unit3/Unit3Full.png" id="1_wft3y"]
+[ext_resource type="Texture2D" uid="uid://c57pb5b7addvd" path="res://Textures/UI/UnitOverlays/UIOverlay_Unit3.png" id="1_oyclm"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_v4nvh"]
 
 [resource]
@@ -10,5 +10,5 @@ unitDescription = "Slow, long-range sniper unit."
 maxHealth = 60.0
 energyCost = 300.0
 metalCost = 80.0
-iconTex = ExtResource("1_wft3y")
+iconTex = ExtResource("1_oyclm")
 unitInfoType = 0

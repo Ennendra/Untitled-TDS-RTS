@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://ctsoihcu8ksgs"]
 
-[ext_resource type="Texture2D" uid="uid://dvt7occ8reyin" path="res://Textures/Buildings/EnergyStorage.png" id="1_5av4d"]
+[ext_resource type="Texture2D" uid="uid://vqq8itvykn6a" path="res://Textures/UI/UnitOverlays/UIOverlay_EnergyStorage.png" id="1_pr2oh"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_n2734"]
 
 [resource]
@@ -10,5 +10,5 @@ unitDescription = "Increases maximum energy storage capacity"
 maxHealth = 180.0
 energyCost = 100.0
 metalCost = 100.0
-iconTex = ExtResource("1_5av4d")
+iconTex = ExtResource("1_pr2oh")
 unitInfoType = 4

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://cocovxks22s8c"]
 
-[ext_resource type="Texture2D" uid="uid://b5syrr1l8a634" path="res://Textures/Units/Player/PlayerBottomV2.png" id="1_xbypl"]
+[ext_resource type="Texture2D" uid="uid://bu6tipt5508oo" path="res://Textures/UI/UnitOverlays/UIOverlay_Player.png" id="1_nooqx"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_1vxnm"]
 
 [resource]
@@ -10,5 +10,5 @@ unitDescription = "Your main vehicle. Required for building up structures but al
 maxHealth = 250.0
 energyCost = 800.0
 metalCost = 800.0
-iconTex = ExtResource("1_xbypl")
+iconTex = ExtResource("1_nooqx")
 unitInfoType = 0

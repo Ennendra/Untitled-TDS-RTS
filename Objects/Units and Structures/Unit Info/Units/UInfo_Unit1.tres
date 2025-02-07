@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://bb2ewtpnqjdv1"]
 
-[ext_resource type="Texture2D" uid="uid://bsljw8s3dhrxl" path="res://Textures/Units/Unit1/Unit1Full.png" id="1_u0o7a"]
+[ext_resource type="Texture2D" uid="uid://dartehyuy3yl5" path="res://Textures/UI/UnitOverlays/UIOverlay_Unit1.png" id="1_3p5vq"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_yqkxb"]
 
 [resource]
@@ -10,5 +10,5 @@ unitDescription = "Small light vehicle with rapid-firing weapons"
 maxHealth = 40.0
 energyCost = 80.0
 metalCost = 40.0
-iconTex = ExtResource("1_u0o7a")
+iconTex = ExtResource("1_3p5vq")
 unitInfoType = 0

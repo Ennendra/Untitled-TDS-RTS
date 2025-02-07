@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://x4gxvyts0ih4"]
 
-[ext_resource type="Texture2D" uid="uid://b25788itue6g8" path="res://Textures/Units/Unit1/Unit1Bottom.png" id="2_skbol"]
+[ext_resource type="Texture2D" uid="uid://dartehyuy3yl5" path="res://Textures/UI/UnitOverlays/UIOverlay_Unit1.png" id="2_c2gql"]
 [ext_resource type="LabelSettings" uid="uid://cmndx8sucoigj" path="res://Textures/UI/MainUIFont.tres" id="3_3ajki"]
 [ext_resource type="Script" path="res://Scripts/UI/UI_ControlGroupButton.cs" id="5_ncc8a"]
 
@@ -14,11 +14,11 @@ script = ExtResource("5_ncc8a")
 
 [node name="CGIcon" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 12.0
+offset_left = 9.0
 offset_top = 19.0
-offset_right = 37.0
-offset_bottom = 44.0
-texture = ExtResource("2_skbol")
+offset_right = 39.0
+offset_bottom = 49.0
+texture = ExtResource("2_c2gql")
 expand_mode = 1
 
 [node name="CGGroup" type="Label" parent="."]

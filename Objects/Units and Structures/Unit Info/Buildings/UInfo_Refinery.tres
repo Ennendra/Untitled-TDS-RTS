@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://bs6pt7msq1ki"]
 
-[ext_resource type="Texture2D" uid="uid://bhe4bd1nkhemy" path="res://Textures/Buildings/Refinery.png" id="1_4pfve"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="1_anwif"]
+[ext_resource type="Texture2D" uid="uid://bf58tx2iyvqu" path="res://Textures/UI/UnitOverlays/UIOverlay_Refinery.png" id="1_p7v6j"]
 
 [resource]
 script = ExtResource("1_anwif")
@@ -10,5 +10,5 @@ unitDescription = "Comsumes a large amount of energy to materialise additional m
 maxHealth = 400.0
 energyCost = 220.0
 metalCost = 100.0
-iconTex = ExtResource("1_4pfve")
+iconTex = ExtResource("1_p7v6j")
 unitInfoType = 4

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://c007oo5mi2fbn"]
 
-[ext_resource type="Texture2D" uid="uid://co3qnm3ikubho" path="res://Textures/Buildings/MetalStorage.png" id="1_8xjy6"]
+[ext_resource type="Texture2D" uid="uid://c1edjwk3m43bl" path="res://Textures/UI/UnitOverlays/UIOverlay_MetalStorage.png" id="1_bi80u"]
 [ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="1_mcp8b"]
 
 [resource]
@@ -10,5 +10,5 @@ unitDescription = "Increases maximum metal storage capacity"
 maxHealth = 180.0
 energyCost = 100.0
 metalCost = 100.0
-iconTex = ExtResource("1_8xjy6")
+iconTex = ExtResource("1_bi80u")
 unitInfoType = 4
