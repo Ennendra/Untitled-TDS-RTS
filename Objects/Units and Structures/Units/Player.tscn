@@ -104,7 +104,7 @@ timeToZeroSpeed = 0.6
 legSprite = NodePath("../BottomSprite")
 rotationSpeedDegrees = 240.0
 
-[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("8_sj1xu")]
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") groups=["Player"] instance=ExtResource("8_sj1xu")]
 damageComponent = NodePath("../DamageComponent")
 isAUnit = true
 isPlayer = true

@@ -49,8 +49,18 @@ public partial class ToolBuilder : ToolParent
 		//Is the tool enabled?
 		if (isActive)
 		{
-            //Do we have a defined and living target?
-            if (IsInstanceValid(toolFactionTarget))
+			//Determine if we have something in the build queue
+            if (buildQueueTarget != null)
+            {
+                //Only supply if the building still requires it
+                if (buildQueueTarget.totalSupplied < buildQueueTarget.totalCost)
+                {
+                    constructorComponent.buildQueueTarget = buildQueueTarget;
+                    constructorComponent.isActive = true;
+                }
+            }
+            //Do we have a defined and living target and nothing active in the build queue?
+            if (IsInstanceValid(toolFactionTarget) && !constructorComponent.isActive)
             {
 				//Check if we are close enough to work on the target
 				if (GlobalPosition.DistanceTo(toolFactionTarget.GlobalPosition) <= toolRange)
@@ -78,19 +88,6 @@ public partial class ToolBuilder : ToolParent
 				{
 					ResetToolTarget();
 				}
-            }
-            else //No direct target, see about working on the build queue instead
-            {
-				if (buildQueueTarget!=null)
-				{
-                    //Only supply if the building still requires supply
-                    if (buildQueueTarget.totalSupplied < buildQueueTarget.totalCost)
-                    {
-                        constructorComponent.buildQueueTarget = buildQueueTarget;
-                        constructorComponent.isActive = true;
-                    }
-                }
-				
             }
         }
 		else //tool is disabled, reset
@@ -138,7 +135,7 @@ public partial class ToolBuilder : ToolParent
                 if (colliderCheck)
                 {
                     FactionComponent targetComponent = (FactionComponent)collidedObject;
-                    if (targetComponent.GlobalPosition.DistanceTo(GlobalPosition) <= (toolRange))
+                    if (targetComponent.GlobalPosition.DistanceTo(GlobalPosition) <= (toolRange) && !targetComponent.IsInGroup("Player"))
                     {
 						SetFactionTarget(targetComponent);
                     }
