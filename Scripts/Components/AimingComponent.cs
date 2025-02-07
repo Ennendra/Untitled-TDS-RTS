@@ -31,6 +31,11 @@ public partial class AimingComponent : Node2D
         EquipWeapon += EquipNewWeapon;
 
         rotationSpeedRadians = Mathf.DegToRad(rotationSpeed);
+
+
+        SetWeaponDamageSource(equippedWeapon);
+        GD.Print(equippedWeapon.weaponWielder.Name);
+
     }
     public override void _Process(double delta)
     {
@@ -38,6 +43,14 @@ public partial class AimingComponent : Node2D
         currentAimDirection = Mathf.RotateToward(currentAimDirection, targetAimDirection,rotationSpeedRadians * (float)delta);
         //currentAimDirection = Mathf.LerpAngle(currentAimDirection, targetAimDirection, aimRotationFactor * (float)delta);
         GlobalRotation = currentAimDirection;
+    }
+
+    public void SetWeaponDamageSource(Node2D source)
+    {
+        if (equippedWeapon != null)
+        {
+            equippedWeapon.weaponWielder = GetParent() as Node2D; //Set the attacker source as the unit itself.
+        }
     }
 
     public void FireWeapons()

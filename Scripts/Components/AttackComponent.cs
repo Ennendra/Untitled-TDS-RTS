@@ -4,6 +4,7 @@ using System;
 public partial class AttackComponent : Area2D
 {
 	float damage;
+    public Node2D damageSource;
 
 	//Damage functions ---
 	public void SetDamage(float newDamage)
@@ -12,7 +13,7 @@ public partial class AttackComponent : Area2D
 	}
 	public void DealDamage(DamageComponent componentToDamage)
 	{
-		componentToDamage.TakeDamage(damage, DamageType.COMBATDAMAGE);
+		componentToDamage.TakeDamage(damage, DamageType.COMBATDAMAGE, damageSource);
 	}
 
 

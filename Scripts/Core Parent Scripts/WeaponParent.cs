@@ -22,6 +22,7 @@ public partial class WeaponParent : Node2D
     
     Node2D[] weaponFirePoints;
     AudioStreamPlayer2D weaponFireSound;
+    public Node2D weaponWielder;
     //Which of the weapons to fire (relevant for ALTERNATE fire)
     int weaponFireIndex = 0;
 
@@ -139,6 +140,7 @@ public partial class WeaponParent : Node2D
             if (projectileTexture != null) { newProjectile.SetProjectileTexture(projectileTexture); }
             
             newProjectile.SetProjectileStats(damage, range, isDirectFire, newProjectileSpeed);
+            newProjectile.SetProjectileAttackSource(weaponWielder);
             //Set the projectile collision layers and masks
             newProjectile.CallDeferred("SetProjectileCollisions", attackCollisionLayers, attackCollisionMasks);
         }

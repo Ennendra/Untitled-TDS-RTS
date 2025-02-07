@@ -86,6 +86,11 @@ public partial class ProjectileParent : Area2D
         mainSprite.Texture = texture;
     }
 
+    public void SetProjectileAttackSource(Node2D source)
+    {
+        attackComponent.damageSource = source;
+    }
+
     //Signals
     public void OnProjectileHit()
     {

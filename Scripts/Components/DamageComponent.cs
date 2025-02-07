@@ -107,11 +107,20 @@ public partial class DamageComponent : Area2D
         healthBar.Value = health;
 		//timeSinceLastDamage = 0;
     }
-    public void TakeDamage(float amount, DamageType type)
+    public void TakeDamage(float amount, DamageType type, Node2D source)
 	{
-		health -= amount;
+        if (type == DamageType.COMBATDAMAGE)
+        {
+            if (timeSinceLastDamage>0.5f) //limit response checks to 2 per second, this also prevents "cannot access disposed object" errors
+            {
+                GetParent().EmitSignal("AttackResponse", source);
+            }
+        }
+
+        health -= amount;
 		healthBar.Value = health;
         timeSinceLastDamage = 0;
+		
         if (health <= 0)
 		{
 			health = 0;
@@ -129,7 +138,7 @@ public partial class DamageComponent : Area2D
 	//Death function
 	public void TriggerDeath(DamageType type)
 	{
-		GD.Print("Death of " + GetParent().Name);
+		//GD.Print("Death of " + GetParent().Name);
 		if (type == DamageType.COMBATDAMAGE)
 			GetParent().EmitSignal("OnDamageKill");
 		else

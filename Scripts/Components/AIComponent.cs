@@ -24,7 +24,7 @@ public partial class AIComponent : Node2D
 	//May be used for artillery units, so they don't go chasing enemies too readily.
 	[Export] float fireRangeOverride = 0;
 	//TODO: Pathfinding component
-    AIUnitState unitState = AIUnitState.IDLE;
+    public AIUnitState unitState { get; protected set; } = AIUnitState.IDLE;
 
 	//Targets for orders
 	//order target can include enemies for attack, or allies for guarding

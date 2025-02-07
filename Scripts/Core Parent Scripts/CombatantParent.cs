@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Runtime;
 
 //This class embodies every unit and structure on the map
@@ -22,6 +23,9 @@ public partial class CombatantParent : CharacterBody2D
 
     [ExportCategory("Faction Definition")]
     [Export] int factionOverride = 0;
+
+    //Signal for responding to damage from an attacker
+    [Signal] public delegate void AttackResponseEventHandler(Node2D attackSource);
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -46,6 +50,8 @@ public partial class CombatantParent : CharacterBody2D
         Connect("OnDamageKill", new Callable(this, "OnDamageKill"));
         AddUserSignal("OnReclaimKill");
         Connect("OnReclaimKill", new Callable(this, "OnReclaimKill"));
+
+        AttackResponse += RespondToAttack;
     }
 
     public void SetUnitInfo()
@@ -125,5 +131,48 @@ public partial class CombatantParent : CharacterBody2D
     public void OnReclaimKill()
     {
         QueueFree();
+    }
+
+    public void RespondToAttack(Node2D attackSource)
+    {
+        if (IsInstanceValid(attackSource))
+        {
+            CircleShape2D shape = new();
+            shape.Radius = 400;
+
+            var spaceState = GetWorld2D().DirectSpaceState;
+            PhysicsShapeQueryParameters2D areaCast = new();
+            areaCast.CollideWithAreas = true; //set collide with areas to true, so it will register building areas
+            areaCast.Shape = shape;
+            areaCast.CollisionMask = factionComponent.CollisionLayer; //For marking any allies of this unit
+            areaCast.Transform = new Transform2D(0, this.GlobalPosition);
+
+            List<FactionComponent> alliesInRange = new();
+            //Run the collision check
+            var collisionResult = spaceState.IntersectShape(areaCast, 100);
+            if (collisionResult.Count > 0)
+            {
+                //Cast each hit to a faction component and add to the list
+                foreach (var collision in collisionResult)
+                {
+                    Variant collidedObject;
+                    bool colliderCheck = collision.TryGetValue("collider", out collidedObject);
+
+                    if (colliderCheck)
+                    {
+                        FactionComponent newComponent = (FactionComponent)collidedObject;
+                        if (IsInstanceValid(newComponent.GetAIComponent())) //Only check with units that can respond to the attack
+                        {
+                            //Only respond if the unit is idle
+                            if (newComponent.GetAIComponent().unitState == AIUnitState.IDLE)
+                            {
+                                newComponent.GetAIComponent().SetNewAttackMoveOrder(attackSource.GlobalPosition);
+                            }
+                        
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -43,7 +43,7 @@ public partial class ToolReclaimer : ToolParent
                         float healthToResourceRatio = toolTarget.maxHealth / toolTarget.metalReclaimValue;
                         targetDamagePerSecond = resourceComponent.GenMetal * healthToResourceRatio;
                     }
-                    toolTarget.TakeDamage(targetDamagePerSecond * (float)delta, DamageType.RECLAIMING);
+                    toolTarget.TakeDamage(targetDamagePerSecond * (float)delta, DamageType.RECLAIMING, null);
 
                     //Emit particles from the tool if applicable
                     if (particles != null)
