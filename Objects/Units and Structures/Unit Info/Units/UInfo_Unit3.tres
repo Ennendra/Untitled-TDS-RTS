@@ -12,3 +12,4 @@ energyCost = 300.0
 metalCost = 80.0
 iconTex = ExtResource("1_oyclm")
 unitInfoType = 0
+damage = "90"

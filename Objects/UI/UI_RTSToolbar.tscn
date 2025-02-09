@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://c2tt6j6mlckwl"]
+[gd_scene load_steps=29 format=3 uid="uid://c2tt6j6mlckwl"]
 
 [ext_resource type="Script" path="res://Scripts/UI/UI_RTSToolbar.cs" id="1_7pdph"]
 [ext_resource type="PackedScene" uid="uid://bsyfqrrdmvel1" path="res://Objects/UI/UISelectedUnitInfo.tscn" id="2_qn0ml"]
@@ -19,7 +19,11 @@
 [ext_resource type="Texture2D" uid="uid://bgcwpokqubdwa" path="res://Textures/UI/Icons/Orders/UICommandAttack.png" id="16_pvwpg"]
 [ext_resource type="Texture2D" uid="uid://cdaxhtixp68j7" path="res://Textures/UI/Icons/Orders/UICommandStop.png" id="17_bt6fg"]
 [ext_resource type="Texture2D" uid="uid://ckuf4gdg3bub2" path="res://Textures/UI/Icons/Orders/UICommandHold.png" id="18_3smou"]
+[ext_resource type="Script" path="res://Scripts/UI/UI_SingleUnitDetails.cs" id="20_18vmu"]
 [ext_resource type="Texture2D" uid="uid://cao327lqmoymq" path="res://Textures/UI/MainUIFramework/MainHealthbar.png" id="20_sa6m3"]
+[ext_resource type="Texture2D" uid="uid://dartehyuy3yl5" path="res://Textures/UI/UnitOverlays/UIOverlay_Unit1.png" id="21_ty5by"]
+[ext_resource type="LabelSettings" uid="uid://cmndx8sucoigj" path="res://Textures/UI/MainUIFont.tres" id="22_5ncul"]
+[ext_resource type="Texture2D" uid="uid://ck0h8pks6ghoq" path="res://Textures/UI/Icons/CustomCursors/UICursorAttack.png" id="23_v4wux"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lbi0b"]
 font_size = 40
@@ -29,6 +33,10 @@ outline_color = Color(1, 0, 1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_k0f7e"]
 font_size = 20
+font_color = Color(0, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_en3x7"]
+font_size = 24
 font_color = Color(0, 1, 1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_fwipt"]
@@ -344,6 +352,79 @@ offset_right = 150.5
 offset_bottom = -12.0
 text = "Actions"
 label_settings = SubResource("LabelSettings_k0f7e")
+
+[node name="SingleUnitSelectionContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 505.0
+offset_top = 50.0
+offset_right = 895.0
+offset_bottom = 200.0
+script = ExtResource("20_18vmu")
+
+[node name="UnitName" type="Label" parent="SingleUnitSelectionContainer"]
+custom_minimum_size = Vector2(175, 0)
+layout_mode = 0
+offset_left = -2.0
+offset_right = 173.0
+offset_bottom = 34.0
+text = "Netw"
+label_settings = SubResource("LabelSettings_en3x7")
+horizontal_alignment = 1
+
+[node name="UnitIcon" type="TextureRect" parent="SingleUnitSelectionContainer"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 40.0
+offset_right = 135.0
+offset_bottom = 140.0
+texture = ExtResource("21_ty5by")
+expand_mode = 1
+
+[node name="UnitDescription" type="Label" parent="SingleUnitSelectionContainer"]
+layout_mode = 0
+offset_left = 175.0
+offset_right = 390.0
+offset_bottom = 70.0
+text = "Unit Description goes here, describing the unit etc etc..."
+label_settings = ExtResource("22_5ncul")
+autowrap_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="SingleUnitSelectionContainer"]
+modulate = Color(1, 0, 0.458824, 1)
+layout_mode = 0
+offset_left = 175.0
+offset_top = 85.0
+offset_right = 390.0
+offset_bottom = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HealthText" type="Label" parent="SingleUnitSelectionContainer"]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 81.0
+offset_right = 390.0
+offset_bottom = 104.0
+text = "120/120"
+label_settings = ExtResource("22_5ncul")
+horizontal_alignment = 1
+
+[node name="DamageIcon" type="TextureRect" parent="SingleUnitSelectionContainer"]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 109.0
+offset_right = 215.0
+offset_bottom = 149.0
+texture = ExtResource("23_v4wux")
+
+[node name="DamageText" type="Label" parent="SingleUnitSelectionContainer"]
+layout_mode = 0
+offset_left = 235.0
+offset_top = 118.0
+offset_right = 275.0
+offset_bottom = 141.0
+text = "5"
+label_settings = ExtResource("22_5ncul")
 
 [node name="BuildLabel" type="Label" parent="."]
 layout_mode = 0

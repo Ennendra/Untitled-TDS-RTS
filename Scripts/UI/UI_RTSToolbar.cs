@@ -12,6 +12,7 @@ public partial class UI_RTSToolbar : Control
     [Export] OrderButton[] orderButtons;
     Control buildingButtonContainer;
     Control factoryButtonContainer;
+    UI_SingleUnitDetails singleUnitDetailContainer;
     Label orderDesignationLabel;
     TextureProgressBar healthBar;
 
@@ -36,6 +37,7 @@ public partial class UI_RTSToolbar : Control
 
         buildingButtonContainer = GetNode<Control>("BuildButtonContainer");
         factoryButtonContainer = GetNode<Control>("FactoryBuildButtonContainer");
+        singleUnitDetailContainer = GetNode<UI_SingleUnitDetails>("SingleUnitSelectionContainer");
         orderDesignationLabel = GetNode<Label>("LabelOrder");
         healthBar = GetNode<TextureProgressBar>("HealthBar");
     }
@@ -56,8 +58,20 @@ public partial class UI_RTSToolbar : Control
             button.SetButtonConnection(connection);
         }
     }
-    public void SetUnitSelectionUI(List<RTSSelectionType> selection)
+    public void SetUnitSelectionUI(List<RTSSelectionType> selection, FactionComponent singleUnit)
     {
+        //Reset the single unit detail container
+        singleUnitDetailContainer.Visible = false;
+        //Enable or disable the toolbar based on whether we selected any units
+        if (selection.Count > 0)
+        {
+            EnableOrderHotbar();
+        }
+        else
+        {
+            DisableOrderHotbar();
+        }
+        //Enable buttons and set their info based on units selected
         for (int i = 0; i < selectedUnitButtons.Length; i++)
         {
             if (i < selection.Count)
@@ -71,14 +85,12 @@ public partial class UI_RTSToolbar : Control
             }
         }
 
-        //Enable or disable the toolbar based on whether we selected any non-structure units
-        if (selection.Count > 0)
+        //If a single unit is selected, change UI to show single unit details
+        if (IsInstanceValid(singleUnit))
         {
-            EnableOrderHotbar();
-        }
-        else
-        {
-            DisableOrderHotbar();
+            selectedUnitButtons[0].Visible = false;
+            singleUnitDetailContainer.Visible = true;
+            singleUnitDetailContainer.SetSelectedUnitInfo(singleUnit);
         }
 
     }

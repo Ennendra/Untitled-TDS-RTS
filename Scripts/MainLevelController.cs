@@ -402,7 +402,8 @@ public partial class MainLevelController : Node2D
                         else
                             selection = rtsController.ExecuteSelection(false);
                         //send the unit selection data to the UI to display
-                        mainUI.GetRTSToolbar().SetUnitSelectionUI(selection);
+                        SetUnitSelectionUI(selection);
+
                     }
                     specialOrderJustExecuted = false;
                 }
@@ -684,8 +685,21 @@ public partial class MainLevelController : Node2D
         if (rtsController.controlGroups[index].units.Count > 0)
         {
             List<RTSSelectionType> selection = rtsController.SelectControlGroup(index, isAdditive);
-            mainUI.GetRTSToolbar().SetUnitSelectionUI(selection);
+            SetUnitSelectionUI(selection);
             SetStateToStandard();
+        }
+    }
+
+    public void SetUnitSelectionUI(List<RTSSelectionType> selection)
+    {
+        //Check whether a single item is selected and send info for single-unit details if so
+        if (rtsController.selectedItems.Count == 1)
+        {
+            mainUI.GetRTSToolbar().SetUnitSelectionUI(selection, rtsController.selectedItems[0]);
+        }
+        else
+        {
+            mainUI.GetRTSToolbar().SetUnitSelectionUI(selection, null);
         }
     }
 
@@ -750,7 +764,7 @@ public partial class MainLevelController : Node2D
 
         //Reset the unit selection on the RTS controller and the UI for it
         rtsController.ClearUnitSelection();
-        mainUI.GetRTSToolbar().SetUnitSelectionUI(new List<RTSSelectionType>());
+        SetUnitSelectionUI(new List<RTSSelectionType>());
         ResetUIToBuildingButtons();
 
         if (playState == LevelControllerPlayState.PERSONALPLAYER)
@@ -995,7 +1009,7 @@ public partial class MainLevelController : Node2D
     public void UnitDeathSelectionAndControlGroupCheck(FactionComponent unitComponent)
     {
         List<RTSSelectionType> selection = rtsController.RemoveDeadUnitFromSelection(unitComponent);
-        mainUI.GetRTSToolbar().SetUnitSelectionUI(selection);
+        SetUnitSelectionUI(selection);
         bool unitInControlGroup = rtsController.RemoveFromControlGroupOnDeath(unitComponent);
         if (unitInControlGroup)
         {
@@ -1119,13 +1133,13 @@ public partial class MainLevelController : Node2D
     {
         List<RTSSelectionType> selection = rtsController.SelectUnitOfType(unitType);
         //send the unit selection data to the UI to display
-        mainUI.GetRTSToolbar().SetUnitSelectionUI(selection);
+        SetUnitSelectionUI(selection);
     }
     public void DeselectUnitOfType(UnitInfo unitType)
     {
         List<RTSSelectionType> selection = rtsController.DeselectUnitOfType(unitType);
         //send the unit selection data to the UI to display
-        mainUI.GetRTSToolbar().SetUnitSelectionUI(selection);
+        SetUnitSelectionUI(selection);
     }
     //Signals for when a factory build button is pressed
     public void OnNewFactoryBuild(ConstructInfo buildInfo, int amount)

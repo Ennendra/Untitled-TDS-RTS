@@ -17,10 +17,11 @@ public partial class UnitInfo : Resource
     [Export] public float energyCost, metalCost;
     [Export] public Texture2D iconTex;
     [Export] public UnitInfoType unitInfoType;
+    [Export] public string damage;
 
-    public UnitInfo() : this("","",120,10,10,null, UnitInfoType.OTHER) { }
+    public UnitInfo() : this("","",120,10,10,null, UnitInfoType.OTHER, "") { }
 
-    public UnitInfo(string unitName, string unitDescription, float maxHealth, float energyCost, float metalCost, Texture2D iconTex, UnitInfoType unitInfoType)
+    public UnitInfo(string unitName, string unitDescription, float maxHealth, float energyCost, float metalCost, Texture2D iconTex, UnitInfoType unitInfoType, string damage)
     {
         this.unitName = unitName;
         this.unitDescription = unitDescription;
@@ -29,6 +30,7 @@ public partial class UnitInfo : Resource
         this.metalCost = metalCost;
         this.iconTex = iconTex;
         this.unitInfoType = unitInfoType;
+        this.damage = damage;
     }
 
 }

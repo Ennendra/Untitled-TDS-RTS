@@ -49,6 +49,11 @@ public partial class DamageComponent : Area2D
 	{
 		return health / maxHealth * 100;
 	}
+	public float GetCurrentHealth()
+	{
+		return health;
+	}
+
     public float[] GetEnergyMetalRatio()
     {
         float[] ratio = new float[2] { 1, 1 };
