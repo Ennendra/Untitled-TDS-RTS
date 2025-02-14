@@ -38,16 +38,16 @@ glow_intensity = 2.0
 glow_blend_mode = 1
 glow_hdr_threshold = 0.9
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rv1op"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cf7n3"]
 texture = ExtResource("2_u1au2")
 texture_region_size = Vector2i(50, 50)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_5wmer"]
 tile_size = Vector2i(50, 50)
-sources/0 = SubResource("TileSetAtlasSource_rv1op")
+sources/0 = SubResource("TileSetAtlasSource_cf7n3")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r0v2o"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qk5ux"]
 texture = ExtResource("2_plj7p")
 separation = Vector2i(1, 1)
 texture_region_size = Vector2i(50, 50)
@@ -63,7 +63,7 @@ texture_region_size = Vector2i(50, 50)
 
 [sub_resource type="TileSet" id="TileSet_vmw86"]
 tile_size = Vector2i(50, 50)
-sources/0 = SubResource("TileSetAtlasSource_r0v2o")
+sources/0 = SubResource("TileSetAtlasSource_qk5ux")
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_eb8bk"]
 vertices = PackedVector2Array(4954.9, -4804.95, 4905.1, 5230, -730, -80, -730, -470, -5305.05, 5230, -820, -80, -5329.95, -4780.04, -1020, -380, -1020, -470, -820, -380)
@@ -130,6 +130,7 @@ region_rect = Rect2(0, 0, 80000, 80000)
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_ce6kg")
+volume_db = -5.125
 autoplay = true
 parameters/looping = true
 
@@ -529,7 +530,7 @@ position = Vector2(-1325, -325)
 position = Vector2(-1325, -175)
 
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
-[connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedToScene"]
+[connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedFromScene"]
 
 [editable path="ObstacleWall"]
 [editable path="ObstacleWall2"]

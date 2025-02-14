@@ -162,6 +162,9 @@ public partial class MainLevelController : Node2D
         mainUI.SetPlayerFactionController(factionController[playerFaction - 1]);
         rtsController.levelController = this;
         rtsController.SetFaction(playerFaction);
+        
+        GD.Print("Player faction:" + playerFaction);
+        GD.Print("Player found?  " + player.Name);
 
         //Add the player to the list if it exists
         //If not, make sure we aren't in personal mode at start
@@ -950,6 +953,7 @@ public partial class MainLevelController : Node2D
         //Set the player and its resource and contructor components to the relevant faction controller
         //(Set as playerfaction - 1 since faction 1 will be index 0 on the controller list)
         factionController[playerFaction - 1].AddPlayer(player);
+        
         //Add the player's sight component to the FOW Controller
         fowController.AddSightComponent(player.GetSightComponent());
     }
@@ -1080,7 +1084,7 @@ public partial class MainLevelController : Node2D
             }
         }
     }
-    public void OnObjectRemovedToScene(Node node)
+    public void OnObjectRemovedFromScene(Node node)
     {
         //Remove the new node from the respective tracker list if they are part of the right group
         if (node.IsInGroup("Building"))

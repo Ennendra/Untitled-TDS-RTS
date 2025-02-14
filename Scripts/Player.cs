@@ -95,9 +95,13 @@ public partial class Player : CombatantParent
         camera = GetNode<Camera2D>("Camera");
 
         factionComponent.SetAsSpotted(factionComponent.faction);
+
+        MinimapMarkerComponent marker = GetNode<MinimapMarkerComponent>("MinimapMarkerComponent");
+        marker.spottedByFaction[factionComponent.faction] = true;
     }
 	public override void _Process(double delta)
 	{
+        
         //If not currently firing, disable mouse interactions if the mouse is over the player UI
         if (!Input.IsActionPressed("Personal_Use_Fire")) { uiInputCheck = playerUI.mouseOverUI; }
 

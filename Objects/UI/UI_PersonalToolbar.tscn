@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dgnlq3bybri7b"]
+[gd_scene load_steps=16 format=3 uid="uid://dgnlq3bybri7b"]
 
 [ext_resource type="Script" path="res://Scripts/UI/UI_PersonalToolbar.cs" id="1_vxbyf"]
 [ext_resource type="Resource" uid="uid://yjs4iloqmg2i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Generator.tres" id="3_gtk04"]
@@ -13,6 +13,7 @@
 [ext_resource type="Resource" uid="uid://dclclw6hqdrx7" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Turret.tres" id="9_tci4v"]
 [ext_resource type="Texture2D" uid="uid://dhaax5as2o7sm" path="res://Textures/UI/MainUIFramework/MainToolbar.png" id="10_maali"]
 [ext_resource type="Texture2D" uid="uid://cao327lqmoymq" path="res://Textures/UI/MainUIFramework/MainHealthbar.png" id="11_lhd0r"]
+[ext_resource type="LabelSettings" uid="uid://cmndx8sucoigj" path="res://Textures/UI/MainUIFont.tres" id="13_u1qc8"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_3djjf"]
 font_size = 24
@@ -78,7 +79,7 @@ show_percentage = false
 anchors_preset = 0
 offset_left = 510.0
 offset_top = 50.0
-offset_right = 740.0
+offset_right = 675.0
 offset_bottom = 200.0
 mouse_filter = 1
 
@@ -92,21 +93,48 @@ offset_right = 70.0
 offset_bottom = 0.0
 grow_vertical = 0
 
+[node name="BuildLabel" type="Label" parent="ToolButtonContainer/ButtonTool1"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "Build"
+horizontal_alignment = 1
+
 [node name="ButtonTool2" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -35.0
+offset_left = -70.0
 offset_top = -70.0
-offset_right = 35.0
+offset_right = 0.0
 offset_bottom = 0.0
-grow_horizontal = 2
+grow_horizontal = 0
 grow_vertical = 0
 
+[node name="ReclaimLabel" type="Label" parent="ToolButtonContainer/ButtonTool2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.5
+offset_top = -25.0
+offset_right = 30.5
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "Reclaim"
+horizontal_alignment = 1
+
 [node name="ButtonTool3" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -121,12 +149,14 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="ButtonWeapon1" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+visible = false
 layout_mode = 1
 offset_right = 70.0
 offset_bottom = 70.0
 isButtonTool = false
 
 [node name="ButtonWeapon2" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -138,6 +168,7 @@ grow_horizontal = 2
 isButtonTool = false
 
 [node name="ButtonWeapon3" parent="ToolButtonContainer" instance=ExtResource("3_hf2e2")]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -147,6 +178,19 @@ offset_right = 0.0
 offset_bottom = 70.0
 grow_horizontal = 0
 isButtonTool = false
+
+[node name="MainToolLabel" type="Label" parent="ToolButtonContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -44.5
+offset_right = 44.5
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Active Tool:"
+label_settings = ExtResource("13_u1qc8")
+horizontal_alignment = 1
 
 [node name="BuildButtonContainer" type="Control" parent="."]
 anchors_preset = 0

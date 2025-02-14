@@ -115,8 +115,8 @@ shape = SubResource("CircleShape2D_pk0mf")
 
 [node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("9_kxgj0")]
 factionComponent = NodePath("../FactionComponent")
-genEnergy = 8.0
-genMetal = 4.0
+genEnergy = 80.0
+genMetal = 40.0
 stoEnergy = 50.0
 stoMetal = 40.0
 
