@@ -9,6 +9,7 @@ public partial class BaseNetworkController : Area2D
 {
     public bool isNetworkOnline = true;
     [Export] FactionComponent factionComponent;
+    List<BuildingParent> buildingsInNetwork = new();
 
     public int GetNetworkFaction()
     {
@@ -23,6 +24,7 @@ public partial class BaseNetworkController : Area2D
 
             if (buildingCast.GetFactionComponent().faction == GetNetworkFaction())
             {
+                buildingsInNetwork.Add(buildingCast);
                 buildingCast.AddToNetwork(this);
             }
         }
@@ -39,8 +41,20 @@ public partial class BaseNetworkController : Area2D
 
             if (buildingCast.GetFactionComponent().faction == GetNetworkFaction())
             {
+                buildingsInNetwork.Remove(buildingCast);
                 buildingCast.RemoveFromNetwork(this);
             }
+        }
+    }
+
+    //Runs when the hub is removed: Make sure all buildings no longer register it as an active network
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+
+        foreach (var building in buildingsInNetwork)
+        {
+            building.RemoveFromNetwork(this);
         }
     }
 }

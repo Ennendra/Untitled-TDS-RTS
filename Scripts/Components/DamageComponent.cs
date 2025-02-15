@@ -116,7 +116,7 @@ public partial class DamageComponent : Area2D
 	{
         if (type == DamageType.COMBATDAMAGE)
         {
-            if (timeSinceLastDamage>0.5f) //limit response checks to 2 per second, this also prevents "cannot access disposed object" errors
+            if (timeSinceLastDamage>0.5f) //limit response checks to 2 per second so attack responses arent spammed
             {
                 GetParent().EmitSignal("AttackResponse", source);
             }

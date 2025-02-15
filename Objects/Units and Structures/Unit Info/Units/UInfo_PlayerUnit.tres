@@ -7,7 +7,7 @@
 script = ExtResource("2_1vxnm")
 unitName = "Commander"
 unitDescription = "Your main vehicle. Required for building up structures but also has decent combat capabilities."
-maxHealth = 250.0
+maxHealth = 600.0
 energyCost = 800.0
 metalCost = 800.0
 iconTex = ExtResource("1_nooqx")

@@ -67,7 +67,7 @@ public partial class BuildingParent : CombatantParent
 	}
 	public void ProcessBuildingTick(double delta)
 	{
-		if (isOnline)
+		if (IsBuildingOnline())
 		{
 			ProcessBuildingOperation(delta);
 		}

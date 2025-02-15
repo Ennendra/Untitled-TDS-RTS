@@ -23,7 +23,10 @@ public partial class AIComponent : Node2D
 	//overrides the standardFireRange from being the equipped weapon's range. if 0, no override is given.
 	//May be used for artillery units, so they don't go chasing enemies too readily.
 	[Export] float fireRangeOverride = 0;
-	//TODO: Pathfinding component
+
+    //tells us whether the AI is 'active', used to control turrets when they are offline
+    public bool isAIActive = true;
+
     public AIUnitState unitState { get; protected set; } = AIUnitState.IDLE;
 
 	//Targets for orders
@@ -56,7 +59,7 @@ public partial class AIComponent : Node2D
 		base._Process(delta);
 
         //Process only if the game isn't paused
-        if (!GetTree().Paused)
+        if (!GetTree().Paused && isAIActive)
         {
 		    //Set aim direction towards a target to fire at, or towards forward movement if none is available
 		    bool isFireTargetValid = CheckFireTarget();
@@ -78,7 +81,7 @@ public partial class AIComponent : Node2D
         base._PhysicsProcess(delta);
 
         //Process only if the game isn't paused
-        if (!GetTree().Paused)
+        if (!GetTree().Paused && isAIActive)
         {
             pathTimer += (float)delta;
             //Process orders based on current order state

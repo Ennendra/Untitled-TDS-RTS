@@ -22,7 +22,9 @@ public partial class BuildingFactory : BuildingParent
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-	}
+
+        if (!IsBuildingOnline()) { constructorComponent.isActive = false; }
+    }
 
     public override void _PhysicsProcess(double delta)
     {
@@ -70,5 +72,6 @@ public partial class BuildingFactory : BuildingParent
                 constructorComponent.isActive = false;
             }
         }
+        
     }
 }

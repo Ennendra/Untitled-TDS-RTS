@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://uope7kr0g6fa"]
 
-[ext_resource type="Script" path="res://Scripts/Core Parent Scripts/BuildingParent.cs" id="1_rlvto"]
+[ext_resource type="Script" path="res://Scripts/Buildings/BuildingTurret.cs" id="1_ilxi0"]
 [ext_resource type="Texture2D" uid="uid://jpbjl7hit1gx" path="res://Textures/Buildings/Turret1/Turret1Base.png" id="2_hnot5"]
 [ext_resource type="PackedScene" uid="uid://bdoapkbfo36gc" path="res://Objects/Other/ExplosionMedium.tscn" id="3_4bxip"]
 [ext_resource type="PackedScene" uid="uid://3g01cgkmgeug" path="res://Objects/Components/DamageComponent.tscn" id="3_ef1lt"]
@@ -19,17 +19,17 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qglq"]
 radius = 43.0
 
-[node name="BuildingTurret" type="CharacterBody2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "sightComponent") groups=["Building"]]
+[node name="BuildingTurret" type="CharacterBody2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "aimComponent", "aiComponent", "factionComponent", "sightComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 16384
-script = ExtResource("1_rlvto")
-buildingType = 1
+script = ExtResource("1_ilxi0")
+buildingType = 7
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
-unitInfo = ExtResource("10_1vn5o")
 deathExplosion = ExtResource("3_4bxip")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
 aimComponent = NodePath("AimingComponent")
+aiComponent = NodePath("AiComponent")
 factionComponent = NodePath("FactionComponent")
 sightComponent = NodePath("SightComponent")
 
