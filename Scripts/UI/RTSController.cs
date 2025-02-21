@@ -308,10 +308,33 @@ public partial class RTSController : Node2D
         //Check if there is only one type and that it is a factory type. If so, send info to the level controller as we will be changing the UI
         if (selectionTypes.Count == 1)
         {
+            //'re-enable' the first button (in the case of it being disabled below previously)
+            levelController.mainUI.GetRTSToolbar().ToggleFactoryBuildButtonEnable(0, true);
+
             if (selectedItems[0].GetFactoryComponent() != null)
             {
-                levelController.SetFactoryButtonInfo(GetFactoryBuildableList());
-                factoryBuildMenuEnabled = true;
+                //Check if this 'factory' is a network hub. If so, make sure only ONE is selected before showing it's build list (being a player unit)
+                //Otherwise, set it normally
+                if (selectedItems[0].unitInfo.unitInfoType == UnitInfoType.STRUCTURE_NETWORKHUB)
+                {
+                    if (selectedItems.Count == 1)
+                    {
+                        levelController.SetFactoryButtonInfo(GetFactoryBuildableList());
+                        factoryBuildMenuEnabled = true;
+
+                        //check if the player is alive and not currently building. Disable the build button if it is
+                        if (IsInstanceValid(levelController.player) || levelController.playerIsBuilding)
+                        {
+                            levelController.mainUI.GetRTSToolbar().ToggleFactoryBuildButtonEnable(0, false);
+                        }
+                    }
+                }
+                else
+                {
+                    levelController.SetFactoryButtonInfo(GetFactoryBuildableList());
+                    factoryBuildMenuEnabled = true;
+                }
+                
             }
             else
             {
@@ -570,23 +593,28 @@ public partial class RTSController : Node2D
     //Functions linked to factory build queue editing (going from button UI to MainLevelController to here)
     public void AddFactoryItemToQueue(ConstructInfo buildInfo)
     {
+        bool uniqueBuilding = false;
         foreach (FactionComponent component in selectedItems)
         {
-            if (IsInstanceValid(component.GetFactoryComponent()))
+            if (IsInstanceValid(component.GetFactoryComponent()) && !uniqueBuilding)
             {
                 component.GetFactoryComponent().AddToBuildQueue(buildInfo);
+                if (!(buildInfo.uniqueIdentifier == CI_UniqueIdentifier.NOTUNIQUE)) { uniqueBuilding = true; }
             }
         }
     }
-    public void RemoveFactoryItemFromQueue(ConstructInfo buildInfo)
+    public bool RemoveFactoryItemFromQueue(ConstructInfo buildInfo) //returns true if a build item in progress that is unique (ie. player) is removed
     {
+        bool uniqueBuildingRemoved = false;
         foreach (FactionComponent component in selectedItems)
         {
             if (IsInstanceValid(component.GetFactoryComponent()))
             {
-                component.GetFactoryComponent().RemoveFromBuildQueue(buildInfo);
+                bool removedCurrentItem = component.GetFactoryComponent().RemoveFromBuildQueue(buildInfo);
+                if (removedCurrentItem && buildInfo.uniqueIdentifier != CI_UniqueIdentifier.NOTUNIQUE) { uniqueBuildingRemoved = true; }
             }
         }
+        return uniqueBuildingRemoved;
     }
     public ConstructInfo[] GetFactoryBuildableList() 
     {

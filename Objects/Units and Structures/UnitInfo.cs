@@ -6,6 +6,7 @@ public enum UnitInfoType
     UNIT_OTHER,
     STRUCTURE_COMBATANT,
     STRUCTURE_BUILDER,
+    STRUCTURE_NETWORKHUB,
     OTHER
 }
 

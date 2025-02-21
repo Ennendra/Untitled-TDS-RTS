@@ -47,6 +47,17 @@ public partial class BaseNetworkController : Area2D
         }
     }
 
+
+    public void ProcessNewBuilding()
+    {
+
+    }
+
+    public void ProcessRemoveBuilding()
+    {
+
+    }
+
     //Runs when the hub is removed: Make sure all buildings no longer register it as an active network
     public override void _ExitTree()
     {

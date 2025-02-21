@@ -118,7 +118,7 @@ public partial class FactoryComponent : Node2D
 	{
 		buildQueue.Add(itemToAdd);
 	}
-	public void RemoveFromBuildQueue(ConstructInfo itemToRemove)
+	public bool RemoveFromBuildQueue(ConstructInfo itemToRemove) //returns true if the item removed is the current item being built
 	{
         //Get all the indexes in the build queue that are of the item we want to remove
         List<int> filteredIndexSet = new();
@@ -137,6 +137,7 @@ public partial class FactoryComponent : Node2D
             buildQueue.Remove(itemToRemove);
             energySupplied = 0;
             metalSupplied = 0;
+            return true;
         }
         else if(filteredIndexSet.Count > 1)
         {
@@ -146,7 +147,7 @@ public partial class FactoryComponent : Node2D
         {
             buildQueue.Remove(itemToRemove);
         }
-
+        return false;
 	}
 	public List<ConstructInfo> GetBuildQueue()
 	{
@@ -163,13 +164,27 @@ public partial class FactoryComponent : Node2D
     }
 	public void CompleteItem()
 	{
-        UnitParent newUnit = (UnitParent)GetCurrentBuildItem().objectToSpawn.Instantiate();
-        GetTree().CurrentScene.AddChild(newUnit);
-        newUnit.GlobalPosition = GlobalPosition + buildOffset;
-        newUnit.SetInitialDirection(unitStartRotation);
-        newUnit.SetNewFaction(factionComponent.faction);
-        newUnit.SetMoveOrder(factionComponent.GetRallyPoint());
-        newUnit.motherFactory = (Node2D)GetParent();
+        if (GetCurrentBuildItem().uniqueIdentifier == CI_UniqueIdentifier.PLAYER)
+        {
+            Player newUnit = (Player)GetCurrentBuildItem().objectToSpawn.Instantiate();
+            GetTree().CurrentScene.AddChild(newUnit);
+            newUnit.GlobalPosition = GlobalPosition + buildOffset;
+            newUnit.SetInitialDirection(unitStartRotation);
+            newUnit.SetNewFaction(factionComponent.faction);
+            newUnit.motherFactory = (Node2D)GetParent();
+            GetTree().CurrentScene.EmitSignal("FactoryUniqueQueueRemoved", GetCurrentBuildItem());
+        }
+        else //default units
+        {
+            UnitParent newUnit = (UnitParent)GetCurrentBuildItem().objectToSpawn.Instantiate();
+            GetTree().CurrentScene.AddChild(newUnit);
+            newUnit.GlobalPosition = GlobalPosition + buildOffset;
+            newUnit.SetInitialDirection(unitStartRotation);
+            newUnit.SetNewFaction(factionComponent.faction);
+            newUnit.SetMoveOrder(factionComponent.GetRallyPoint());
+            newUnit.motherFactory = (Node2D)GetParent();
+        }
+        
         
         buildQueue.RemoveAt(0);
         energySupplied = 0;

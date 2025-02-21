@@ -145,6 +145,11 @@ public partial class UI_RTSToolbar : Control
         }
     }
 
+    public void ToggleFactoryBuildButtonEnable(int buttonIndex, bool isEnabled)
+    {
+        factoryBuildingButtons[buttonIndex].Disabled = !isEnabled;
+    }
+
     public void ResetBuildingButtons()
     {
         buildingButtonContainer.Visible = true;

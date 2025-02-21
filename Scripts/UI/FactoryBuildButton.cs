@@ -10,7 +10,7 @@ public partial class FactoryBuildButton : Button
     Label labelAmount;
 
 
-    //The node that these buttons will emit signals to (ie. the player)
+    //The node that these buttons will emit signals to (ie. the main level controller)
     Node2D inputConnection;
 
     // Called when the node enters the scene tree for the first time.

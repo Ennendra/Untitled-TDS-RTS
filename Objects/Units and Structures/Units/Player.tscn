@@ -26,7 +26,7 @@ radius = 27.5
 [sub_resource type="CircleShape2D" id="CircleShape2D_0prfk"]
 radius = 25.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("spriteAimCursor", "weaponFolder", "toolFolder", "buildTool", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "movementComponent", "resourceComponent", "sightComponent") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("spriteAimCursor", "weaponFolder", "toolFolder", "buildTool", "physicsCollider", "mainSprite", "damageComponent", "aimComponent", "factionComponent", "movementComponent", "resourceComponent", "sightComponent") groups=["Player"]]
 collision_layer = 8
 collision_mask = 1048587
 motion_mode = 1
@@ -35,6 +35,7 @@ spriteAimCursor = NodePath("AimingComponent/AimingCursor")
 weaponFolder = NodePath("AimingComponent/Weapons")
 toolFolder = NodePath("AimingComponent/Tools")
 buildTool = NodePath("AimingComponent/Tools/ToolBuilder1")
+physicsCollider = NodePath("CollisionShape2D")
 deathExplosion = ExtResource("3_ttisl")
 mainSprite = NodePath("BottomSprite")
 damageComponent = NodePath("DamageComponent")

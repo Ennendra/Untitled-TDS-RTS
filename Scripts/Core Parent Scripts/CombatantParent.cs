@@ -132,7 +132,7 @@ public partial class CombatantParent : CharacterBody2D
     {
         QueueFree();
     }
-
+    
     public void RespondToAttack(Node2D attackSource)
     {
         if (IsInstanceValid(attackSource))

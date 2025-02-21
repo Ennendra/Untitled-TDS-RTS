@@ -11,4 +11,5 @@ maxHealth = 180.0
 energyCost = 100.0
 metalCost = 100.0
 iconTex = ExtResource("1_pr2oh")
-unitInfoType = 4
+unitInfoType = 5
+damage = ""

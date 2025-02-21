@@ -88,4 +88,6 @@ visible = false
 sightRange = 600
 factionComponent = NodePath("../FactionComponent")
 
+[connection signal="tree_exiting" from="." to="." method="OnBuildingDeath"]
+
 [editable path="AimingComponent/Weapon"]

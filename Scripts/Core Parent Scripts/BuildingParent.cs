@@ -120,5 +120,22 @@ public partial class BuildingParent : CombatantParent
 	{
         //Add this network area to the list that this building is in
         networksInArea.Remove(network);
+		
     }
+
+	public void OnBuildingDeath()
+	{
+		//Send a signal to the main level controller if this building was building a unique item
+		if (IsInstanceValid(factoryComponent))
+		{
+			List<ConstructInfo> buildQueue = factoryComponent.GetBuildQueue();
+			foreach (ConstructInfo build in buildQueue)
+			{
+				if (build.uniqueIdentifier != CI_UniqueIdentifier.NOTUNIQUE)
+				{
+					GetTree().CurrentScene.EmitSignal("FactoryUniqueQueueRemoved", build);
+				}
+			}
+		}
+	}
 }

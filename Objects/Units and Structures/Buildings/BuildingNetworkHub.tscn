@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://d8rp6yirf64h"]
+[gd_scene load_steps=20 format=3 uid="uid://d8rp6yirf64h"]
 
 [ext_resource type="Script" path="res://Scripts/Buildings/BuildingNetworkHub.cs" id="1_syvvr"]
 [ext_resource type="Texture2D" uid="uid://cushumnxn0gh7" path="res://Textures/Buildings/NetworkHub.png" id="2_vcfvo"]
@@ -13,6 +13,9 @@
 [ext_resource type="Texture2D" uid="uid://87eogpif1ted" path="res://Textures/UI/CustomUIPixel.png" id="9_d28g0"]
 [ext_resource type="PackedScene" uid="uid://eh463onn4fn4" path="res://Objects/Components/MinimapMarkerComponent.tscn" id="11_8eymw"]
 [ext_resource type="PackedScene" uid="uid://ccx23ah2havia" path="res://Objects/Components/FOWSightComponent.tscn" id="13_ermop"]
+[ext_resource type="PackedScene" uid="uid://c5o73c7qclacc" path="res://Objects/Components/ConstructorComponent.tscn" id="14_qkm2b"]
+[ext_resource type="PackedScene" uid="uid://cm07ojc8e0ev4" path="res://Objects/Components/FactoryComponent.tscn" id="15_hguwo"]
+[ext_resource type="Resource" uid="uid://d2ocrsu2vatr" path="res://Objects/Units and Structures/Construction Info/Units/Player.tres" id="16_bhq07"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vg8ap"]
 radius = 43.0
@@ -29,11 +32,13 @@ shader_parameter/linesColorIntensity = 2.0
 shader_parameter/hologramTextureTiling = Vector2(1, 0.1)
 shader_parameter/hologramTexture = ExtResource("8_4geie")
 
-[node name="BuildingNetworkHub" type="CharacterBody2D" node_paths=PackedStringArray("buildingObstacleBounds", "mainSprite", "damageComponent", "factionComponent", "sightComponent") groups=["Building"]]
+[node name="BuildingNetworkHub" type="CharacterBody2D" node_paths=PackedStringArray("buildingObstacleBounds", "constructorComponent", "factoryComponent", "mainSprite", "damageComponent", "factionComponent", "sightComponent") groups=["Building"]]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_syvvr")
 buildingObstacleBounds = NodePath("BuildingObstacleBounds")
+constructorComponent = NodePath("ConstructorComponent")
+factoryComponent = NodePath("FactoryComponent")
 deathExplosion = ExtResource("3_4tsre")
 mainSprite = NodePath("MainSprite")
 damageComponent = NodePath("DamageComponent")
@@ -52,8 +57,9 @@ healthBarOffset = 50.0
 [node name="Collider" type="CollisionShape2D" parent="DamageComponent" groups=["Building"]]
 shape = SubResource("CircleShape2D_vg8ap")
 
-[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent") instance=ExtResource("5_21qxu")]
+[node name="FactionComponent" parent="." node_paths=PackedStringArray("damageComponent", "factoryComponent") instance=ExtResource("5_21qxu")]
 damageComponent = NodePath("../DamageComponent")
+factoryComponent = NodePath("../FactoryComponent")
 selectedTexture = ExtResource("5_86ifb")
 unitInfo = ExtResource("5_bkni2")
 
@@ -90,6 +96,18 @@ visible = false
 sightRange = 200
 factionComponent = NodePath("../FactionComponent")
 
+[node name="ConstructorComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("14_qkm2b")]
+factionComponent = NodePath("../FactionComponent")
+maxSupplyRate = 20.0
+
+[node name="Collider" type="CollisionShape2D" parent="ConstructorComponent" groups=["Building"]]
+shape = SubResource("CircleShape2D_vg8ap")
+
+[node name="FactoryComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("15_hguwo")]
+buildableUnits = Array[Resource]([ExtResource("16_bhq07")])
+factionComponent = NodePath("../FactionComponent")
+
+[connection signal="tree_exiting" from="." to="." method="OnBuildingDeath"]
 [connection signal="area_entered" from="NetworkController" to="NetworkController" method="OnComponentEntered"]
 [connection signal="area_exited" from="NetworkController" to="NetworkController" method="OnComponentExited"]
 [connection signal="body_entered" from="NetworkController" to="." method="OnBodyEntered"]

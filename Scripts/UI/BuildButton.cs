@@ -8,10 +8,10 @@ public partial class BuildButton : Button
 	[Export] ConstructInfo buildInfo;
 	TextureRect buttonTexture;
 	bool isTechAvailable = true;
-	
 
-	//The node that these buttons will emit signals to (ie. the player)
-	Node2D inputConnection;
+
+    //The node that these buttons will emit signals to (ie. the main level controller)
+    Node2D inputConnection;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

@@ -39,16 +39,16 @@ public partial class BuildingFactory : BuildingParent
 
 
         //place the blueprint
-        BlueprintParent newUnit = (BlueprintParent)buildableUnits[index].objectToSpawn.Instantiate();
-        GetTree().CurrentScene.AddChild(newUnit);
-        newUnit.GlobalPosition = GlobalPosition+buildCenterOffset;
-        newUnit.SetNewFaction(factionComponent.faction);
-        newUnit.GetDamageComponent().SetHealthPercentage(1);
+  //      BlueprintParent newUnit = (BlueprintParent)buildableUnits[index].objectToSpawn.Instantiate();
+  //      GetTree().CurrentScene.AddChild(newUnit);
+  //      newUnit.GlobalPosition = GlobalPosition+buildCenterOffset;
+  //      newUnit.SetNewFaction(factionComponent.faction);
+  //      newUnit.GetDamageComponent().SetHealthPercentage(1);
 
-		constructorComponent.blueprintTarget = newUnit;
-		constructorComponent.isActive = true;
+		//constructorComponent.blueprintTarget = newUnit;
+		//constructorComponent.isActive = true;
 
-		currentBuild = newUnit;
+		//currentBuild = newUnit;
     }
 
 	public void CancelConstruction()

@@ -53,7 +53,7 @@ public class BuildingQueue
     }
 }
 
-public partial class Player : CombatantParent
+public partial class Player : UnitParent
 {
     PlayerState state = PlayerState.COMBAT;
     public MainLevelController levelController;

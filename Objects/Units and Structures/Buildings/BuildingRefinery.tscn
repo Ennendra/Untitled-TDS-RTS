@@ -67,3 +67,5 @@ polygon = PackedVector2Array(75, 75, 75, -75, -75, -75, -75, 75)
 visible = false
 sightRange = 200
 factionComponent = NodePath("../FactionComponent")
+
+[connection signal="tree_exiting" from="." to="." method="OnBuildingDeath"]

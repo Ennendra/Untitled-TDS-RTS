@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using static Godot.WebSocketPeer;
@@ -56,6 +57,7 @@ public partial class MainLevelController : Node2D
     //Signals for factory build buttons
     [Signal] public delegate void NewFactoryBuildEventHandler(ConstructInfo buildInfo, int amount);
     [Signal] public delegate void CancelFactoryBuildEventHandler(ConstructInfo buildInfo, int amount);
+    [Signal] public delegate void FactoryUniqueQueueRemovedEventHandler(ConstructInfo buildinfo);
     //Signal for when a Control Group button is pressed
     [Signal] public delegate void SelectControlGroupButtonEventHandler(int index);
     //Signal for toggling the builder on or off
@@ -67,9 +69,10 @@ public partial class MainLevelController : Node2D
     public PersonalPlayState personalPlayState { get; private set; } = PersonalPlayState.STANDARD;
     public RTSPlayState rtsPlayState { get; private set; } = RTSPlayState.STANDARD; 
     
-    Player player;
+    public Player player { get; protected set; }
+    public bool playerIsBuilding = false;
     int playerFaction = 1;
-	MainUI mainUI;
+	public MainUI mainUI { get; protected set; }
     RTSController rtsController;
     //Which building in the player's build queue is selected to deploy between 0-4. -1 = none selected
     int buildQueueSelected = -1;
@@ -121,6 +124,7 @@ public partial class MainLevelController : Node2D
 
         NewFactoryBuild += OnNewFactoryBuild;
         CancelFactoryBuild += OnRemoveFactoryBuild;
+        FactoryUniqueQueueRemoved += OnFactoryRemovedUniqueQueue;
 
 
         SetOrderState += OnOrderStatePress;
@@ -171,6 +175,7 @@ public partial class MainLevelController : Node2D
         if (player != null) 
         { 
             AddPlayer(player);
+            player.SetMainCamera();
             mainUI.GetBuildQueueBar().ToggleToolActivity(true);
         }
         else 
@@ -529,6 +534,11 @@ public partial class MainLevelController : Node2D
         }
     }
 
+    public bool isPlayerActive()
+    {
+        if (IsInstanceValid(player) || playerIsBuilding) { return true; }
+        return false;
+    }
     public void SetBuildPlacementItem()
     {
 
@@ -948,7 +958,7 @@ public partial class MainLevelController : Node2D
         mainUI.GetPersonalToolbar().SetAimComponentLink(player.GetAimComponent());
 
         //Set the RTS Controller faction to the player, so it checks the correct collision masks
-        player.SetMainCamera();
+        //player.SetMainCamera();
 
         //Set the player and its resource and contructor components to the relevant faction controller
         //(Set as playerfaction - 1 since faction 1 will be index 0 on the controller list)
@@ -1148,6 +1158,20 @@ public partial class MainLevelController : Node2D
     //Signals for when a factory build button is pressed
     public void OnNewFactoryBuild(ConstructInfo buildInfo, int amount)
     {
+
+        switch (buildInfo.uniqueIdentifier) 
+        {
+            case CI_UniqueIdentifier.PLAYER:
+                if (!isPlayerActive()) 
+                { 
+                    rtsController.AddFactoryItemToQueue(buildInfo);
+                    playerIsBuilding = true;
+                    mainUI.GetRTSToolbar().ToggleFactoryBuildButtonEnable(0, false); 
+                }
+                return;
+            default: break;
+        }
+
         for (int i = 0; i < amount; i++)
         {
             rtsController.AddFactoryItemToQueue(buildInfo);
@@ -1156,11 +1180,23 @@ public partial class MainLevelController : Node2D
     }
     public void OnRemoveFactoryBuild(ConstructInfo buildInfo, int amount)
     {
+        bool uniqueItemRemoved = false;
         for (int i = 0; i < amount; i++)
         {
-            rtsController.RemoveFactoryItemFromQueue(buildInfo);
+            if (rtsController.RemoveFactoryItemFromQueue(buildInfo)) { uniqueItemRemoved = true; }
         }
         UpdateFactoryButtonQueueInfo();
+
+        if (buildInfo.uniqueIdentifier == CI_UniqueIdentifier.PLAYER && uniqueItemRemoved) { playerIsBuilding = false; mainUI.GetRTSToolbar().ToggleFactoryBuildButtonEnable(0, true); }
+    }
+    //Executes when a building dies that has a unique item in its build queue. To tell the controller that it's no longer being built
+    public void OnFactoryRemovedUniqueQueue(ConstructInfo buildInfo)
+    {
+        switch (buildInfo.uniqueIdentifier)
+        {
+            case CI_UniqueIdentifier.PLAYER: playerIsBuilding = false; break;
+            default: break;
+        }
     }
 
     //Signal for build active toggle
