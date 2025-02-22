@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://b2shq52ahls6c"]
+[gd_scene load_steps=32 format=4 uid="uid://b2shq52ahls6c"]
 
 [ext_resource type="Script" path="res://Scripts/Scenarios/TestScenario1.cs" id="1_om60n"]
 [ext_resource type="PackedScene" uid="uid://de2gm8ancssa7" path="res://Objects/UI/MainUI.tscn" id="1_opx02"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cybcybto6k8b2" path="res://Objects/Other/ObstacleWall.tscn" id="11_mq8xd"]
 [ext_resource type="PackedScene" uid="uid://cn41rvyxe41sf" path="res://Objects/Other/MetalNode.tscn" id="11_vfawt"]
 [ext_resource type="PackedScene" uid="uid://po7nu1qpdrka" path="res://Objects/Units and Structures/Buildings/BuildingGenerator.tscn" id="12_ni0lv"]
+[ext_resource type="PackedScene" uid="uid://bq5bhdu4b5oyl" path="res://Objects/Levels/MainAIController.tscn" id="12_nuy2i"]
 [ext_resource type="PackedScene" uid="uid://b6n5rl53lqn3g" path="res://Objects/Units and Structures/Buildings/BuildingEnergyStorage.tscn" id="13_qamcm"]
 [ext_resource type="PackedScene" uid="uid://uope7kr0g6fa" path="res://Objects/Units and Structures/Buildings/BuildingTurret.tscn" id="15_yyp5f"]
 [ext_resource type="PackedScene" uid="uid://cbdtq5xcm5v8v" path="res://Objects/Units and Structures/Units/Unit2.tscn" id="16_ykxnd"]
@@ -80,7 +81,7 @@ source_geometry_mode = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 30.0
 
-[node name="TestScenario1" type="Node2D" node_paths=PackedStringArray("fowController", "terrainTilemapLayers")]
+[node name="TestScenario1" type="Node2D" node_paths=PackedStringArray("fowController", "terrainTilemapLayers", "aiControllers")]
 script = ExtResource("1_om60n")
 top = 0.0
 left = 0.0
@@ -88,6 +89,7 @@ bottom = 6000.0
 right = 12000.0
 fowController = NodePath("FowController")
 terrainTilemapLayers = [null]
+aiControllers = [NodePath("AIControllerContainer/AIController1_S"), NodePath("AIControllerContainer/AIController2_C"), NodePath("AIControllerContainer/AIController3_NE"), NodePath("AIControllerContainer/AIController4_SE")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hvmem")
@@ -138,6 +140,16 @@ stream = ExtResource("4_pipwy")
 volume_db = -5.125
 autoplay = true
 parameters/looping = true
+
+[node name="AIControllerContainer" type="Node" parent="."]
+
+[node name="AIController1_S" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
+
+[node name="AIController2_C" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
+
+[node name="AIController3_NE" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
+
+[node name="AIController4_SE" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
 
 [node name="ObstacleWater" parent="." instance=ExtResource("10_2j7vy")]
 position = Vector2(-200, 3850)

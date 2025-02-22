@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq5bhdu4b5oyl"]
+
+[ext_resource type="Script" path="res://Scripts/Scenarios/MainAIController.cs" id="1_ck8ea"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1y3ou"]
+
+[node name="AIController" type="Node2D"]
+script = ExtResource("1_ck8ea")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1y3ou")

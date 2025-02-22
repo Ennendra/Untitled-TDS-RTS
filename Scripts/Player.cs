@@ -373,7 +373,10 @@ public partial class Player : UnitParent
     {
         CreateExplosion();
 
+        //Force perspective to RTS mode
         if (levelController.playState == LevelControllerPlayState.PERSONALPLAYER) { levelController.ToggleRTSMode(); }
+        //Reset the UI for the build queue
+        playerUI.GetBuildQueueBar().UpdateButtonQueueInfo(new List<BuildingQueue>());
 
         QueueFree();
     }

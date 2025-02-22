@@ -176,7 +176,6 @@ public partial class RTSController : Node2D
         //Clear selected units if not holding the shift key
         if (!isAdditive) ClearUnitSelection();
 
-        endSelectPoint = GetGlobalMousePosition();
         isCurrentlySelecting = false;
         var spaceState = GetWorld2D().DirectSpaceState;
 

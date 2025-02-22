@@ -111,6 +111,9 @@ public partial class MainLevelController : Node2D
     PackedScene mapEdgeScene = ResourceLoader.Load<PackedScene>("res://Objects/Other/ObstacleMapEdge.tscn");
     ObstacleMapEdge[] obstacleMapEdges = new ObstacleMapEdge[4]; //the edges of the map
 
+    //The AI that will control the RTS movements of enemies
+    [Export] public MainAIController[] aiControllers = new MainAIController[0];
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
@@ -230,6 +233,14 @@ public partial class MainLevelController : Node2D
 
         //Set the map bounds
         UpdateMapBounds();
+
+        //AI Initialisation
+        CallDeferred("InitAIUnitLists");
+    }
+
+    public virtual void InitAIUnitLists()
+    {
+        //this function will be set up separately in each level's controller
     }
 
     public Vector2 GetMapSize()
@@ -948,7 +959,7 @@ public partial class MainLevelController : Node2D
 
 
     //List manipulation functions
-    public void AddPlayer(Player player)
+    public virtual void AddPlayer(Player player)
     {
         this.player = player;
         player.levelController = this;
@@ -967,20 +978,20 @@ public partial class MainLevelController : Node2D
         //Add the player's sight component to the FOW Controller
         fowController.AddSightComponent(player.GetSightComponent());
     }
-    public void RemovePlayer(Player player)
+    public virtual void RemovePlayer(Player player)
     {
         fowController.RemoveSightComponent(player.GetSightComponent());
         factionController[player.GetCurrentFaction() - 1].RemovePlayer();
         this.player = null;
     }
-    public void AddBuilding(BuildingParent building)
+    public virtual void AddBuilding(BuildingParent building)
     {
         buildingsInScene.Add(building);
         UpdateNavigationMap();
         factionController[building.GetCurrentFaction() - 1].AddBuilding(building);
         fowController.AddSightComponent(building.GetSightComponent());
     }
-    public void RemoveBuilding(BuildingParent building)
+    public virtual void RemoveBuilding(BuildingParent building)
     {
         buildingsInScene.Remove(building);
         UnitDeathSelectionAndControlGroupCheck(building.GetFactionComponent());
@@ -989,14 +1000,14 @@ public partial class MainLevelController : Node2D
         factionController[building.GetCurrentFaction() - 1].RemoveBuilding(building);
         fowController.RemoveSightComponent(building.GetSightComponent());
     }
-    public void AddBlueprint(BlueprintParent blueprint)
+    public virtual void AddBlueprint(BlueprintParent blueprint)
     {
         blueprintsInScene.Add(blueprint);
         UpdateNavigationMap();
         factionController[blueprint.GetCurrentFaction() - 1].AddBlueprint(blueprint);
         fowController.AddSightComponent(blueprint.GetSightComponent());
     }
-    public void RemoveBlueprint(BlueprintParent blueprint)
+    public virtual void RemoveBlueprint(BlueprintParent blueprint)
     {
         blueprintsInScene.Remove(blueprint);
         UnitDeathSelectionAndControlGroupCheck(blueprint.GetFactionComponent());
@@ -1005,13 +1016,13 @@ public partial class MainLevelController : Node2D
         factionController[blueprint.GetCurrentFaction() - 1].RemoveBlueprint(blueprint);
         fowController.RemoveSightComponent(blueprint.GetSightComponent());
     }
-    public void AddUnit(UnitParent unit)
+    public virtual void AddUnit(UnitParent unit)
     {
         unitsInScene.Add(unit);
         factionController[unit.GetCurrentFaction() - 1].AddUnit(unit);
         fowController.AddSightComponent(unit.GetSightComponent());
     }
-    public void RemoveUnit(UnitParent unit)
+    public virtual void RemoveUnit(UnitParent unit)
     {
         unitsInScene.Remove(unit);
         UnitDeathSelectionAndControlGroupCheck(unit.GetFactionComponent());
@@ -1020,7 +1031,7 @@ public partial class MainLevelController : Node2D
         factionController[unit.GetCurrentFaction() - 1].RemoveUnit(unit);
         fowController.RemoveSightComponent(unit.GetSightComponent());
     }
-    public void UnitDeathSelectionAndControlGroupCheck(FactionComponent unitComponent)
+    public virtual void UnitDeathSelectionAndControlGroupCheck(FactionComponent unitComponent)
     {
         List<RTSSelectionType> selection = rtsController.RemoveDeadUnitFromSelection(unitComponent);
         SetUnitSelectionUI(selection);
