@@ -167,22 +167,24 @@ public partial class FactoryComponent : Node2D
         if (GetCurrentBuildItem().uniqueIdentifier == CI_UniqueIdentifier.PLAYER)
         {
             Player newUnit = (Player)GetCurrentBuildItem().objectToSpawn.Instantiate();
+            newUnit.motherFactory = (Node2D)GetParent();
             GetTree().CurrentScene.AddChild(newUnit);
             newUnit.GlobalPosition = GlobalPosition + buildOffset;
             newUnit.SetInitialDirection(unitStartRotation);
             newUnit.SetNewFaction(factionComponent.faction);
-            newUnit.motherFactory = (Node2D)GetParent();
+            
             GetTree().CurrentScene.EmitSignal("FactoryUniqueQueueRemoved", GetCurrentBuildItem());
         }
         else //default units
         {
             UnitParent newUnit = (UnitParent)GetCurrentBuildItem().objectToSpawn.Instantiate();
+            newUnit.motherFactory = (Node2D)GetParent();
             GetTree().CurrentScene.AddChild(newUnit);
             newUnit.GlobalPosition = GlobalPosition + buildOffset;
             newUnit.SetInitialDirection(unitStartRotation);
             newUnit.SetNewFaction(factionComponent.faction);
             newUnit.SetMoveOrder(factionComponent.GetRallyPoint());
-            newUnit.motherFactory = (Node2D)GetParent();
+            
         }
         
         

@@ -890,7 +890,7 @@ public partial class MainLevelController : Node2D
             foreach (var fComponent in fComponentGroup)
             {
                 FactionComponent combatant = fComponent as FactionComponent;
-                if (combatant.spottedByFaction[playerFaction])
+                if (combatant.spottedByFaction[playerFaction] || fowController.Visible == false)
                 {
                     Node2D parent = (Node2D)combatant.GetParent();
                     parent.Visible = true;

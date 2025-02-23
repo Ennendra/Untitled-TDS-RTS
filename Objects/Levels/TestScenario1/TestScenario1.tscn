@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=4 uid="uid://b2shq52ahls6c"]
+[gd_scene load_steps=33 format=4 uid="uid://b2shq52ahls6c"]
 
 [ext_resource type="Script" path="res://Scripts/Scenarios/TestScenario1.cs" id="1_om60n"]
 [ext_resource type="PackedScene" uid="uid://de2gm8ancssa7" path="res://Objects/UI/MainUI.tscn" id="1_opx02"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://b8vkvmby213gr" path="res://Objects/Other/ObstacleWater.tscn" id="10_2j7vy"]
 [ext_resource type="PackedScene" uid="uid://6akwd6vee46k" path="res://Objects/Units and Structures/Units/Unit1.tscn" id="10_d6ee4"]
 [ext_resource type="PackedScene" uid="uid://cybcybto6k8b2" path="res://Objects/Other/ObstacleWall.tscn" id="11_mq8xd"]
+[ext_resource type="Script" path="res://Scripts/Scenarios/TestScenario1/AIC_TS1_South.cs" id="11_u5nvo"]
 [ext_resource type="PackedScene" uid="uid://cn41rvyxe41sf" path="res://Objects/Other/MetalNode.tscn" id="11_vfawt"]
 [ext_resource type="PackedScene" uid="uid://po7nu1qpdrka" path="res://Objects/Units and Structures/Buildings/BuildingGenerator.tscn" id="12_ni0lv"]
 [ext_resource type="PackedScene" uid="uid://bq5bhdu4b5oyl" path="res://Objects/Levels/MainAIController.tscn" id="12_nuy2i"]
@@ -81,8 +82,10 @@ source_geometry_mode = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 30.0
 
-[node name="TestScenario1" type="Node2D" node_paths=PackedStringArray("fowController", "terrainTilemapLayers", "aiControllers")]
+[node name="TestScenario1" type="Node2D" node_paths=PackedStringArray("navigationRegionGround", "navigationRegionHover", "fowController", "terrainTilemapLayers", "aiControllers")]
 script = ExtResource("1_om60n")
+navigationRegionGround = NodePath("NavigationRegion2D")
+navigationRegionHover = NodePath("NavigationRegion2DWithoutLow")
 top = 0.0
 left = 0.0
 bottom = 6000.0
@@ -130,6 +133,7 @@ region_rect = Rect2(0, 0, 12000, 6000)
 [node name="RTSController" parent="." instance=ExtResource("3_k5so8")]
 
 [node name="FowController" parent="." instance=ExtResource("6_b5ptr")]
+visible = false
 z_index = 5
 
 [node name="Player" parent="." instance=ExtResource("6_3g7nl")]
@@ -144,12 +148,20 @@ parameters/looping = true
 [node name="AIControllerContainer" type="Node" parent="."]
 
 [node name="AIController1_S" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
+script = ExtResource("11_u5nvo")
+SleepTimeDuration = 10.0
 
 [node name="AIController2_C" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
 
 [node name="AIController3_NE" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
 
 [node name="AIController4_SE" parent="AIControllerContainer" instance=ExtResource("12_nuy2i")]
+
+[node name="Node2D" type="Node2D" parent="AIControllerContainer"]
+position = Vector2(625, 2975)
+
+[node name="Unit2" parent="." instance=ExtResource("10_d6ee4")]
+position = Vector2(6875, 5950)
 
 [node name="ObstacleWater" parent="." instance=ExtResource("10_2j7vy")]
 position = Vector2(-200, 3850)
@@ -671,7 +683,7 @@ position = Vector2(6300, 5300)
 factionOverride = 2
 
 [node name="S_Unit2_6" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(6450, 5300)
+position = Vector2(6500, 5300)
 factionOverride = 2
 
 [node name="S_Unit2_7" parent="." instance=ExtResource("16_ykxnd")]
@@ -2093,6 +2105,9 @@ factionOverride = 2
 [node name="SE_Unit3_13" parent="." instance=ExtResource("23_faf3p")]
 position = Vector2(11275, 5750)
 factionOverride = 2
+
+[node name="Unit1" parent="." instance=ExtResource("10_d6ee4")]
+position = Vector2(225, 3100)
 
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedFromScene"]

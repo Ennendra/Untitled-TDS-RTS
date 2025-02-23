@@ -1,13 +1,13 @@
 [gd_resource type="Resource" load_steps=4 format=3 uid="uid://d2ocrsu2vatr"]
 
-[ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_1o8p1"]
-[ext_resource type="Script" path="res://Objects/Units and Structures/Construction Info/ConstructInfo.cs" id="2_mbmtu"]
-[ext_resource type="Resource" uid="uid://cocovxks22s8c" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_PlayerUnit.tres" id="3_ecaa0"]
+[ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_h1j26"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/Construction Info/ConstructInfo.cs" id="2_6rjkd"]
+[ext_resource type="Resource" uid="uid://cocovxks22s8c" path="res://Objects/Units and Structures/Unit Info/Units/UInfo_PlayerUnit.tres" id="3_s0oig"]
 
 [resource]
-script = ExtResource("2_mbmtu")
-objectToSpawn = ExtResource("1_1o8p1")
+script = ExtResource("2_6rjkd")
+objectToSpawn = ExtResource("1_h1j26")
 type = 4
 objectGridSize = Vector2(0, 0)
 uniqueIdentifier = 1
-unitInfo = ExtResource("3_ecaa0")
+unitInfo = ExtResource("3_s0oig")
