@@ -122,7 +122,7 @@ public partial class MovementComponent : Node2D
 						MovementComponent mComponent = collidedUnit.GetMovementComponent();
 
 						//Add a push to the unit's movement vector based on the collision and if it was from this object's movement
-						if (isMoving)
+						if (!mComponent.isMoving)
 						{
 							float pushAngle = GlobalPosition.DirectionTo(collision.GetPosition()).Angle();
 							float pushAmount = collision.GetRemainder().Length();

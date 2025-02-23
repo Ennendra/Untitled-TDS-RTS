@@ -12,6 +12,8 @@ public partial class DamageComponent : Area2D
 	//These can be set via construct info when creating the unit
 	public float energyReclaimValue=10, metalReclaimValue=10;
 
+	CombatantParent parentObject;
+
 	//Healthbar variables
 	[Export] ProgressBar healthBar;
 	[Export] float healthBarOffset; //Y-position offset
@@ -31,7 +33,9 @@ public partial class DamageComponent : Area2D
 		healthBar.MaxValue = maxHealth;
 		healthBar.Value = health;
 
-        //SetHealthbarOffset(healthBarOffset);
+		//SetHealthbarOffset(healthBarOffset);
+
+		parentObject = (CombatantParent)GetParent();
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -118,7 +122,7 @@ public partial class DamageComponent : Area2D
         {
             if (timeSinceLastDamage>0.5f) //limit response checks to 2 per second so attack responses arent spammed
             {
-                GetParent().EmitSignal("AttackResponse", source);
+                parentObject.RespondToAttack(source);
             }
         }
 

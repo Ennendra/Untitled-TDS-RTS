@@ -134,6 +134,7 @@ region_rect = Rect2(0, 0, 12000, 6000)
 [node name="RTSController" parent="." instance=ExtResource("3_k5so8")]
 
 [node name="FowController" parent="." instance=ExtResource("6_b5ptr")]
+visible = false
 z_index = 5
 
 [node name="Player" parent="." instance=ExtResource("6_3g7nl")]
