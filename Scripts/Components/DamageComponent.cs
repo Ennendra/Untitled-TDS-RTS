@@ -120,7 +120,7 @@ public partial class DamageComponent : Area2D
 	{
         if (type == DamageType.COMBATDAMAGE)
         {
-            if (timeSinceLastDamage>0.5f) //limit response checks to 2 per second so attack responses arent spammed
+            if (timeSinceLastDamage>2.5f) //limit response checks so attack responses arent spammed
             {
                 parentObject.RespondToAttack(source);
             }
