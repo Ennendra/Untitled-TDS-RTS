@@ -42,10 +42,9 @@ public partial class TestScenario1 : MainLevelController
         unitAddArea = new Rect2(7350, 3425, 4650, 2575);
         aiControllers[3].AddUnitsInArea(unitAddArea, "");
 
-        GD.Print("AI1 - Buildings: " + aiControllers[0].buildingsInTeam.Count.ToString() + ", Units: " + aiControllers[0].unitsInTeam.Count.ToString());
-        GD.Print("AI2 - Buildings: " + aiControllers[1].buildingsInTeam.Count.ToString() + ", Units: " + aiControllers[1].unitsInTeam.Count.ToString());
-        GD.Print("AI3 - Buildings: " + aiControllers[2].buildingsInTeam.Count.ToString() + ", Units: " + aiControllers[2].unitsInTeam.Count.ToString());
-        GD.Print("AI4 - Buildings: " + aiControllers[3].buildingsInTeam.Count.ToString() + ", Units: " + aiControllers[3].unitsInTeam.Count.ToString());
+        
+        //Set some factory rally points for each AI base
+
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

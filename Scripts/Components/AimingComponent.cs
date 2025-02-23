@@ -34,7 +34,6 @@ public partial class AimingComponent : Node2D
 
 
         SetWeaponDamageSource(equippedWeapon);
-        GD.Print(equippedWeapon.weaponWielder.Name);
 
     }
     public override void _Process(double delta)

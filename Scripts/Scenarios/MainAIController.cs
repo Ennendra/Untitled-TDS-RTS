@@ -24,19 +24,25 @@ public class AIControlGroup
     //This is only used for attack waves, will *always* be false for defenders
 	public bool groupAssembled = false;
 
-	//Initialise the group waypoints and what we want for the group (either with a random set or a specific one)
-	public void InitGroup(Vector2[] waypoints, int groupSize, int[] buildWeight)
+    //Utility: Use GD.Randi to get a random int between min (inclusive) and max (non-inclusive)
+    //e.g., min 0 and 10 max will give a value between 0 and 9
+    public int RandIntRange(int min, int max)
+    {
+        return (int)(GD.Randi() % max + min);
+    }
+
+    //Initialise the group waypoints and what we want for the group (either with a random set or a specific one)
+    public void InitGroup(Vector2[] waypoints, int groupSize, int[] buildWeight)
 	{
         this.waypoints = new Vector2[waypoints.Length];
         for (int i=0; i<waypoints.Length; i++)
         {
             this.waypoints[i] = waypoints[i];
         }
-        Random rand = new Random((DateTime.Now.Millisecond));
         //Generate a random set of wanted units
         for (int i=0; i <groupSize; i++)
         {
-            int nextUnitIndex = rand.Next(buildWeight.Length);
+            int nextUnitIndex = RandIntRange(0, buildWeight.Length);
             int nextUnit = buildWeight[nextUnitIndex];
             wantedUnits[nextUnit]++;
         }
@@ -72,15 +78,47 @@ public class AIControlGroup
         return (unit.GetAIComponent().unitState == AIUnitState.IDLE || unit.GetAIComponent().unitState == AIUnitState.MOVE);
     }
 
-    public Vector2 AddMovementScatter(Vector2 movementPosition)
+    //Spaces the movement locations for multiple units (Taken from RTS controller)
+    public List<Vector2> GetMovePositionArray(Vector2 firstPosition, int maxPositions)
     {
-        Random rand = new Random(DateTime.Now.Millisecond);
-        float randRange = ((float)rand.NextDouble() * 2) - 1;
+        List<Vector2> newOrderPositions = new();
 
-        Vector2 scatterRange = new Vector2(125 * randRange, 125 * randRange);
+        int currentPositionsFilled = 0; //How many positions have been prepared for the selected units
+        int positionRotationAmount = 6, positionRotationIndex = 0, positionLength = 60; //Used to prepare positions around the center point
+        while (currentPositionsFilled < maxPositions)
+        {
+            //Set the first order position
+            if (currentPositionsFilled == 0)
+            {
+                newOrderPositions.Add(firstPosition);
+                currentPositionsFilled++;
+            }
+            else
+            {
+                //prepare positions rotated in a circle centered at the first order position
+                //It rotates at the specified 'length' an amount of times (positionRotationAmount) to run a full circle, then moves to a new layer (wider circle)
+                float rotationAmount = Mathf.DegToRad(positionRotationIndex * (360 / positionRotationAmount));
+                Vector2 newPositionOffset = new Vector2(positionLength, 0);
+                newPositionOffset = newPositionOffset.Rotated(rotationAmount);
+                newOrderPositions.Add(firstPosition + newPositionOffset);
 
-        Vector2 newPosition = movementPosition + scatterRange;
-        return newPosition;
+                //increment the rotation on this layer
+                positionRotationIndex++;
+
+                //If we've done one full circle, prepare the next layer
+                if (positionRotationIndex >= positionRotationAmount)
+                {
+                    positionLength += 60;
+                    positionRotationAmount += 6;
+                    positionRotationIndex = 0;
+                }
+
+                currentPositionsFilled++;
+            }
+
+        }
+
+        return newOrderPositions;
     }
 
     //Attackers: Set attackmoves through waypoints, then targets nearest enemies
@@ -90,13 +128,16 @@ public class AIControlGroup
         currentWaypoint++;
         if (currentWaypoint < waypoints.Length)
         {
+            List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
+            int currentMoveIndex = 0;
             //move to next waypoint
             foreach (UnitParent unit in units)
             {
                 if (isAttackGroup)
-                { unit.GetAIComponent().SetNewAttackMoveOrder(AddMovementScatter(waypoints[currentWaypoint])); }
+                { unit.GetAIComponent().SetNewAttackMoveOrder(newOrderPositions[currentMoveIndex]); }
                 else if (unit.GlobalPosition.DistanceTo(waypoints[currentWaypoint]) > 350)
-                { unit.GetAIComponent().SetNewMoveOrder(AddMovementScatter(waypoints[currentWaypoint])); }
+                { unit.GetAIComponent().SetNewMoveOrder(newOrderPositions[currentMoveIndex]); }
+                currentMoveIndex++;
             }
             
         }
@@ -151,12 +192,15 @@ public class AIControlGroup
     //Defender functions
     public void AITickDefense()
 	{
+        List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
+        int currentMoveIndex = 0;
         foreach (UnitParent unit in units)
         {
             //Move units back to the current defense point if idle and too far away from it
             if (unit.GetAIComponent().unitState == AIUnitState.IDLE && unit.GlobalPosition.DistanceTo(waypoints[currentWaypoint]) > 200)
             {
-                unit.GetAIComponent().SetNewMoveOrder(AddMovementScatter(waypoints[currentWaypoint]));
+                unit.GetAIComponent().SetNewMoveOrder(newOrderPositions[currentMoveIndex]);
+                currentMoveIndex++;
             }
         }
         //Continue patrol if all units are assembled and idle
@@ -168,11 +212,14 @@ public class AIControlGroup
     //Setting reactions for the defense group if attacked
     public void RespondToAttack(Vector2 positionOfAttack)
     {
+        List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
+        int currentMoveIndex = 0;
         foreach (UnitParent unit in units)
         {
             if (IsUnitIdle(unit))
             {
-                unit.GetAIComponent().SetNewAttackMoveOrder(AddMovementScatter(positionOfAttack));
+                unit.GetAIComponent().SetNewAttackMoveOrder(newOrderPositions[currentMoveIndex]);
+                currentMoveIndex++;
             }
         }
     }
@@ -195,7 +242,6 @@ public class AIControlGroup
     public void AddUnit(UnitParent unit)
     {
         units.Add(unit);
-        GD.Print(unit.GetFactionComponent().unitInfo.unitName);
 		switch (unit.GetFactionComponent().unitInfo.unitName) 
 		{
 			case "Unit1":
@@ -257,6 +303,8 @@ public partial class MainAIController : Node2D
 	public List<UnitParent> unitsInTeam = new();
 	public List<AIControlGroup> attackGroups = new();
 	public List<AIControlGroup> defenseGroups = new();
+    public List<Vector2> attackRallyPoints = new();
+    public List<Vector2> defenseRallyPoints = new();
     //Units that may have been built but weren't be able to be assigned to a team
     public List<UnitsInProgress> unitsInProgress = new();
     
@@ -266,23 +314,22 @@ public partial class MainAIController : Node2D
 
     //References to the construct info that will be used alongside the "item codes" to find factories that build them
     [Export] public ConstructInfo[] constructUnitInfoSet;
-    //public virtual void InitUnitConstructInfoSet()
-    //{
-    //    constructUnitInfoSet = new ConstructInfo[3];
-    //    constructUnitInfoSet[0] = ResourceLoader.Load<ConstructInfo>("res://Objects/UnitsAndStructures/ConstructionInfo/Units/Unit1.tres");
-    //    constructUnitInfoSet[1] = ResourceLoader.Load<ConstructInfo>("res://Objects/UnitsAndStructures/ConstructionInfo/Units/Unit2.tres");
-    //    constructUnitInfoSet[2] = ResourceLoader.Load<ConstructInfo>("res://Objects/UnitsAndStructures/ConstructionInfo/Units/Unit3.tres");
-    //}
 
-	//Adds units to this AI controllers list for use.
-	//Special code strings may be added to set the result in a particular way (e.g. setting a set as part of a defensive group that should be replenished)
-	public virtual void AddUnitsInArea(Rect2 rectArea, string specialCode)
+    //Utility: Use GD.Randi to get a random int between min (inclusive) and max (non-inclusive)
+    //e.g., min 0 and 10 max will give a value between 0 and 9
+    public int RandIntRange(int min, int max)
+    {
+        return (int)(GD.Randi() % max + min);
+    }
+
+    //Adds units to this AI controllers list for use.
+    //Special code strings may be added to set the result in a particular way (e.g. setting a set as part of a defensive group that should be replenished)
+    public virtual void AddUnitsInArea(Rect2 rectArea, string specialCode)
 	{
 		PhysicsDirectSpaceState2D spaceState = GetWorld2D().DirectSpaceState;
         
         //Set up the shape and position of the rectangle area
         Vector2 rectangleCenter = rectArea.Position + (rectArea.Size / 2);
-		GD.Print(rectangleCenter);
         RectangleShape2D shape = new();
 		shape.Size = rectArea.Size;
 
@@ -338,13 +385,18 @@ public partial class MainAIController : Node2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{
-		AITickTimer += (float)delta;
-		AISleepTimer += (float)delta;
-		if (AITickTimer > 0.5f && AISleepTimer > SleepTimeDuration) 
-		{
-			ProcessAITick();
-			AITickTimer = 0;
-		}
+        //Make sure the AI processing is only happening while the game is not paused
+        if (!GetTree().Paused)
+        {
+            AITickTimer += (float)delta;
+            AISleepTimer += (float)delta;
+            if (AITickTimer > 0.5f && AISleepTimer > SleepTimeDuration)
+            {
+                ProcessAITick();
+                AITickTimer = 0;
+            }
+        }
+		
 	}
 
 	//Runs the actions that the AI wants to take
@@ -408,8 +460,7 @@ public partial class MainAIController : Node2D
         if (unitCodesNeeded.Count > 0)
         {
             //Choose from the subset randomly to select it to build
-            Random rand = new Random((DateTime.Now.Millisecond));
-            int itemChoice = rand.Next(unitCodesNeeded.Count);
+            int itemChoice = RandIntRange(0, unitCodesNeeded.Count);
             int itemToBuild = unitCodesNeeded[itemChoice];
             //Assign that item code to a construct info
             ConstructInfo unitToConstruct = constructUnitInfoSet[itemToBuild];
@@ -421,6 +472,19 @@ public partial class MainAIController : Node2D
                 {
                     if (component.buildableUnits.Contains(unitToConstruct) && component.GetBuildQueue().Count == 0)
                     {
+                        //Setting a rally point for the unit when it's built (if applicable)
+                        building.GetFactionComponent().SetRallyPoint(building.GlobalPosition + new Vector2(0, -150));
+                        if (controlGroup.isAttackGroup)
+                        {
+                            if (attackRallyPoints.Count > 0)
+                                 building.GetFactionComponent().SetRallyPoint(attackRallyPoints[RandIntRange(0, attackRallyPoints.Count)]);
+                        }
+                        else
+                        {
+                            if (defenseRallyPoints.Count > 0)
+                                building.GetFactionComponent().SetRallyPoint(defenseRallyPoints[RandIntRange(0, defenseRallyPoints.Count)]);
+                        }
+
                         component.AddToBuildQueue(unitToConstruct);
                         UnitsInProgress newReserve = new UnitsInProgress(building, itemToBuild, controlGroup);
                         unitsInProgress.Add(newReserve);

@@ -83,6 +83,7 @@ source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 30.0
 
 [node name="TestScenario1" type="Node2D" node_paths=PackedStringArray("navigationRegionGround", "navigationRegionHover", "fowController", "terrainTilemapLayers", "aiControllers")]
+process_mode = 3
 script = ExtResource("1_om60n")
 navigationRegionGround = NodePath("NavigationRegion2D")
 navigationRegionHover = NodePath("NavigationRegion2DWithoutLow")
@@ -133,7 +134,6 @@ region_rect = Rect2(0, 0, 12000, 6000)
 [node name="RTSController" parent="." instance=ExtResource("3_k5so8")]
 
 [node name="FowController" parent="." instance=ExtResource("6_b5ptr")]
-visible = false
 z_index = 5
 
 [node name="Player" parent="." instance=ExtResource("6_3g7nl")]
@@ -543,7 +543,7 @@ position = Vector2(5850, 5750)
 factionOverride = 2
 
 [node name="S_BuildingNetworkHub3" parent="." instance=ExtResource("8_w0l73")]
-position = Vector2(4650, 5500)
+position = Vector2(4650, 5600)
 factionOverride = 2
 
 [node name="S_BuildingNetworkHub4" parent="." instance=ExtResource("8_w0l73")]
@@ -639,11 +639,11 @@ position = Vector2(3450, 4950)
 factionOverride = 2
 
 [node name="S_Unit1_3" parent="." instance=ExtResource("10_d6ee4")]
-position = Vector2(5100, 5700)
+position = Vector2(4425, 5900)
 factionOverride = 2
 
 [node name="S_Unit1_4" parent="." instance=ExtResource("10_d6ee4")]
-position = Vector2(5100, 5800)
+position = Vector2(6400, 5650)
 factionOverride = 2
 
 [node name="S_Unit1_5" parent="." instance=ExtResource("10_d6ee4")]

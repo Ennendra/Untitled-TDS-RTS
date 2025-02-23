@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://de2gm8ancssa7"]
+[gd_scene load_steps=19 format=3 uid="uid://de2gm8ancssa7"]
 
 [ext_resource type="Script" path="res://Scripts/UI/MainUI.cs" id="1_jtxnd"]
 [ext_resource type="PackedScene" uid="uid://c5n86pfqwpxsp" path="res://Objects/UI/UI_BuildPlacement.tscn" id="2_1hj84"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b07un4314isw4" path="res://Objects/UI/UI_RTSControlGroupBar.tscn" id="6_243ub"]
 [ext_resource type="PackedScene" uid="uid://7k68ub1drccj" path="res://Objects/UI/UI_BuildQueueBar.tscn" id="7_i6mpu"]
 [ext_resource type="PackedScene" uid="uid://b1tc2knsc0m5e" path="res://Objects/UI/UIMinimap.tscn" id="7_oqt4b"]
+[ext_resource type="Texture2D" uid="uid://4iafd06wt5rc" path="res://Textures/UI/MainUIFramework/MinimapButtons.png" id="8_fgldl"]
 [ext_resource type="Texture2D" uid="uid://b6apsbqincpft" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapPlus.png" id="8_r2gcq"]
 [ext_resource type="Texture2D" uid="uid://bxsgxmmf4u5aj" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapPlus_Click.png" id="9_pmnhy"]
 [ext_resource type="Texture2D" uid="uid://lpwynnqv40kg" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapPlus_Hover.png" id="10_qrmeq"]
@@ -35,17 +36,31 @@ visible = false
 
 [node name="UI_BuildQueueBar" parent="." instance=ExtResource("7_i6mpu")]
 
-[node name="UI_MinimapZoomPlus" type="TextureButton" parent="."]
-visible = false
+[node name="MinimapButtonBG" type="TextureRect" parent="."]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 550.0
-offset_top = -281.0
-offset_right = 640.0
-offset_bottom = -263.0
+offset_left = 465.0
+offset_top = -294.0
+offset_right = 735.0
+offset_bottom = -254.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("8_fgldl")
+
+[node name="UI_MinimapZoomPlus" type="TextureButton" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 615.0
+offset_top = -280.0
+offset_right = 705.0
+offset_bottom = -258.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 1
@@ -57,16 +72,15 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="UI_MinimapZoomMinus" type="TextureButton" parent="."]
-visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 430.0
+offset_left = 495.0
 offset_top = -280.0
-offset_right = 520.0
-offset_bottom = -262.0
+offset_right = 585.0
+offset_bottom = -258.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 1

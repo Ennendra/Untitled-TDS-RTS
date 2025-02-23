@@ -286,7 +286,6 @@ public partial class RTSController : Node2D
         foreach(FactionComponent unit in selectedItems)
         {
             UnitInfo uInfo = unit.unitInfo;
-            GD.Print(uInfo.unitName);
             if (unitTypeInSelection.Contains(uInfo)) 
             {
                 //Increment the 'amount' of the unit type selected by 1

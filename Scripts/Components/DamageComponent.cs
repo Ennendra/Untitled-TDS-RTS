@@ -143,7 +143,6 @@ public partial class DamageComponent : Area2D
 	//Death function
 	public void TriggerDeath(DamageType type)
 	{
-		//GD.Print("Death of " + GetParent().Name);
 		if (type == DamageType.COMBATDAMAGE)
 			GetParent().EmitSignal("OnDamageKill");
 		else

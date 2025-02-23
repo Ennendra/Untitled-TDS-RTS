@@ -32,6 +32,8 @@ public partial class UI_Minimap : Control
 	int currentZoomLevel = 0;
 	Vector2[] zoomLevels = new Vector2[] { new Vector2(-1, -1), new Vector2(4000, 4000), new Vector2(2500, 2500)};
 
+	public bool drawMinimapfow = true;
+
 	//The size of the minimap itself (in case we need to change the UI size later)
 	//The initial draw size and offset can be edited to accomodate the minimap should I wish to scale it, while the others are based on the map ratio
 	[Export] TextureRect fogSprite, shroudSprite;
@@ -90,7 +92,7 @@ public partial class UI_Minimap : Control
 		}
 
         //drawing the fow textures if applicable
-        if (fowTextures != null)
+        if (fowTextures != null && drawMinimapfow && IsMinimapFullMap())
         {
             DrawTexture(fowTextures[0], minimapDrawOffset);
             DrawTexture(fowTextures[1], minimapDrawOffset);
@@ -218,12 +220,17 @@ public partial class UI_Minimap : Control
 		//clear the current set of drawn markers
 		markersToDraw.Clear();
 
-		//Set some temp variables to choose between the initial values or the ratio-affected values, depending on whether the zoom level is full map or not
-		Vector2 tickDrawSize, tickDrawOffset;
+		fogSprite.Texture = null;
+		shroudSprite.Texture = null;
+
+        //Set some temp variables to choose between the initial values or the ratio-affected values, depending on whether the zoom level is full map or not
+        Vector2 tickDrawSize, tickDrawOffset;
 		//Set the minimap region based on whether it's local scan mode for full map scan mode
 		Vector2 drawScale, drawCenter, scanRegion;
 		if (!IsMinimapFullMap())
 		{
+
+
             tickDrawSize = initialMinimapDrawSize;
             tickDrawOffset = initialMinimapDrawOffset;
 
@@ -242,7 +249,9 @@ public partial class UI_Minimap : Control
 			drawCenter = minimapFullmapCenter;
 			drawScale = tickDrawSize / minimapFullmapScanSize;
 
-			if (fowTextures != null)
+			
+
+			if (fowTextures != null && drawMinimapfow)
 			{
 				fogSprite.Texture = fowTextures[0];
 				shroudSprite.Texture = fowTextures[1];
@@ -278,7 +287,7 @@ public partial class UI_Minimap : Control
         foreach (MinimapMarkerComponent marker in markers)
 		{
 			//Check whether the marker is within the region to be shown on the minimap
-			if (IsWithinScanAreaRectangle(marker.GlobalPosition, drawCenter, scanRegion) && marker.spottedByFaction[playerFaction])
+			if (IsWithinScanAreaRectangle(marker.GlobalPosition, drawCenter, scanRegion) && (marker.spottedByFaction[playerFaction] || !drawMinimapfow))
 			{
 
 				//Set the position on the minimap (relative to the center of the minimap) that this marker will draw

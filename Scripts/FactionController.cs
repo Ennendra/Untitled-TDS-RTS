@@ -331,27 +331,6 @@ public partial class FactionController
     public int GetFaction() { return faction; }
     public void SetFaction(int value) { faction = value; }
 
-    //public Player GetPlayer()
-    //{
-    //    if (playerUnit != null) 
-    //        return playerUnit;
-    //    else
-    //    {
-    //        GD.Print("Error: No player unit in this faction controller!");
-    //        return null;
-    //    }
-    //}
-    //public int GetPlayerFaction()
-    //{
-    //    if (playerUnit != null)
-    //        return playerUnit.GetFactionComponent().faction;
-    //    else
-    //    {
-    //        GD.Print("Error: No player unit in this faction controller when checking for faction number!");
-    //        return -1;
-    //    }
-    //}
-
     //Function to get the minimap marker component from all units and buildings
     public void SetAllFactionMinimapMarkerComponents(MinimapMarkerTag buildingTag, MinimapMarkerTag blueprintTag, MinimapMarkerTag unitTag)
     {

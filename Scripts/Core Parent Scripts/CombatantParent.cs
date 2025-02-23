@@ -75,7 +75,6 @@ public partial class CombatantParent : CharacterBody2D
     }
     public void SetNewFaction(int newFaction)
     {
-        GD.Print("New Faction: "+newFaction);
         factionComponent.faction = newFaction;
     }
     public MovementComponent GetMovementComponent() { return movementComponent; }

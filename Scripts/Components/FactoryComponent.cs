@@ -173,6 +173,7 @@ public partial class FactoryComponent : Node2D
             newUnit.SetInitialDirection(unitStartRotation);
             newUnit.SetNewFaction(factionComponent.faction);
             
+            //Send signal to the level controller that this unique item is no longer being built
             GetTree().CurrentScene.EmitSignal("FactoryUniqueQueueRemoved", GetCurrentBuildItem());
         }
         else //default units
@@ -183,7 +184,13 @@ public partial class FactoryComponent : Node2D
             newUnit.GlobalPosition = GlobalPosition + buildOffset;
             newUnit.SetInitialDirection(unitStartRotation);
             newUnit.SetNewFaction(factionComponent.faction);
-            newUnit.SetMoveOrder(factionComponent.GetRallyPoint());
+
+            //Add a bit of scatter to the rally point to prevent a line congestion
+            Vector2 scatter = new Vector2((float)GD.RandRange(-100, 100), (float)GD.RandRange(-100, 100));
+            //Vector2 newMovePosition = factionComponent.GetRallyPoint() + scatter;
+
+            Vector2 newMovePosition = factionComponent.GetRallyPoint();
+            newUnit.SetMoveOrder(newMovePosition);
             
         }
         

@@ -11,6 +11,9 @@ public partial class AIC_TS1_South : MainAIController
     {
         base._Ready();
 
+        attackRallyPoints.Add(new Vector2(5200, 5650));
+        defenseRallyPoints.Add(new Vector2(6400, 5650));
+
         //Set waypoint paths
         defensePath = new Vector2[2];
         defensePath[0] = new Vector2(5350, 4200);
@@ -31,22 +34,23 @@ public partial class AIC_TS1_South : MainAIController
         base.ProcessAITick();
     }
 
+    
+
     public override void GenerateNewAttackGroup()
     {
         //South base will simply create randomised attack waves, ranging from 6-12 units
         //Over time, the weighting of what units are made make tanks and snipers more than scouts
-        Random rand = new Random(DateTime.Now.Millisecond);
         int[] unitBuildWeight = new int[] { 0, 0, 0, 0, 1 };
-        int buildSize = rand.Next(6, 9);
+        int buildSize = RandIntRange(6, 9);
         if (AISleepTimer > 400) 
         { 
             unitBuildWeight = new int[] { 0, 0, 0, 1, 1, 1, 2 };
-            buildSize = rand.Next(8, 13);
+            buildSize = RandIntRange(8, 13);
         }
         if (AISleepTimer >= 700) 
         { 
             unitBuildWeight = new int[] { 0, 1, 1, 1, 2, 2 };
-            buildSize = rand.Next(10, 13);
+            buildSize = RandIntRange(10, 13);
         }
 
         //TODO - Choose one of the attack paths

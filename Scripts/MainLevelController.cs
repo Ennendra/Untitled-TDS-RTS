@@ -169,9 +169,6 @@ public partial class MainLevelController : Node2D
         mainUI.SetPlayerFactionController(factionController[playerFaction - 1]);
         rtsController.levelController = this;
         rtsController.SetFaction(playerFaction);
-        
-        GD.Print("Player faction:" + playerFaction);
-        GD.Print("Player found?  " + player.Name);
 
         //Add the player to the list if it exists
         //If not, make sure we aren't in personal mode at start
@@ -540,7 +537,6 @@ public partial class MainLevelController : Node2D
         //Pausing and unpausing
         if (Input.IsActionJustPressed("PauseGame"))
         {
-            GD.Print("Pause?");
             PauseGame();
         }
     }
@@ -558,9 +554,9 @@ public partial class MainLevelController : Node2D
     //Setting the pause state
     public void PauseGame()
     {
-        GD.Print(GetTree().Paused);
+        GD.Print("Before pause: " + GetTree().Paused);
         GetTree().Paused = !GetTree().Paused;
-        GD.Print(GetTree().Paused);
+        GD.Print("After Pause: " + GetTree().Paused);
     }
 
     public Vector2 GetMinimapToMapPosition()
@@ -861,6 +857,10 @@ public partial class MainLevelController : Node2D
     //Functions for the fog of war
     public void UpdateFOW(double delta)
     {
+        //Set minimap FOW based on the FOW visibility
+        if (fowController.Visible == true) { mainUI.GetMinimap().drawMinimapfow = true; }
+        else { mainUI.GetMinimap().drawMinimapfow = false; }
+
         ImageTexture[] newFOWTextures = fowController.ProcessCall(delta);
         //Will only return textures when the actual FOW updates
         if (newFOWTextures != null) 
@@ -903,6 +903,8 @@ public partial class MainLevelController : Node2D
             }
 
         }
+
+        
     }
     
 
