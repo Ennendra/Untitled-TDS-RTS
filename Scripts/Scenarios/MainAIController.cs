@@ -49,11 +49,13 @@ public class AIControlGroup
 	}
 	public void InitGroup(Vector2[] waypoints, int[] unitList)
 	{
+        //Setting the group's attack movement path (or defense patrol path)
         this.waypoints = new Vector2[waypoints.Length];
         for (int i = 0; i < waypoints.Length; i++)
         {
             this.waypoints[i] = waypoints[i];
         }
+        //Adding the units to its wanted list for factories to build
         for (int i=0; i< unitList.Length; i++)
         {
             wantedUnits[unitList[i]]++;
@@ -212,7 +214,7 @@ public class AIControlGroup
     //Setting reactions for the defense group if attacked
     public void RespondToAttack(Vector2 positionOfAttack)
     {
-        List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
+        List<Vector2> newOrderPositions = GetMovePositionArray(positionOfAttack, units.Count);
         int currentMoveIndex = 0;
         foreach (UnitParent unit in units)
         {
@@ -301,6 +303,7 @@ public partial class MainAIController : Node2D
 	//All the units and buildings that this team can control
 	public List<BuildingParent> buildingsInTeam = new();
 	public List<UnitParent> unitsInTeam = new();
+    public List<BuildingParent> buildingFactoriesInTeam = new(); //A shortlist of buildings that contain a factory component
 	public List<AIControlGroup> attackGroups = new();
 	public List<AIControlGroup> defenseGroups = new();
     public List<Vector2> attackRallyPoints = new();
@@ -310,6 +313,9 @@ public partial class MainAIController : Node2D
     
     protected float AITickTimer = 0;
 	protected float AISleepTimer = 0;
+    bool isAwakened = false, AIEnabled = true;
+
+    protected float PostAwakeningAITimer = 0;
 	[Export] float SleepTimeDuration = 180;
 
     //References to the construct info that will be used alongside the "item codes" to find factories that build them
@@ -390,11 +396,19 @@ public partial class MainAIController : Node2D
         {
             AITickTimer += (float)delta;
             AISleepTimer += (float)delta;
-            if (AITickTimer > 0.5f && AISleepTimer > SleepTimeDuration)
+
+            if (AISleepTimer > SleepTimeDuration) { isAwakened = true; }
+
+            if (isAwakened && AIEnabled)
             {
-                ProcessAITick();
-                AITickTimer = 0;
+                PostAwakeningAITimer += (float)delta;
+                if (AITickTimer > 0.8f)
+                {
+                    ProcessAITick();
+                    AITickTimer = 0;
+                }
             }
+            
         }
 		
 	}
@@ -444,18 +458,20 @@ public partial class MainAIController : Node2D
 
     }
 
+    public void EnableAIController()
+    {
+        isAwakened = true;
+    }
+    public void DisableAIController()
+    {
+        isAwakened = false;
+    }
+
     public void CheckAndProcessSupply(AIControlGroup controlGroup)
     {
         if (controlGroup.groupAssembled) { return; }
         //Create a subset of items that we 'want' to build
         List<int> unitCodesNeeded = controlGroup.GetItemsRequiringSupply();
-
-        string test = "UCs needed: ";
-        foreach (int unitCode in unitCodesNeeded)
-        {
-            test += unitCode.ToString() + ", ";
-        }
-        GD.Print(test);
 
         if (unitCodesNeeded.Count > 0)
         {
@@ -465,32 +481,30 @@ public partial class MainAIController : Node2D
             //Assign that item code to a construct info
             ConstructInfo unitToConstruct = constructUnitInfoSet[itemToBuild];
             //Find a factory that can build that item and add it to its build queue
-            foreach (BuildingParent building in buildingsInTeam)
+            foreach (BuildingParent building in buildingFactoriesInTeam)
             {
                 FactoryComponent component = building.GetFactionComponent().GetFactoryComponent();
-                if (IsInstanceValid(component))
+                if (component.buildableUnits.Contains(unitToConstruct) && component.GetBuildQueue().Count == 0)
                 {
-                    if (component.buildableUnits.Contains(unitToConstruct) && component.GetBuildQueue().Count == 0)
+                    //Setting a rally point for the unit when it's built (if applicable)
+                    building.GetFactionComponent().SetRallyPoint(building.GlobalPosition + new Vector2(0, -150));
+                    if (controlGroup.isAttackGroup)
                     {
-                        //Setting a rally point for the unit when it's built (if applicable)
-                        building.GetFactionComponent().SetRallyPoint(building.GlobalPosition + new Vector2(0, -150));
-                        if (controlGroup.isAttackGroup)
-                        {
-                            if (attackRallyPoints.Count > 0)
-                                 building.GetFactionComponent().SetRallyPoint(attackRallyPoints[RandIntRange(0, attackRallyPoints.Count)]);
-                        }
-                        else
-                        {
-                            if (defenseRallyPoints.Count > 0)
-                                building.GetFactionComponent().SetRallyPoint(defenseRallyPoints[RandIntRange(0, defenseRallyPoints.Count)]);
-                        }
-
-                        component.AddToBuildQueue(unitToConstruct);
-                        UnitsInProgress newReserve = new UnitsInProgress(building, itemToBuild, controlGroup);
-                        unitsInProgress.Add(newReserve);
-                        controlGroup.unitsInReserve[itemToBuild]++;
-                        if (!controlGroup.IsItemRequiringSupply(itemToBuild)) { break; }
+                        if (attackRallyPoints.Count > 0)
+                            building.GetFactionComponent().SetRallyPoint(attackRallyPoints[RandIntRange(0, attackRallyPoints.Count)]);
                     }
+                    else
+                    {
+                        if (defenseRallyPoints.Count > 0)
+                            building.GetFactionComponent().SetRallyPoint(defenseRallyPoints[RandIntRange(0, defenseRallyPoints.Count)]);
+                    }
+
+                    component.AddToBuildQueue(unitToConstruct);
+                    UnitsInProgress newReserve = new UnitsInProgress(building, itemToBuild, controlGroup);
+                    unitsInProgress.Add(newReserve);
+                    controlGroup.unitsInReserve[itemToBuild]++;
+                    //after this unit was added, don't add any more to this control group if it will be filled
+                    if (!controlGroup.IsItemRequiringSupply(itemToBuild)) { break; }
                 }
             }
         }
@@ -567,7 +581,7 @@ public partial class MainAIController : Node2D
         {
             if (attackers.units.Contains(unit)) 
             {
-                attackers.units.Remove(unit);
+                attackers.RemoveUnit(unit);
                 return;
             }
         }
@@ -575,7 +589,7 @@ public partial class MainAIController : Node2D
         {
             if (defenders.units.Contains(unit))
             {
-                defenders.units.Remove(unit);
+                defenders.RemoveUnit(unit);
                 return;
             }
         }
@@ -583,26 +597,29 @@ public partial class MainAIController : Node2D
 	public void AddBuilding(BuildingParent building)
 	{
 		buildingsInTeam.Add(building);
-	}
+        //Add it to a factory shortlist if it has the component
+        FactoryComponent component = building.GetFactionComponent().GetFactoryComponent();
+        if (IsInstanceValid(component))
+        {
+            buildingFactoriesInTeam.Add(building);
+        }
+
+    }
 	public void RemoveBuilding(BuildingParent building)
 	{
 		buildingsInTeam.Remove(building);
+        if (buildingFactoriesInTeam.Contains(building)) { buildingFactoriesInTeam.Remove(building); }
 
         //Check if this building was currently building anything for a control group
         //If it was, remove that item from the reserves so it can be used on a different factory later
         UnitsInProgress uip = FindUnitInProgressByFactory(building);
+        
         if (uip.itemCode != -1)
         {
             uip.controlGroup.unitsInReserve[uip.itemCode]--;
             unitsInProgress.Remove(uip);
         }
     }
-
-	//Finding a factory that is free to build the item supplied. Returns null if no factories are found
-	public BuildingParent FindIdleFactory(ConstructInfo unitToBuild)
-	{
-		return null;
-	}
 
     //Functions to quickly access the collision masks for allied or enemy units. e.g. Faction 1 would mean layer 5 for allied and layer 6-7 for enemy
     public uint GetAlliedCollisionMask()

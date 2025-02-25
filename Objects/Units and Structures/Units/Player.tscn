@@ -116,10 +116,10 @@ shape = SubResource("CircleShape2D_pk0mf")
 
 [node name="ResourceComponent" parent="." node_paths=PackedStringArray("factionComponent") instance=ExtResource("9_kxgj0")]
 factionComponent = NodePath("../FactionComponent")
-genEnergy = 120.0
-genMetal = 80.0
-stoEnergy = 50.0
-stoMetal = 40.0
+genEnergy = 15.0
+genMetal = 10.0
+stoEnergy = 100.0
+stoMetal = 60.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ResourceComponent"]
 shape = SubResource("CircleShape2D_0prfk")

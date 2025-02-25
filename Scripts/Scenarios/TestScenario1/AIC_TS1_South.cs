@@ -42,12 +42,12 @@ public partial class AIC_TS1_South : MainAIController
         //Over time, the weighting of what units are made make tanks and snipers more than scouts
         int[] unitBuildWeight = new int[] { 0, 0, 0, 0, 1 };
         int buildSize = RandIntRange(6, 9);
-        if (AISleepTimer > 400) 
+        if (PostAwakeningAITimer > 150) 
         { 
             unitBuildWeight = new int[] { 0, 0, 0, 1, 1, 1, 2 };
             buildSize = RandIntRange(8, 13);
         }
-        if (AISleepTimer >= 700) 
+        if (PostAwakeningAITimer >= 420) 
         { 
             unitBuildWeight = new int[] { 0, 1, 1, 1, 2, 2 };
             buildSize = RandIntRange(10, 13);

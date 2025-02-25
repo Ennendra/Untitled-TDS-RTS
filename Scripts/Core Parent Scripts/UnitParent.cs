@@ -20,10 +20,16 @@ public partial class UnitParent : CombatantParent
 
         if (motherFactory != null)
         {
-            if (GlobalPosition.DistanceTo(motherFactory.GlobalPosition) > 90)
+            //check that the factory is still alive
+            if (IsInstanceValid(motherFactory))
             {
-                physicsCollider.Disabled = false;
+                if (GlobalPosition.DistanceTo(motherFactory.GlobalPosition) > 90)
+                {
+                    physicsCollider.Disabled = false;
+                }
             }
+            else { physicsCollider.Disabled = false; }
+            
         }
         else
         {
