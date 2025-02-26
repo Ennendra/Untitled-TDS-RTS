@@ -1230,7 +1230,7 @@ public partial class MainLevelController : Node2D
         //Generate the initial nav polygon region bounds
         NavigationPolygon newNavMesh = new();
         newNavMesh.AddOutline(mapBounds);
-        newNavMesh.AgentRadius = 20;
+        newNavMesh.AgentRadius = 30;
 
         //Create the nav geometry data that will hold all the obstacle data
         NavigationMeshSourceGeometryData2D navGeometryData = new();

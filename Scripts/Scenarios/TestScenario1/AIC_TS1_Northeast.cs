@@ -4,27 +4,43 @@ using System;
 public partial class AIC_TS1_Northeast : MainAIController
 {
 
-    Vector2[] defensePath;
-    Vector2[] attackPath1;
+    Vector2[] defensePath1, defensePath2, defensePath3;
+    Vector2[] attackPath1, attackPath2;
 
     public override void _Ready()
     {
         base._Ready();
 
         //Define rally points for factories (Before they move on paths)
-        //attackRallyPoints.Add(new Vector2(5200, 5650));
-        //defenseRallyPoints.Add(new Vector2(6400, 5650));
+        attackRallyPoints.Add(new Vector2(9200, 2300));
+        attackRallyPoints.Add(new Vector2(9200, 2800));
+        attackRallyPoints.Add(new Vector2(6800, 375));
+        attackRallyPoints.Add(new Vector2(6825, 975));
+        defenseRallyPoints.Add(new Vector2(9400, 1350));
 
         //Set waypoint paths
-        //defensePath = new Vector2[2];
-        //defensePath[0] = new Vector2(5350, 4200);
-        //defensePath[1] = new Vector2(6500, 5300);
+        defensePath1 = new Vector2[1];
+        defensePath1[0] = new Vector2(6825, 425);
+        defensePath2 = new Vector2[2];
+        defensePath2[0] = new Vector2(7700, 1825);
+        defensePath2[1] = new Vector2(6975, 2775);
+        defensePath3 = new Vector2[2];
+        defensePath3[0] = new Vector2(8725, 2275);
+        defensePath3[1] = new Vector2(10775, 2075);
 
-        //attackPath1 = new Vector2[4];
-        //attackPath1[0] = new Vector2(6500, 5400);
-        //attackPath1[1] = new Vector2(3500, 4050);
-        //attackPath1[2] = new Vector2(2450, 3000);
-        //attackPath1[3] = new Vector2(625, 2975);
+
+        attackPath1 = new Vector2[5];
+        attackPath1[0] = new Vector2(7125, 2325);
+        attackPath1[1] = new Vector2(6000, 1150);
+        attackPath1[2] = new Vector2(4300, 1225);
+        attackPath1[3] = new Vector2(2700, 1725);
+        attackPath1[4] = new Vector2(975, 3050);
+        attackPath2 = new Vector2[5];
+        attackPath2[0] = new Vector2(7125, 2325);
+        attackPath2[1] = new Vector2(6950, 3650);
+        attackPath2[2] = new Vector2(4625, 4250);
+        attackPath2[3] = new Vector2(700, 5325);
+        attackPath2[4] = new Vector2(950, 2950);
 
         //Initialise defense groups
         GenerateNewDefenseGroup();
@@ -39,23 +55,38 @@ public partial class AIC_TS1_Northeast : MainAIController
 
     public override void GenerateNewAttackGroup()
     {
-        //Template - Generating random attack waves with varying weights and group sizes (weight is 80% Unit1, 20% Unit2)
-        //int[] unitBuildWeight = new int[] { 0, 0, 0, 0, 1 };
-        //int buildSize = RandIntRange(6, 9);
+        //Northeast, random attack waves
+        int[] unitBuildWeight = new int[] { 0, 0, 1, 1, 1, 2 };
+        int buildSize = RandIntRange(10, 15);
         //Choosing one of the attack paths
-        //Vector2[] chosenAttackPath = attackPath1;
+        Vector2[] chosenAttackPath;
+        float chosenPathRand = GD.Randf();
+        if (chosenPathRand <= 0.5f) { chosenAttackPath = attackPath1; }
+        else { chosenAttackPath = attackPath2; }
         //Create the new attack wave, which will generate a randomised group from that weighting
-        //AIControlGroup newGroup = new AIControlGroup();
-        //newGroup.InitGroup(chosenAttackPath, buildSize, unitBuildWeight);
-        //attackGroups.Add(newGroup);
+        AIControlGroup newGroup = new AIControlGroup();
+        newGroup.InitGroup(chosenAttackPath, buildSize, unitBuildWeight);
+        attackGroups.Add(newGroup);
     }
     public override void GenerateNewDefenseGroup()
     {
-        //Template - Generating a pre-defined defense wave (4 Unit1, 4 Unit2)
-        //int[] defenseGroupComp = new int[] { 0, 0, 0, 0, 1, 1, 1, 1 };
-        //AIControlGroup newGroup = new AIControlGroup();
-        //newGroup.InitGroup(defensePath, defenseGroupComp);
-        //newGroup.SetAsDefenseGroup();
-        //defenseGroups.Add(newGroup);
+        //Northeast - 3 teams, one stationary at west, one patrol near center, other patrol line at south
+        int[] defenseGroupComp = new int[] { 0, 0, 1, 2, 2, 2, 2, 2 };
+        AIControlGroup newGroup = new AIControlGroup();
+        newGroup.InitGroup(defensePath1, defenseGroupComp);
+        newGroup.SetAsDefenseGroup();
+        defenseGroups.Add(newGroup);
+
+        defenseGroupComp = new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1 };
+        newGroup = new AIControlGroup();
+        newGroup.InitGroup(defensePath2, defenseGroupComp);
+        newGroup.SetAsDefenseGroup();
+        defenseGroups.Add(newGroup);
+
+        defenseGroupComp = new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 2 };
+        newGroup = new AIControlGroup();
+        newGroup.InitGroup(defensePath3, defenseGroupComp);
+        newGroup.SetAsDefenseGroup();
+        defenseGroups.Add(newGroup);
     }
 }

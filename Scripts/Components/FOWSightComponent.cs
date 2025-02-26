@@ -26,7 +26,7 @@ public partial class FOWSightComponent : Node2D
 		offset = new Vector2(sightRange, sightRange);
 	}
 
-    public void ScanForTarget()
+    public void ScanForTargetOld()
     {
         //Init the space state
         var spaceState = GetWorld2D().DirectSpaceState;
@@ -81,6 +81,21 @@ public partial class FOWSightComponent : Node2D
         }
     }
 
+    public void ScanForTarget(List<FOWSightComponent> sightComponents)
+    {
+        foreach (var sightComponent in sightComponents)
+        {
+            //Don't do the distance check if they are already spotted
+            if (!sightComponent.GetFactionComponent().spottedByFaction[GetSightFaction()])
+            {
+                if (GlobalPosition.DistanceTo(sightComponent.GlobalPosition) < sightRange+20)
+                {
+                    sightComponent.GetFactionComponent().spottedByFaction[GetSightFaction()] = true;
+                }
+            }
+        }
+    }
+
     //A simpler spotting scan for mining nodes. Will simply use a distance check
     public void ScanMiningNodes()
     {
@@ -103,5 +118,9 @@ public partial class FOWSightComponent : Node2D
 	{
 		return factionComponent.faction;
 	}
+    public FactionComponent GetFactionComponent()
+    {
+        return factionComponent;
+    }
 
 }

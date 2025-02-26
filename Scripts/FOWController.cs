@@ -110,7 +110,7 @@ public partial class FOWController : Node2D
     {
         foreach (var sightComponent in sightComponents)
         {
-            sightComponent.ScanForTarget();
+            sightComponent.ScanForTarget(sightComponents);
             sightComponent.ScanMiningNodes();
         }
     }

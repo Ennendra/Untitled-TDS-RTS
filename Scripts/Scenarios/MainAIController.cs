@@ -19,7 +19,7 @@ public class AIControlGroup
     public int[] unitsInReserve = new int[5] { 0, 0, 0, 0, 0 };
 
     public Vector2[] waypoints;
-	public int currentWaypoint=0;
+	public int currentWaypoint=-1;
     //Tells us when all units wanted are supplied, either by the units supplied or by the group size
     //This is only used for attack waves, will *always* be false for defenders
 	public bool groupAssembled = false;
@@ -127,34 +127,41 @@ public class AIControlGroup
     //Defenders: Cycle through waypoints as a patrol route
     public void MoveToNextWaypoint()
     {
-        currentWaypoint++;
-        if (currentWaypoint < waypoints.Length)
+        //If there was only 1 waypoint, it just means a defense group that's holding one position.
+        //It's movement check on the point is already done in AITickDefense so no more is necessary
+        if (waypoints.Length > 1)
         {
-            List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
-            int currentMoveIndex = 0;
-            //move to next waypoint
-            foreach (UnitParent unit in units)
+
+            currentWaypoint++;
+            if (currentWaypoint < waypoints.Length)
             {
-                if (isAttackGroup)
-                { unit.GetAIComponent().SetNewAttackMoveOrder(newOrderPositions[currentMoveIndex]); }
-                else if (unit.GlobalPosition.DistanceTo(waypoints[currentWaypoint]) > 350)
-                { unit.GetAIComponent().SetNewMoveOrder(newOrderPositions[currentMoveIndex]); }
-                currentMoveIndex++;
-            }
-            
-        }
-        else
-        {
-            if (isAttackGroup)
-            {
-                //Attack: Target nearest enemy and attackmove towards it
+                List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
+                int currentMoveIndex = 0;
+                //move to next waypoint
+                foreach (UnitParent unit in units)
+                {
+                    if (isAttackGroup)
+                        { unit.GetAIComponent().SetNewAttackMoveOrder(newOrderPositions[currentMoveIndex]); }
+                    else if (unit.GlobalPosition.DistanceTo(waypoints[currentWaypoint]) > 350)
+                        { unit.GetAIComponent().SetNewMoveOrder(newOrderPositions[currentMoveIndex]); }
+                    currentMoveIndex++;
+                }
+
             }
             else
             {
-                //Defense: reset patrol route
-                currentWaypoint = 0;
+                if (isAttackGroup)
+                {
+                    //Attack: Target nearest enemy and attackmove towards it
+                }
+                else
+                {
+                    //Defense: reset patrol route
+                    currentWaypoint = 0;
+                }
             }
         }
+        
     }
 
 
@@ -194,21 +201,29 @@ public class AIControlGroup
     //Defender functions
     public void AITickDefense()
 	{
-        List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
-        int currentMoveIndex = 0;
-        foreach (UnitParent unit in units)
+        //Only process if there is units currently active
+        if (units.Count > 0)
         {
-            //Move units back to the current defense point if idle and too far away from it
-            if (unit.GetAIComponent().unitState == AIUnitState.IDLE && unit.GlobalPosition.DistanceTo(waypoints[currentWaypoint]) > 200)
+
+            //Set the waypoint to 0 if not assigned yet (part of preventing attack waves from starting on second WP)
+            if (currentWaypoint == -1) { currentWaypoint = 0; }
+            List<Vector2> newOrderPositions = GetMovePositionArray(waypoints[currentWaypoint], units.Count);
+            int currentMoveIndex = 0;
+            foreach (UnitParent unit in units)
             {
-                unit.GetAIComponent().SetNewMoveOrder(newOrderPositions[currentMoveIndex]);
-                currentMoveIndex++;
+                //Move units back to the current defense point if idle and too far away from it
+                if (unit.GetAIComponent().unitState == AIUnitState.IDLE && unit.GlobalPosition.DistanceTo(waypoints[currentWaypoint]) > 200)
+                {
+                    unit.GetAIComponent().SetNewMoveOrder(newOrderPositions[currentMoveIndex]);
+                    currentMoveIndex++;
+                }
             }
-        }
-        //Continue patrol if all units are assembled and idle
-        if (IsAllUnitsIdle())
-        {
-            MoveToNextWaypoint();
+            //Continue patrol if all units are assembled and idle
+            if (IsAllUnitsIdle())
+            {
+                MoveToNextWaypoint();
+            }
+
         }
     }
     //Setting reactions for the defense group if attacked
@@ -451,7 +466,8 @@ public partial class MainAIController : Node2D
         }
 
         //If there is nothing needing to be built, we can prepare another attack wave
-        if (AreAllGroupsSupplied())
+        //Limit to 5 attack waves to prevent overloading the game
+        if (AreAllGroupsSupplied() && attackGroups.Count < 5)
         {
             GenerateNewAttackGroup();
         }

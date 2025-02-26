@@ -12,19 +12,19 @@ public partial class AIC_Template : MainAIController
         base._Ready();
 
         //Define rally points for factories (Before they move on paths)
-        //attackRallyPoints.Add(new Vector2(5200, 5650));
-        //defenseRallyPoints.Add(new Vector2(6400, 5650));
+        //attackRallyPoints.Add(new Vector2());
+        //defenseRallyPoints.Add(new Vector2());
 
         //Set waypoint paths
         //defensePath = new Vector2[2];
-        //defensePath[0] = new Vector2(5350, 4200);
-        //defensePath[1] = new Vector2(6500, 5300);
+        //defensePath[0] = new Vector2();
+        //defensePath[1] = new Vector2();
 
         //attackPath1 = new Vector2[4];
-        //attackPath1[0] = new Vector2(6500, 5400);
-        //attackPath1[1] = new Vector2(3500, 4050);
-        //attackPath1[2] = new Vector2(2450, 3000);
-        //attackPath1[3] = new Vector2(625, 2975);
+        //attackPath1[0] = new Vector2();
+        //attackPath1[1] = new Vector2();
+        //attackPath1[2] = new Vector2();
+        //attackPath1[3] = new Vector2();
 
         //Initialise defense groups
         GenerateNewDefenseGroup();

@@ -31,6 +31,13 @@ public partial class MovementComponent : Node2D
 	//Tells us whether the unit is "moving"
 	//This will stop it from pushing units if it's only motion is from being pushed itself
     public bool isMoving { get; private set; } = false;
+	//Tells us if this unit is colliding with another moving unit (and can't bounce them)
+	//Will help to try and navigate around them based on target direction and the collision angle
+	bool movingCollision = false;
+	float movingCollisionAngle = 0;
+	//Tracks whether we are hitting walls or buildings. If it goes for long enough, then the pathfinding component will perform a repathing, to help avoid getting stuck
+	bool IsHittingStaticObject = false;
+	public float timeOnStaticObject = 0;
 
     //Sprite that will be manipulated by movement rotation if applicable
     [Export] Sprite2D legSprite;
@@ -59,13 +66,21 @@ public partial class MovementComponent : Node2D
 
     public override void _Process(double delta)
 	{
-		if (movementType == MovementType.HOVER)
-		{
-            if (IsInstanceValid(legSprite) && currentMoveVector.Length() > 1.0f)
-            {
-				legSprite.GlobalRotation = Mathf.RotateToward(legSprite.GlobalRotation, targetDirection, rotationSpeed * (float)delta);
-            }
+        //Alter the target direction if we are in a unit-to-unit collision
+        if (movingCollision)
+        {
+            //Set the target direction to rotate away from the angle that the collision happened by 60 degrees
+            float angleChangeAmount = Mathf.DegToRad(40.0f);
+            targetDirection = Mathf.RotateToward(targetDirection, movingCollisionAngle, -angleChangeAmount);
         }
+
+        if (movementType == MovementType.HOVER)
+		{
+			if (IsInstanceValid(legSprite) && currentMoveVector.Length() > 1.0f)
+			{
+				legSprite.GlobalRotation = Mathf.RotateToward(legSprite.GlobalRotation, targetDirection, rotationSpeed * (float)delta);
+			}
+		}
 		else if (movementType == MovementType.AIR)
 		{
 			if (IsInstanceValid(legSprite))
@@ -73,26 +88,27 @@ public partial class MovementComponent : Node2D
 
 			}
 		}
-        else //ground/default
-        {
+		else //ground/default
+		{
 			//Rotate the movement towards the target direction
-            groundMoveDirection = Mathf.RotateToward(groundMoveDirection, targetDirection, rotationSpeed * (float)delta);
-            if (IsInstanceValid(legSprite))
-            {
-                legSprite.GlobalRotation = groundMoveDirection;
-            }
+			groundMoveDirection = Mathf.RotateToward(groundMoveDirection, targetDirection, rotationSpeed * (float)delta);
+			if (IsInstanceValid(legSprite))
+			{
+				legSprite.GlobalRotation = groundMoveDirection;
+			}
 			
-        }
-		
-	}
+		}
+    }
     public override void _PhysicsProcess(double delta)
     {
         CharacterBody2D parent = (CharacterBody2D)this.GetParent();
 
-		//Get the base movement vector
+        
 
-		//If we're grounded, rotate the current movement slightly towards the target direction (to reduce the 'slipperiness' of grounded units)
-		if (movementType == MovementType.GROUND) 
+        //Get the base movement vector
+
+        //If we're grounded, rotate the current movement slightly towards the target direction (to reduce the 'slipperiness' of grounded units)
+        if (movementType == MovementType.GROUND) 
 		{
 			float currentMoveAngle = currentMoveVector.Angle();
 			float currentMoveSpeed = currentMoveVector.Length();
@@ -107,6 +123,8 @@ public partial class MovementComponent : Node2D
 		{
 			parent.Velocity = currentMoveVector;
 			bool isCollision = parent.MoveAndSlide();
+			movingCollision = false;
+			IsHittingStaticObject = false;
 
 			//Process additional physics if there was a collision
 			if (isCollision)
@@ -130,14 +148,32 @@ public partial class MovementComponent : Node2D
 							mComponent.AddMovementForce(pushVector, delta);
 							
 						}
+						else //Both units are moving, see about trying to move around them
+						{
+							movingCollision = true;
+							movingCollisionAngle = GlobalPosition.DirectionTo(collidedUnit.GlobalPosition).Angle();
+						}
 					}
+					else //We are hitting a building or other static obstacle
+					{
+						IsHittingStaticObject = true;
+					}
+
+
 				}
 			}
 		}
-    }
 
-    //Movement Functions
-    public void Accelerate(double delta)
+		//If we are hitting the walls still, progress the timer on it, otherwise, reset values
+		if (IsHittingStaticObject)
+			{ timeOnStaticObject += (float)delta; }
+		else 
+			{ timeOnStaticObject = 0; }
+	
+	}
+
+	//Movement Functions
+	public void Accelerate(double delta)
 	{
         float speedAddAmount = maxSpeed * AccelerateFactor * (float)delta;
         if (movementType == MovementType.HOVER)

@@ -30,7 +30,21 @@ public partial class PathfindingComponent : Node2D
 		globals = GetNode<Globals>("/root/Globals");
 	}
 
-	public bool SetNewPath(Vector2 newTargetPosition)
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+
+		//repath if the object seems stuck on a wall
+		if (movement.timeOnStaticObject > 3.0f && currentPath!=null)
+		{
+			Vector2 pathResetTarget = currentPath[currentPath.Length - 1];
+
+            SetNewPath(pathResetTarget);
+			movement.timeOnStaticObject = 0;
+		}
+    }
+
+    public bool SetNewPath(Vector2 newTargetPosition)
 	{
 		if (!IsInstanceValid(movement)) 
 		{
