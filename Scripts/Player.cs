@@ -103,7 +103,7 @@ public partial class Player : UnitParent
 	{
         
         //If not currently firing, disable mouse interactions if the mouse is over the player UI
-        if (!Input.IsActionPressed("Personal_Use_Fire")) { uiInputCheck = playerUI.mouseOverUI; }
+        if (!Input.IsActionPressed("Personal_Use_Fire")) { uiInputCheck = playerUI.IsOverActiveUI(); }
 
         if (IsLevelControllerSet())
         {
@@ -180,16 +180,10 @@ public partial class Player : UnitParent
                 aimComponent.FireWeapons();
             }
 
-            //if (Input.IsActionPressed("Personal_UseTool") && !uiInputCheck)
-            //{
-            //    //TODO: Check whether player UI is in the mouse point, and not fire if so
-            //    aimComponent.UseTool();
-            //}
             if (Input.IsActionJustPressed("Personal_UseTool") && !uiInputCheck)
             {
                 aimComponent.UseTool();
             }
-            //else aimComponent.StopTool();
         }
     }
 

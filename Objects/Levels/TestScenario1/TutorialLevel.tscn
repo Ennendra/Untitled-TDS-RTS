@@ -1,0 +1,270 @@
+[gd_scene load_steps=26 format=4 uid="uid://dql1gje1j0xtn"]
+
+[ext_resource type="Script" path="res://Scripts/Scenarios/Tutorial/TutorialLevelController.cs" id="1_upeql"]
+[ext_resource type="Texture2D" uid="uid://cxuspvi06ufjx" path="res://Textures/Tilesets/Water.png" id="2_vn0cj"]
+[ext_resource type="Texture2D" uid="uid://cyvfug66mahru" path="res://Textures/Tilesets/tilemap1.png" id="3_v8i45"]
+[ext_resource type="PackedScene" uid="uid://de2gm8ancssa7" path="res://Objects/UI/MainUI.tscn" id="4_l3ne7"]
+[ext_resource type="Texture2D" uid="uid://b5bi526386u1m" path="res://Textures/Tilesets/grasstile.png" id="5_6uvpb"]
+[ext_resource type="PackedScene" uid="uid://bajnlaslouu4e" path="res://Objects/UI/RTSController.tscn" id="6_ls6kk"]
+[ext_resource type="PackedScene" uid="uid://dgxbaegip6qd3" path="res://Objects/FOWController.tscn" id="7_ivisl"]
+[ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="8_noswc"]
+[ext_resource type="AudioStream" uid="uid://dvj0ypum3joxq" path="res://Sounds/Music/Like Angels Fall.mp3" id="9_0ie6o"]
+[ext_resource type="PackedScene" uid="uid://d8rp6yirf64h" path="res://Objects/Units and Structures/Buildings/BuildingNetworkHub.tscn" id="10_f3qbq"]
+[ext_resource type="PackedScene" uid="uid://po7nu1qpdrka" path="res://Objects/Units and Structures/Buildings/BuildingGenerator.tscn" id="11_udhrm"]
+[ext_resource type="PackedScene" uid="uid://b6n5rl53lqn3g" path="res://Objects/Units and Structures/Buildings/BuildingEnergyStorage.tscn" id="12_qy44x"]
+[ext_resource type="PackedScene" uid="uid://cn41rvyxe41sf" path="res://Objects/Other/MetalNode.tscn" id="13_34d3f"]
+[ext_resource type="PackedScene" uid="uid://b8wtdlbxd7cm6" path="res://Objects/Units and Structures/Buildings/BuildingMiner.tscn" id="14_qnx2f"]
+[ext_resource type="PackedScene" uid="uid://biil6hteswsdn" path="res://Objects/Units and Structures/Buildings/BuildingMetalStorage.tscn" id="15_c8iet"]
+[ext_resource type="PackedScene" uid="uid://dl8s3u8cffmp2" path="res://Objects/Units and Structures/Buildings/BuildingFactory.tscn" id="16_a8por"]
+[ext_resource type="PackedScene" uid="uid://cybcybto6k8b2" path="res://Objects/Other/ObstacleWall.tscn" id="17_fjeu0"]
+[ext_resource type="PackedScene" uid="uid://b8vkvmby213gr" path="res://Objects/Other/ObstacleWater.tscn" id="18_cob6v"]
+
+[sub_resource type="Environment" id="Environment_xi4ko"]
+background_mode = 3
+glow_enabled = true
+glow_levels/1 = 16.0
+glow_levels/2 = 16.0
+glow_levels/3 = 16.0
+glow_levels/4 = 16.0
+glow_levels/5 = 16.0
+glow_levels/6 = 16.0
+glow_levels/7 = 16.0
+glow_intensity = 2.0
+glow_blend_mode = 1
+glow_hdr_threshold = 0.9
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3jxqe"]
+texture = ExtResource("2_vn0cj")
+texture_region_size = Vector2i(50, 50)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_8od5m"]
+tile_size = Vector2i(50, 50)
+sources/0 = SubResource("TileSetAtlasSource_3jxqe")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwrnt"]
+texture = ExtResource("3_v8i45")
+separation = Vector2i(1, 1)
+texture_region_size = Vector2i(50, 50)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_7o3xo"]
+tile_size = Vector2i(50, 50)
+sources/0 = SubResource("TileSetAtlasSource_iwrnt")
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_ev53c"]
+vertices = PackedVector2Array(10297.9, 8921.74, 30, 9268.97, 30, 30, 4933.06, 30)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 4950, 0, 10350, 8950, 0, 9300), PackedVector2Array(-750, -100, -750, -450, -1000, -450, -1000, -400, -800, -400, -800, -100)])
+parsed_collision_mask = 524295
+source_geometry_mode = 1
+source_geometry_group_name = &"navigation_polygon_source_group"
+agent_radius = 30.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_wlyl4"]
+parsed_collision_mask = 7
+source_geometry_mode = 1
+source_geometry_group_name = &"navigation_polygon_source_group"
+agent_radius = 30.0
+
+[node name="TutorialLevel" type="Node2D" node_paths=PackedStringArray("navigationRegionGround", "navigationRegionHover", "fowController", "terrainTilemapLayers")]
+script = ExtResource("1_upeql")
+navigationRegionGround = NodePath("NavigationRegion2D")
+navigationRegionHover = NodePath("NavigationRegion2DWithoutLow")
+top = 0.0
+left = 0.0
+bottom = 3000.0
+right = 3000.0
+fowController = NodePath("FowController")
+terrainTilemapLayers = []
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_xi4ko")
+
+[node name="WaterTilemap" type="TileMapLayer" parent="."]
+z_index = -5
+tile_map_data = PackedByteArray("AAAhACkAAAAAAAAAAAAhACgAAAAAAAAAAAAhACcAAAAAAAAAAAAhACYAAAAAAAAAAAAhACUAAAAAAAAAAAAhACQAAAAAAAAAAAAhACMAAAAAAAAAAAAiACMAAAAAAAAAAAAjACMAAAAAAAAAAAAkACMAAAAAAAAAAAAlACMAAAAAAAAAAAAmACMAAAAAAAAAAAAnACMAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_8od5m")
+
+[node name="GrassTilemap" type="TileMapLayer" parent="."]
+z_index = -5
+tile_map_data = PackedByteArray("AAAUABcAAAACAAAAAAAVABcAAAACAAAAAAAWABcAAAACAAAAAAAXABcAAAACAAAAAAAYABcAAAACAAAAAAAZABcAAAACAAAAAAAaABcAAAACAAAAAAAbABcAAAACAAAAAAAcABcAAAACAAAAAAAdABcAAAACAAAAAAAeABcAAAACAAAAAAAfABcAAAACAAAAAAAgABcAAAACAAAAAAAhABcAAAACAAAAAAAiABcAAAACAAAAAAAjABcAAAACAAAAAAAkABcAAAACAAAAAAAlABcAAAACAAAAAAAmABcAAAACAAAAAAAnABcAAAACAAAAAAAoABgAAAADAAAAAAAoABkAAAADAAAAAAAoABoAAAADAAAAAAAoABsAAAADAAAAAAAoABwAAAADAAAAAAAoAB0AAAADAAAAAAAoAB4AAAADAAAAAAAoAB8AAAADAAAAAAAoACAAAAADAAAAAAAoACEAAAADAAAAAAAoACIAAAADAAAAAAAoACMAAAADAAAAAAAoACQAAAADAAAAAAAoACUAAAADAAAAAAAoACYAAAADAAAAAAAoACcAAAADAAAAAAAoACgAAAADAAAAAAAoACkAAAADAAAAAAAnACoAAAAAAAAAAAAmACoAAAAAAAAAAAAlACoAAAAAAAAAAAAkACoAAAAAAAAAAAAjACoAAAAAAAAAAAAiACoAAAAAAAAAAAAhACoAAAAAAAAAAAAgACoAAAAAAAAAAAAfACoAAAAAAAAAAAAeACoAAAAAAAAAAAAdACoAAAAAAAAAAAAcACoAAAAAAAAAAAAbACoAAAAAAAAAAAAaACoAAAAAAAAAAAAZACoAAAAAAAAAAAAYACoAAAAAAAAAAAAXACoAAAAAAAAAAAAWACoAAAAAAAAAAAAVACoAAAAAAAAAAAAUACoAAAAAAAAAAAATABgAAAABAAAAAAATABkAAAABAAAAAAATABoAAAABAAAAAAATABsAAAABAAAAAAATABwAAAABAAAAAAATAB0AAAABAAAAAAATAB4AAAABAAAAAAATAB8AAAABAAAAAAATACAAAAABAAAAAAATACEAAAABAAAAAAATACIAAAABAAAAAAATACMAAAABAAAAAAATACQAAAABAAAAAAATACUAAAABAAAAAAATACYAAAABAAAAAAATACcAAAABAAAAAAATACgAAAABAAAAAAATACkAAAABAAAAAAATACoAAAAEAAAAAAATABcAAAAEAAAAAAAoABcAAAAEAAAAAAAoACoAAAAEAAAAAAASACsAAAACAAAAAAATACsAAAACAAAAAAAUACsAAAACAAAAAAAVACsAAAACAAAAAAAWACsAAAACAAAAAAAXACsAAAACAAAAAAAYACsAAAACAAAAAAAZACsAAAACAAAAAAAaACsAAAACAAAAAAAbACsAAAACAAAAAAAcACsAAAACAAAAAAAdACsAAAACAAAAAAAeACsAAAACAAAAAAAfACsAAAACAAAAAAAgACsAAAACAAAAAAAhACsAAAACAAAAAAAiACsAAAACAAAAAAAjACsAAAACAAAAAAAkACsAAAACAAAAAAAlACsAAAACAAAAAAAmACsAAAACAAAAAAAnACsAAAACAAAAAAAoACsAAAACAAAAAAApACsAAAACAAAAAAASABYAAAAAAAAAAAATABYAAAAAAAAAAAAUABYAAAAAAAAAAAAVABYAAAAAAAAAAAAWABYAAAAAAAAAAAAXABYAAAAAAAAAAAAYABYAAAAAAAAAAAAZABYAAAAAAAAAAAAaABYAAAAAAAAAAAAbABYAAAAAAAAAAAAcABYAAAAAAAAAAAAdABYAAAAAAAAAAAAeABYAAAAAAAAAAAAfABYAAAAAAAAAAAAgABYAAAAAAAAAAAAhABYAAAAAAAAAAAAiABYAAAAAAAAAAAAjABYAAAAAAAAAAAAkABYAAAAAAAAAAAAlABYAAAAAAAAAAAAmABYAAAAAAAAAAAAnABYAAAAAAAAAAAAoABYAAAAAAAAAAAApABYAAAAAAAAAAAApABcAAAABAAAAAAApABgAAAABAAAAAAApABkAAAABAAAAAAApABoAAAABAAAAAAApABsAAAABAAAAAAApABwAAAABAAAAAAApAB0AAAABAAAAAAApAB4AAAABAAAAAAApAB8AAAABAAAAAAApACAAAAABAAAAAAApACEAAAABAAAAAAApACIAAAABAAAAAAApACMAAAABAAAAAAApACQAAAABAAAAAAApACUAAAABAAAAAAApACYAAAABAAAAAAApACcAAAABAAAAAAApACgAAAABAAAAAAApACkAAAABAAAAAAApACoAAAABAAAAAAASABcAAAADAAAAAAASABgAAAADAAAAAAASABkAAAADAAAAAAASABoAAAADAAAAAAASABsAAAADAAAAAAASABwAAAADAAAAAAASAB0AAAADAAAAAAASAB4AAAADAAAAAAASAB8AAAADAAAAAAASACAAAAADAAAAAAASACEAAAADAAAAAAASACIAAAADAAAAAAASACMAAAADAAAAAAASACQAAAADAAAAAAASACUAAAADAAAAAAASACYAAAADAAAAAAASACcAAAADAAAAAAASACgAAAADAAAAAAASACkAAAADAAAAAAASACoAAAADAAAAAAARABYAAAAAAAAAAAAQABYAAAAAAAAAAAAPABYAAAAAAAAAAAAOABYAAAAAAAAAAAANABYAAAAAAAAAAAAMABYAAAAAAAAAAAALABYAAAAAAAAAAAAKABYAAAAAAAAAAAAJABYAAAAAAAAAAAAIABYAAAAAAAAAAAAHABYAAAAAAAAAAAAGABYAAAAAAAAAAAAFABYAAAAAAAAAAAAEABYAAAAAAAAAAAADABYAAAAAAAAAAAACABYAAAAAAAAAAAABABYAAAAAAAAAAAAAABYAAAAAAAAAAAARACsAAAACAAAAAAAQACsAAAACAAAAAAAPACsAAAACAAAAAAAOACsAAAACAAAAAAANACsAAAACAAAAAAAMACsAAAACAAAAAAALACsAAAACAAAAAAAKACsAAAACAAAAAAAJACsAAAACAAAAAAAIACsAAAACAAAAAAAHACsAAAACAAAAAAAGACsAAAACAAAAAAAFACsAAAACAAAAAAAEACsAAAACAAAAAAADACsAAAACAAAAAAACACsAAAACAAAAAAABACsAAAACAAAAAAAAACsAAAACAAAAAAAqABYAAAAAAAAAAAArABYAAAAAAAAAAAAsABYAAAAAAAAAAAAtABYAAAAAAAAAAAAuABYAAAAAAAAAAAAvABYAAAAAAAAAAAAwABYAAAAAAAAAAAAxABYAAAAAAAAAAAAyABYAAAAAAAAAAAAzABYAAAAAAAAAAAA0ABYAAAAAAAAAAAA1ABYAAAAAAAAAAAA2ABYAAAAAAAAAAAA3ABYAAAAAAAAAAAA4ABYAAAAAAAAAAAA5ABYAAAAAAAAAAAA6ABYAAAAAAAAAAAA7ABYAAAAAAAAAAAAqACsAAAACAAAAAAArACsAAAACAAAAAAAsACsAAAACAAAAAAAtACsAAAACAAAAAAAuACsAAAACAAAAAAAvACsAAAACAAAAAAAwACsAAAACAAAAAAAxACsAAAACAAAAAAAyACsAAAACAAAAAAAzACsAAAACAAAAAAA0ACsAAAACAAAAAAA1ACsAAAACAAAAAAA2ACsAAAACAAAAAAA3ACsAAAACAAAAAAA4ACsAAAACAAAAAAA5ACsAAAACAAAAAAA6ACsAAAACAAAAAAA7ACsAAAACAAAAAAA=")
+tile_set = SubResource("TileSet_7o3xo")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
+navigation_polygon = SubResource("NavigationPolygon_ev53c")
+
+[node name="NavigationRegion2DWithoutLow" type="NavigationRegion2D" parent="."]
+visible = false
+navigation_polygon = SubResource("NavigationPolygon_wlyl4")
+navigation_layers = 7
+
+[node name="MainUIPersonal" parent="." instance=ExtResource("4_l3ne7")]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Background" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+z_index = -1
+texture_repeat = 2
+position = Vector2(1500, 1500)
+texture = ExtResource("5_6uvpb")
+region_enabled = true
+region_rect = Rect2(0, 0, 3000, 3000)
+
+[node name="RTSController" parent="." instance=ExtResource("6_ls6kk")]
+
+[node name="FowController" parent="." instance=ExtResource("7_ivisl")]
+z_index = 5
+
+[node name="Player" parent="." instance=ExtResource("8_noswc")]
+position = Vector2(1525, 1600)
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_0ie6o")
+volume_db = -15.125
+autoplay = true
+parameters/looping = true
+
+[node name="BuildingNetworkHub" parent="." instance=ExtResource("10_f3qbq")]
+position = Vector2(500, 2700)
+
+[node name="BuildingNetworkHub2" parent="." instance=ExtResource("10_f3qbq")]
+position = Vector2(1500, 2700)
+
+[node name="BuildingNetworkHub3" parent="." instance=ExtResource("10_f3qbq")]
+position = Vector2(2500, 2700)
+
+[node name="BuildingGenerator" parent="." instance=ExtResource("11_udhrm")]
+position = Vector2(75, 2925)
+
+[node name="BuildingGenerator2" parent="." instance=ExtResource("11_udhrm")]
+position = Vector2(225, 2925)
+
+[node name="BuildingGenerator3" parent="." instance=ExtResource("11_udhrm")]
+position = Vector2(375, 2925)
+
+[node name="BuildingGenerator4" parent="." instance=ExtResource("11_udhrm")]
+position = Vector2(525, 2925)
+
+[node name="BuildingGenerator5" parent="." instance=ExtResource("11_udhrm")]
+position = Vector2(675, 2925)
+
+[node name="BuildingGenerator6" parent="." instance=ExtResource("11_udhrm")]
+position = Vector2(825, 2925)
+
+[node name="BuildingEnergyStorage" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(50, 2800)
+
+[node name="BuildingEnergyStorage2" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(50, 2700)
+
+[node name="BuildingEnergyStorage3" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(150, 2800)
+
+[node name="BuildingEnergyStorage4" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(150, 2700)
+
+[node name="BuildingEnergyStorage5" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(850, 2800)
+
+[node name="BuildingEnergyStorage6" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(850, 2700)
+
+[node name="BuildingEnergyStorage7" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(750, 2800)
+
+[node name="BuildingEnergyStorage8" parent="." instance=ExtResource("12_qy44x")]
+position = Vector2(750, 2700)
+
+[node name="MetalNode" parent="." instance=ExtResource("13_34d3f")]
+position = Vector2(2500, 2850)
+
+[node name="MetalNode2" parent="." instance=ExtResource("13_34d3f")]
+position = Vector2(2300, 2850)
+
+[node name="MetalNode3" parent="." instance=ExtResource("13_34d3f")]
+position = Vector2(2700, 2850)
+
+[node name="BuildingMiner" parent="." instance=ExtResource("14_qnx2f")]
+position = Vector2(2300, 2850)
+
+[node name="BuildingMiner2" parent="." instance=ExtResource("14_qnx2f")]
+position = Vector2(2500, 2850)
+
+[node name="BuildingMiner3" parent="." instance=ExtResource("14_qnx2f")]
+position = Vector2(2700, 2850)
+
+[node name="BuildingMetalStorage" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2300, 2750)
+
+[node name="BuildingMetalStorage2" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2200, 2750)
+
+[node name="BuildingMetalStorage3" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2200, 2650)
+
+[node name="BuildingMetalStorage4" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2300, 2650)
+
+[node name="BuildingMetalStorage5" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2700, 2750)
+
+[node name="BuildingMetalStorage6" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2700, 2650)
+
+[node name="BuildingMetalStorage7" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2800, 2750)
+
+[node name="BuildingMetalStorage8" parent="." instance=ExtResource("15_c8iet")]
+position = Vector2(2800, 2650)
+
+[node name="BuildingNetworkHub4" parent="." instance=ExtResource("10_f3qbq")]
+position = Vector2(150, 550)
+
+[node name="BuildingFactory" parent="." instance=ExtResource("16_a8por")]
+position = Vector2(325, 550)
+
+[node name="ObstacleWall" parent="." instance=ExtResource("17_fjeu0")]
+
+[node name="ObstacleBounds" parent="ObstacleWall" index="0"]
+polygon = PackedVector2Array(0, 1100, 1000, 1100, 1000, 2200, 0, 2200)
+
+[node name="ObstacleWall2" parent="." instance=ExtResource("17_fjeu0")]
+
+[node name="ObstacleBounds" parent="ObstacleWall2" index="0"]
+polygon = PackedVector2Array(2000, 1100, 3000, 1100, 3000, 2200, 2000, 2200)
+
+[node name="ObstacleWall3" parent="." instance=ExtResource("17_fjeu0")]
+
+[node name="ObstacleBounds" parent="ObstacleWall3" index="0"]
+polygon = PackedVector2Array(1000, 1100, 1000, 1200, 2000, 1200, 2000, 1100)
+
+[node name="ObstacleWall4" parent="." instance=ExtResource("17_fjeu0")]
+
+[node name="ObstacleBounds" parent="ObstacleWall4" index="0"]
+polygon = PackedVector2Array(1000, 2100, 1000, 2200, 2000, 2200, 2000, 2100)
+
+[node name="ObstacleWater" parent="." instance=ExtResource("18_cob6v")]
+
+[node name="ObstacleBounds" parent="ObstacleWater" index="0"]
+polygon = PackedVector2Array(1650, 2100, 1700, 2100, 1700, 1800, 2000, 1800, 2000, 1750, 1650, 1750)
+
+[connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
+[connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedFromScene"]
+
+[editable path="ObstacleWall"]
+[editable path="ObstacleWall2"]
+[editable path="ObstacleWall3"]
+[editable path="ObstacleWall4"]
+[editable path="ObstacleWater"]

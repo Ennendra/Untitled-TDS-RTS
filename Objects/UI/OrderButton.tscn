@@ -4,6 +4,7 @@
 
 [node name="OrderButton" type="Button"]
 custom_minimum_size = Vector2(50, 50)
+focus_mode = 0
 expand_icon = true
 script = ExtResource("1_uef15")
 

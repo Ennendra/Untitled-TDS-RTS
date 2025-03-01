@@ -50,7 +50,7 @@ public partial class BuildQueueButton : Button
     public void OnButtonPressed(InputEvent @event)
     {
         
-        if (inputConnection != null)
+        if (inputConnection != null && !Input.IsActionPressed("HideUI"))
         {
             if (@event is InputEventMouseButton mb)
             {

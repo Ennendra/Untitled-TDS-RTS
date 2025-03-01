@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://c37bcfodn8dhh"]
+
+[ext_resource type="Texture2D" uid="uid://dyhhrs3j1hdcm" path="res://Textures/UI/UnitOverlays/UIOverlay_Turret1.png" id="1_00ymf"]
+[ext_resource type="Script" path="res://Objects/Units and Structures/UnitInfo.cs" id="2_8jt3k"]
+
+[resource]
+script = ExtResource("2_8jt3k")
+unitName = "Test Dummy"
+unitDescription = "You shoot it to learn things"
+maxHealth = 60.0
+energyCost = 300.0
+metalCost = 80.0
+iconTex = ExtResource("1_00ymf")
+unitInfoType = 0
+damage = "90"

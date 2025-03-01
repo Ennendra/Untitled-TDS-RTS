@@ -55,10 +55,9 @@ public partial class UI_ControlGroupButton : Button
 
 	public void OnButtonPressed()
 	{
-        if (connection != null)
+        if (connection != null && !Input.IsActionPressed("HideUI"))
         {
             connection.EmitSignal("SelectControlGroupButton", index);
         }
-        else GD.Print("Control Group button has no connection!");
     }
 }

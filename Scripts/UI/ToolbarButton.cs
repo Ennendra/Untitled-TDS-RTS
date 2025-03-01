@@ -78,7 +78,7 @@ public partial class ToolbarButton : Button
 
     public void ExecuteEquipInput()
     {
-        if (equipLink != null)
+        if (equipLink != null && !Input.IsActionPressed("HideUI"))
         {
             if (isButtonTool && tool != null)
             {

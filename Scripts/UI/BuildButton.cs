@@ -39,7 +39,7 @@ public partial class BuildButton : Button
 
 	public void OnButtonPressed()
 	{
-		if (inputConnection != null)
+		if (inputConnection != null && !Input.IsActionPressed("HideUI"))
 		{
 			inputConnection.EmitSignal("GetNewBuildInfo", buildInfo);
 		}

@@ -35,7 +35,7 @@ public partial class OrderButton : Button
 
     public void OnButtonPressed()
 	{
-        if (inputConnection != null)
+        if (inputConnection != null && !Input.IsActionPressed("HideUI"))
         {
             //convert the code to a string (as enums cannot be used in a signal)
             string sButtonCode = "None";
@@ -50,6 +50,5 @@ public partial class OrderButton : Button
 
             inputConnection.EmitSignal("SetOrderState", sButtonCode);
         }
-        else GD.Print("Selection button has no connection to RTS controller!");
     }
 }

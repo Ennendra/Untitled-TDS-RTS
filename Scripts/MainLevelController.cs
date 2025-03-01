@@ -41,6 +41,26 @@ public struct ResourceStats
     }
 }
 
+public class LevelTechAvailabilityController 
+{
+    //Unit and Building tech
+    public bool tech_unitScout = true;
+    public bool tech_unitTank = true;
+    public bool tech_unitSniper = true;
+
+    public bool tech_networkHub = true;
+    public bool tech_generator = true;
+    public bool tech_miner = true;
+    public bool tech_storage = true;
+    public bool tech_refinery = true;
+    public bool tech_turret = true;
+
+    //Specific controls (mostly for tutorial use)
+    public bool control_RTSToggle = true;
+    public bool control_Shooting = true;
+}
+
+
 public partial class MainLevelController : Node2D
 {
     Globals globals;
@@ -67,7 +87,8 @@ public partial class MainLevelController : Node2D
 
     public LevelControllerPlayState playState { get; private set; } = LevelControllerPlayState.PERSONALPLAYER;
     public PersonalPlayState personalPlayState { get; private set; } = PersonalPlayState.STANDARD;
-    public RTSPlayState rtsPlayState { get; private set; } = RTSPlayState.STANDARD; 
+    public RTSPlayState rtsPlayState { get; private set; } = RTSPlayState.STANDARD;
+    int levelPhase = 1;
     
     public Player player { get; protected set; }
     public bool playerIsBuilding = false;
@@ -240,6 +261,17 @@ public partial class MainLevelController : Node2D
         //this function will be set up separately in each level's controller
     }
 
+    //Determines what tech is available and whether certain controls are enabled at the start
+    //Default everything is enabled, but can be tweaked in scenarios (particularly tutorial)
+    public virtual void InitLevelControlsAndTech()
+    {
+        UpdateTechUI();
+    }
+    public void UpdateTechUI()
+    {
+
+    }
+
     public Vector2 GetMapSize()
     {
         float width = right - left;
@@ -377,7 +409,7 @@ public partial class MainLevelController : Node2D
         //General inputs when in RTS mode
         if (playState == LevelControllerPlayState.RTSCOMMAND)
         {
-            if (rtsController.isCurrentlySelecting || mainUI.mouseOverUI)
+            if (rtsController.isCurrentlySelecting || mainUI.IsOverActiveUI())
                 { globals.SetNewCustomCursor("Personal"); }
             else
                 { 
@@ -396,7 +428,7 @@ public partial class MainLevelController : Node2D
                 //pressing selection button
                 if (Input.IsActionJustPressed("RTS_Select"))
                 {
-                    if (!mainUI.mouseOverUI) //Are we not over any UI?
+                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
                     {
                         rtsController.SetInitialSelectionPoint();
                     }

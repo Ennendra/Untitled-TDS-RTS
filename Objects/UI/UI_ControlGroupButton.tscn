@@ -8,6 +8,7 @@
 custom_minimum_size = Vector2(50, 50)
 offset_right = 50.0
 offset_bottom = 50.0
+focus_mode = 0
 mouse_filter = 1
 action_mode = 0
 script = ExtResource("5_ncc8a")

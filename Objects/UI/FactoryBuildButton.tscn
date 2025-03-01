@@ -6,6 +6,7 @@
 [node name="FactoryBuildButton" type="Button"]
 clip_contents = true
 custom_minimum_size = Vector2(70, 70)
+focus_mode = 0
 mouse_filter = 1
 action_mode = 0
 script = ExtResource("1_et0vp")

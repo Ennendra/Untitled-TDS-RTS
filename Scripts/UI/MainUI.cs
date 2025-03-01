@@ -27,6 +27,7 @@ public partial class MainUI : CanvasLayer
 	UI_Minimap minimap;
 	//Minimap zoom buttons
 	TextureButton minimapZoomButtonPlus, minimapZoomButtonMinus;
+	TextureRect minimapZoomButtonBG;
 	//Paused indicator
 	TextureRect pausedIcon;
 
@@ -41,6 +42,7 @@ public partial class MainUI : CanvasLayer
 		minimap = GetNode<UI_Minimap>("UI_Minimap");
 		minimapZoomButtonPlus = GetNode<TextureButton>("UI_MinimapZoomPlus");
         minimapZoomButtonMinus = GetNode<TextureButton>("UI_MinimapZoomMinus");
+		minimapZoomButtonBG = GetNode<TextureRect>("MinimapButtonBG");
 		pausedIcon = GetNode<TextureRect>("UI_Paused");
 
         CallDeferred("InitBuildGhost");
@@ -63,6 +65,31 @@ public partial class MainUI : CanvasLayer
             minimapZoomButtonPlus.Disabled = true;
         else
             minimapZoomButtonPlus.Disabled = false;
+
+		if (Input.IsActionPressed("HideUI"))
+		{
+			resourceTracker.Modulate = new Color(1, 1, 1, 0.03f);
+			personalToolbar.Modulate = new Color(1, 1, 1, 0.03f);
+			rtsToolbar.Modulate = new Color(1, 1, 1, 0.03f);
+			controlGroupBar.Modulate = new Color(1, 1, 1, 0.03f);
+			minimap.Modulate = new Color(1, 1, 1, 0.03f);
+			minimapZoomButtonMinus.Modulate = new Color(1, 1, 1, 0.03f);
+			minimapZoomButtonPlus.Modulate = new Color(1, 1, 1, 0.03f);
+            minimapZoomButtonBG.Modulate = new Color(1, 1, 1, 0.03f);
+            buildQueueBar.Modulate = new Color(1, 1, 1, 0.03f);
+        }
+		else
+		{
+            resourceTracker.Modulate = new Color(1, 1, 1, 1);
+            personalToolbar.Modulate = new Color(1, 1, 1, 1);
+            rtsToolbar.Modulate = new Color(1, 1, 1, 1);
+            controlGroupBar.Modulate = new Color(1, 1, 1, 1);
+            minimap.Modulate = new Color(1, 1, 1, 1);
+            minimapZoomButtonMinus.Modulate = new Color(1, 1, 1, 1);
+            minimapZoomButtonPlus.Modulate = new Color(1, 1, 1, 1);
+            minimapZoomButtonBG.Modulate = new Color(1, 1, 1, 1);
+            buildQueueBar.Modulate = new Color(1, 1, 1, 1);
+        }
     }
 	public void InitBuildGhost()
 	{
@@ -77,6 +104,14 @@ public partial class MainUI : CanvasLayer
 	public FactionController GetPlayerFactionController() 
 	{  
 		return this.playerFactionController; 
+	}
+
+	//tells us whether the mouse is over the UI and the UI is not being mostly hidden by the hideUI keybind
+	public bool IsOverActiveUI()
+	{
+		bool uiHiddenByKeybind = Input.IsActionPressed("HideUI");
+
+		return (mouseOverUI && !uiHiddenByKeybind);
 	}
 
 	//Function compiling each set of buttons to link to the mainlevelcontroller script (ie. where to send signals to when pressed)
