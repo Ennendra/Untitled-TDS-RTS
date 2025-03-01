@@ -58,6 +58,9 @@ public class LevelTechAvailabilityController
     //Specific controls (mostly for tutorial use)
     public bool control_RTSToggle = true;
     public bool control_Shooting = true;
+    public bool control_movement = true;
+    public bool control_rtsSelection = true;
+    public bool control_rtsOrders = true;
 }
 
 
@@ -88,7 +91,9 @@ public partial class MainLevelController : Node2D
     public LevelControllerPlayState playState { get; private set; } = LevelControllerPlayState.PERSONALPLAYER;
     public PersonalPlayState personalPlayState { get; private set; } = PersonalPlayState.STANDARD;
     public RTSPlayState rtsPlayState { get; private set; } = RTSPlayState.STANDARD;
+
     int levelPhase = 1;
+    public LevelTechAvailabilityController techController = new();
     
     public Player player { get; protected set; }
     public bool playerIsBuilding = false;
@@ -383,15 +388,6 @@ public partial class MainLevelController : Node2D
         {
             globals.SetNewCustomCursor("Personal");
 
-            //Deprecating the equipment inputs. These will be replaced with building queue inputs
-            //if (Input.IsActionJustPressed("Personal_SelectTool1")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(0); }
-            //if (Input.IsActionJustPressed("Personal_SelectTool2")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(1); }
-            //if (Input.IsActionJustPressed("Personal_SelectTool3")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(2); }
-
-            //if (Input.IsActionJustPressed("Personal_SelectWeapon1")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(3); }
-            //if (Input.IsActionJustPressed("Personal_SelectWeapon2")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(4); }
-            //if (Input.IsActionJustPressed("Personal_SelectWeapon3")) { mainUI.GetPersonalToolbar().ExecuteEquipInput(5); }
-
             ProcessBuildingQueueInputs();
 
 
@@ -428,7 +424,7 @@ public partial class MainLevelController : Node2D
                 //pressing selection button
                 if (Input.IsActionJustPressed("RTS_Select"))
                 {
-                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
+                    if (!mainUI.IsOverActiveUI() && techController.control_rtsSelection) //Are we not over any UI?
                     {
                         rtsController.SetInitialSelectionPoint();
                     }
@@ -456,9 +452,9 @@ public partial class MainLevelController : Node2D
                     specialOrderJustExecuted = false;
                 }
                 //Pressing execute order button
-                if (Input.IsActionJustPressed("RTS_ExecuteOrder"))
+                if (Input.IsActionJustPressed("RTS_ExecuteOrder") && techController.control_rtsOrders)
                 {
-                    if (!mainUI.mouseOverUI) //Are we not over any UI?
+                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
                     {
                         rtsController.ExecuteStandardOrder(GetGlobalMousePosition());
                     }
@@ -471,7 +467,7 @@ public partial class MainLevelController : Node2D
                 }
 
                 //Checking general 'selection' mouse press for the minimap, when minimap is in full mode
-                if (Input.IsActionPressed("RTS_Select") && !specialOrderJustExecuted && !rtsController.isCurrentlySelecting && mainUI.mouseOverUI)
+                if (Input.IsActionPressed("RTS_Select") && !specialOrderJustExecuted && !rtsController.isCurrentlySelecting && mainUI.IsOverActiveUI())
                 {
                     if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition()) && mainUI.GetMinimap().IsMinimapFullMap())
                     {
@@ -481,22 +477,26 @@ public partial class MainLevelController : Node2D
                 }
 
                 //Pressing any of the order hotbar hotkeys
-                if (Input.IsActionJustPressed("RTS_SetMoveOrder"))
+                if (techController.control_rtsOrders)
                 {
-                    OnOrderStatePress("Move");
+                    if (Input.IsActionJustPressed("RTS_SetMoveOrder"))
+                    {
+                        OnOrderStatePress("Move");
+                    }
+                    if (Input.IsActionJustPressed("RTS_SetAttackOrder"))
+                    {
+                        OnOrderStatePress("Attack");
+                    }
+                    if (Input.IsActionJustPressed("RTS_SetStopOrder"))
+                    {
+                        OnOrderStatePress("Stop");
+                    }
+                    if (Input.IsActionJustPressed("RTS_SetHoldOrder"))
+                    {
+                        OnOrderStatePress("Hold");
+                    }
                 }
-                if (Input.IsActionJustPressed("RTS_SetAttackOrder"))
-                {
-                    OnOrderStatePress("Attack");
-                }
-                if (Input.IsActionJustPressed("RTS_SetStopOrder"))
-                {
-                    OnOrderStatePress("Stop");
-                }
-                if (Input.IsActionJustPressed("RTS_SetHoldOrder"))
-                {
-                    OnOrderStatePress("Hold");
-                }
+                
                 
 
             }
@@ -509,7 +509,7 @@ public partial class MainLevelController : Node2D
             {
                 if (Input.IsActionJustPressed("RTS_Select"))
                 {
-                    if (!mainUI.mouseOverUI) //Are we not over any UI?
+                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
                     {
                         //Execute Move at the mouse position
                         rtsController.ExecuteMoveOrder(GetGlobalMousePosition());
@@ -532,7 +532,7 @@ public partial class MainLevelController : Node2D
             {
                 if (Input.IsActionJustPressed("RTS_Select"))
                 {
-                    if (!mainUI.mouseOverUI) //Are we not over any UI?
+                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
                     {
                         //Execute Attack/Attack-Move at the mouse position
                         rtsController.ExecuteAttackOrder(GetGlobalMousePosition());
@@ -561,7 +561,7 @@ public partial class MainLevelController : Node2D
         //Check minimap zoom keybinds
         ProcessMinimapInputs();
         //Toggling RTS Mode
-        if (Input.IsActionJustPressed("RTSModeToggle"))
+        if (Input.IsActionJustPressed("RTSModeToggle") && techController.control_RTSToggle)
         {
             CallDeferred("ToggleRTSMode");
         }
@@ -776,7 +776,7 @@ public partial class MainLevelController : Node2D
         //TODO: Ensure this function places the building 
         mainUI.ProcessBuildingPlacement(GetGlobalMousePosition(), player.GetFactionComponent());
 
-        if (!mainUI.mouseOverUI)
+        if (!mainUI.IsOverActiveUI())
         {
             if (Input.IsActionJustPressed("PlaceBuilding"))
             {
@@ -863,7 +863,7 @@ public partial class MainLevelController : Node2D
     public void OnOrderStatePress(string buttonCode)
     {
         //only activate if we actually have something selected and are not currently dragging a selection box
-        if (rtsController.selectedItems.Count > 0 && !rtsController.isCurrentlySelecting)
+        if (rtsController.selectedItems.Count > 0 && !rtsController.isCurrentlySelecting && techController.control_rtsOrders)
         {
             switch (buttonCode)
             {

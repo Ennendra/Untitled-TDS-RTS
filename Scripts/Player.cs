@@ -174,7 +174,7 @@ public partial class Player : UnitParent
         //General combat controls
         if (playerUI != null)
         {
-            if (Input.IsActionPressed("Personal_Use_Fire") && !uiInputCheck && !weaponsDisabled)
+            if (Input.IsActionPressed("Personal_Use_Fire") && !uiInputCheck && !weaponsDisabled && levelController.techController.control_Shooting)
             {
                 //TODO: Check whether player UI is in the mouse point, and not fire if so
                 aimComponent.FireWeapons();
