@@ -1,14 +1,22 @@
-[gd_scene load_steps=32 format=4 uid="uid://bvji7q1gdfv36"]
+[gd_scene load_steps=40 format=4 uid="uid://bvji7q1gdfv36"]
 
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="1_ndp2k"]
 [ext_resource type="Script" path="res://Scripts/MainLevelController.cs" id="1_slh8m"]
 [ext_resource type="Texture2D" uid="uid://cyvfug66mahru" path="res://Textures/Tilesets/tilemap1.png" id="2_plj7p"]
 [ext_resource type="Texture2D" uid="uid://cxuspvi06ufjx" path="res://Textures/Tilesets/Water.png" id="2_u1au2"]
+[ext_resource type="Resource" uid="uid://dcxhrv06cdy4i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_NetworkHub.tres" id="2_uexv7"]
 [ext_resource type="Texture2D" uid="uid://b5bi526386u1m" path="res://Textures/Tilesets/grasstile.png" id="3_lxxcb"]
+[ext_resource type="Resource" uid="uid://yjs4iloqmg2i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Generator.tres" id="3_wrkc3"]
+[ext_resource type="Resource" uid="uid://uuwgt6j15354" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Miner.tres" id="4_61bka"]
 [ext_resource type="PackedScene" uid="uid://po7nu1qpdrka" path="res://Objects/Units and Structures/Buildings/BuildingGenerator.tscn" id="4_k817o"]
+[ext_resource type="Resource" uid="uid://cv3aep28kx6f8" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Refinery.tres" id="5_gjtg2"]
 [ext_resource type="PackedScene" uid="uid://dpyxe4fuquhmf" path="res://Objects/Units and Structures/Buildings/BuildingRefinery.tscn" id="5_oydl6"]
 [ext_resource type="PackedScene" uid="uid://d8rp6yirf64h" path="res://Objects/Units and Structures/Buildings/BuildingNetworkHub.tscn" id="6_ff2od"]
+[ext_resource type="Resource" uid="uid://duv5n2wh276mn" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_EnergyStorage.tres" id="6_rgs2u"]
 [ext_resource type="PackedScene" uid="uid://de2gm8ancssa7" path="res://Objects/UI/MainUI.tscn" id="7_3pqy3"]
+[ext_resource type="Resource" uid="uid://3yiscuiw5o3t" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_MetalStorage.tres" id="7_c5d4k"]
+[ext_resource type="Resource" uid="uid://cu5mfbycdnot5" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Factory.tres" id="8_rr8sk"]
+[ext_resource type="Resource" uid="uid://dclclw6hqdrx7" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Turret.tres" id="9_kt8kb"]
 [ext_resource type="PackedScene" uid="uid://biil6hteswsdn" path="res://Objects/Units and Structures/Buildings/BuildingMetalStorage.tscn" id="9_qek2b"]
 [ext_resource type="PackedScene" uid="uid://b6n5rl53lqn3g" path="res://Objects/Units and Structures/Buildings/BuildingEnergyStorage.tscn" id="10_2yq5g"]
 [ext_resource type="PackedScene" uid="uid://6akwd6vee46k" path="res://Objects/Units and Structures/Units/Unit1.tscn" id="11_vy2n2"]
@@ -84,6 +92,7 @@ agent_radius = 30.0
 [node name="Main" type="Node2D" node_paths=PackedStringArray("fowController", "terrainTilemapLayers")]
 process_mode = 3
 script = ExtResource("1_slh8m")
+buildingList_tier1 = Array[Resource]([ExtResource("2_uexv7"), ExtResource("3_wrkc3"), ExtResource("4_61bka"), ExtResource("5_gjtg2"), ExtResource("6_rgs2u"), ExtResource("7_c5d4k"), ExtResource("8_rr8sk"), ExtResource("9_kt8kb")])
 top = -2000.0
 left = -3000.0
 bottom = 6000.0

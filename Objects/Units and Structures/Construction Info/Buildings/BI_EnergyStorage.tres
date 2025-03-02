@@ -9,4 +9,5 @@ script = ExtResource("3_pxonm")
 objectToSpawn = ExtResource("1_16ivi")
 type = 2
 objectGridSize = Vector2(2, 2)
+uniqueIdentifier = 0
 unitInfo = ExtResource("3_yl4xa")

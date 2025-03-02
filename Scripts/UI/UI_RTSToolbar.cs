@@ -33,8 +33,6 @@ public partial class UI_RTSToolbar : Control
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        SetBuildingButtons(buildingList_tier1);
-
         buildingButtonContainer = GetNode<Control>("BuildButtonContainer");
         factoryButtonContainer = GetNode<Control>("FactoryBuildButtonContainer");
         singleUnitDetailContainer = GetNode<UI_SingleUnitDetails>("SingleUnitSelectionContainer");
@@ -95,11 +93,11 @@ public partial class UI_RTSToolbar : Control
 
     }
     //Functions for the building buttons
-    public void SetBuildingButtons(ConstructInfo[] buildingList)
+    public void SetBuildingButtons(List<ConstructInfo> buildingList)
     {
         for (int i = 0; i < buildingButtons.Length; i++)
         {
-            if (i < buildingList.Length)
+            if (i < buildingList.Count)
             {
                 buildingButtons[i].SetButtonConstructInfo(buildingList[i]);
                 buildingButtons[i].Visible = true;
@@ -125,7 +123,7 @@ public partial class UI_RTSToolbar : Control
             button.SetButtonConnection(connection);
         }
     }
-    public void SetFactoryBuildingButtons(ConstructInfo[] buildingList)
+    public void SetFactoryBuildingButtons(List<ConstructInfo> buildingList)
     {
         //Hide the building button container and reveal the factory button container
         buildingButtonContainer.Visible = false;
@@ -133,7 +131,7 @@ public partial class UI_RTSToolbar : Control
 
         for (int i = 0; i < factoryBuildingButtons.Length; i++)
         {
-            if (i < buildingList.Length)
+            if (i < buildingList.Count)
             {
                 factoryBuildingButtons[i].SetButtonConstructInfo(buildingList[i]);
                 factoryBuildingButtons[i].Visible = true;

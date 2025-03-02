@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Net.Security;
 using System.Reflection;
 
@@ -304,7 +305,16 @@ public partial class RTSController : Node2D
         }
 
         //Check if there is only one type and that it is a factory type. If so, send info to the level controller as we will be changing the UI
-        if (selectionTypes.Count == 1)
+        DetermineBuildUI(selectionTypes.Count);
+
+        return selectionTypes;
+    }
+
+    //Takes 
+    public void DetermineBuildUI(int selectionTypeCount)
+    {
+        //Check if there is only one type and that it is a factory type. If so, send info to the level controller as we will be changing the UI
+        if (selectionTypeCount == 1)
         {
             //'re-enable' the first button (in the case of it being disabled below previously)
             levelController.mainUI.GetRTSToolbar().ToggleFactoryBuildButtonEnable(0, true);
@@ -327,12 +337,12 @@ public partial class RTSController : Node2D
                         }
                     }
                 }
-                else
+                else //it is a standard factory
                 {
                     levelController.SetFactoryButtonInfo(GetFactoryBuildableList());
                     factoryBuildMenuEnabled = true;
                 }
-                
+
             }
             else
             {
@@ -345,8 +355,6 @@ public partial class RTSController : Node2D
             levelController.ResetUIToBuildingButtons();
             factoryBuildMenuEnabled = false;
         }
-
-        return selectionTypes;
     }
 
     //Functions on executing orders

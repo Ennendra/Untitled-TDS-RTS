@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class UI_PersonalToolbar : Control
 {
@@ -15,8 +16,6 @@ public partial class UI_PersonalToolbar : Control
 	public override void _Ready()
 	{
         healthBar = GetNode<TextureProgressBar>("HealthBar");
-
-        SetBuildingButtons(buildingList_tier1);
     }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -47,11 +46,11 @@ public partial class UI_PersonalToolbar : Control
     }
 
     //Functions for the building buttons
-    public void SetBuildingButtons(ConstructInfo[] buildingList)
+    public void SetBuildingButtons(List<ConstructInfo> buildingList)
     {
         for (int i=0; i<buildingButtons.Length; i++)
         {
-            if (i < buildingList.Length)
+            if (i < buildingList.Count)
             {
                 buildingButtons[i].SetButtonConstructInfo(buildingList[i]);
                 buildingButtons[i].Visible = true;
@@ -62,6 +61,21 @@ public partial class UI_PersonalToolbar : Control
             }
         }
     }
+    //public void SetBuildingButtons(ConstructInfo[] buildingList)
+    //{
+    //    for (int i = 0; i < buildingButtons.Length; i++)
+    //    {
+    //        if (i < buildingList.Length)
+    //        {
+    //            buildingButtons[i].SetButtonConstructInfo(buildingList[i]);
+    //            buildingButtons[i].Visible = true;
+    //        }
+    //        else
+    //        {
+    //            buildingButtons[i].Visible = false;
+    //        }
+    //    }
+    //}
     public void SetBuildButtonConnection(Node2D connection)
     {
         foreach (BuildButton button in buildingButtons)

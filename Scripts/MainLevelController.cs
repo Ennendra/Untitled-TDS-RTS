@@ -27,6 +27,48 @@ public enum RTSPlayState
     SETORDER_ATTACK
 }
 
+public enum TechControlCode 
+{ 
+    TECH_UNITSCOUT,
+    TECH_UNITTANK,
+    TECH_UNITSNIPER,
+    TECH_NETWORKHUB,
+    TECH_GENERATOR,
+    TECH_MINER,
+    TECH_STORAGEENERGY,
+    TECH_STORAGEMETAL,
+    TECH_REFINERY,
+    TECH_TURRET,
+    TECH_COMMANDERUNIT,
+    CONTROL_RTSTOGGLE,
+    CONTROL_MOVEMENT,
+    CONTROL_SHOOTING,
+    CONTROL_RTSSELECTION,
+    CONTROL_RTSORDERS
+}
+
+public class TechControlResourceLink 
+{
+    public ConstructInfo tech;
+    public TechControlCode code;
+    public bool isEnabled;
+
+    public TechControlResourceLink(ConstructInfo tech, TechControlCode code, bool isEnabled)
+    {
+        this.tech = tech;
+        this.code = code;
+        this.isEnabled = isEnabled;
+    }
+    //Alternative resource link, used for control-specific codes
+    public TechControlResourceLink(TechControlCode code)
+    {
+        this.tech = null;
+        this.code = code;
+        this.isEnabled = true;
+    }
+}
+
+
 public struct ResourceStats
 {
     public float[] totalGeneration = new float[3] { 0, 0, 0 };
@@ -43,24 +85,72 @@ public struct ResourceStats
 
 public class LevelTechAvailabilityController 
 {
-    //Unit and Building tech
-    public bool tech_unitScout = true;
-    public bool tech_unitTank = true;
-    public bool tech_unitSniper = true;
 
-    public bool tech_networkHub = true;
-    public bool tech_generator = true;
-    public bool tech_miner = true;
-    public bool tech_storage = true;
-    public bool tech_refinery = true;
-    public bool tech_turret = true;
-
-    //Specific controls (mostly for tutorial use)
+    //Enabling or disabling specific controls (mostly for tutorial use)
     public bool control_RTSToggle = true;
     public bool control_Shooting = true;
     public bool control_movement = true;
     public bool control_rtsSelection = true;
     public bool control_rtsOrders = true;
+
+    //A list linking each tech availability code to a construct info, for use in enabling or disabling build buttons
+    public List<TechControlResourceLink> techAvailability = new();
+
+    //Initialising the tech controller and all the tech availability
+    public LevelTechAvailabilityController()
+    {
+        TechControlResourceLink newLink;
+        ConstructInfo newInfo;
+
+        //Buildings
+        //Network Hub
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Buildings/BI_NetworkHub.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_NETWORKHUB, true);
+        techAvailability.Add(newLink);
+        //Generator
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Buildings/BI_Generator.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_GENERATOR, true);
+        techAvailability.Add(newLink);
+        //Miner
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Buildings/BI_Miner.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_MINER, true);
+        techAvailability.Add(newLink);
+        //Storage - Energy
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Buildings/BI_EnergyStorage.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_STORAGEENERGY, true);
+        techAvailability.Add(newLink);
+        //Storage - Metal
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Buildings/BI_MetalStorage.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_STORAGEMETAL, true);
+        techAvailability.Add(newLink);
+        //Refinery
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Buildings/BI_Refinery.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_REFINERY, true);
+        techAvailability.Add(newLink);
+        //Turret
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Buildings/BI_Turret.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_TURRET, true);
+        techAvailability.Add(newLink);
+
+        //Units - Factory
+        //Unit 1 - Scout
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Units/Unit1.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_UNITSCOUT, true);
+        techAvailability.Add(newLink);
+        //Unit 2 - Tank
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Units/Unit2.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_UNITTANK, true);
+        techAvailability.Add(newLink);
+        //Unit 3 - Sniper
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Units/Unit3.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_UNITSNIPER, true);
+        techAvailability.Add(newLink);
+
+        //Commander unit/Player
+        newInfo = ResourceLoader.Load<ConstructInfo>("res://Objects/Units and Structures/Construction Info/Units/Player.tres");
+        newLink = new TechControlResourceLink(newInfo, TechControlCode.TECH_COMMANDERUNIT, true);
+        techAvailability.Add(newLink);
+    }
 }
 
 
@@ -94,7 +184,8 @@ public partial class MainLevelController : Node2D
 
     int levelPhase = 1;
     public LevelTechAvailabilityController techController = new();
-    
+    [Export] ConstructInfo[] buildingList_tier1;
+
     public Player player { get; protected set; }
     public bool playerIsBuilding = false;
     int playerFaction = 1;
@@ -252,7 +343,12 @@ public partial class MainLevelController : Node2D
         //Init the Fog of War and its textures, and prepare a set of them for the minimap
         fowTextures = fowController.InitFOW(new Vector2(left, top), GetMapSize());
 
+        //Set all the buttons on the UI to link to the controller for signal purposes
         mainUI.SetButtonConnections(this);
+        //Set the level tech and make sure the building buttons are set correctly
+        InitLevelControlsAndTech();
+        UpdateMainBuildingButtons();
+
 
         //Set the map bounds
         UpdateMapBounds();
@@ -270,11 +366,37 @@ public partial class MainLevelController : Node2D
     //Default everything is enabled, but can be tweaked in scenarios (particularly tutorial)
     public virtual void InitLevelControlsAndTech()
     {
-        UpdateTechUI();
+        
     }
-    public void UpdateTechUI()
+    public void UpdateGlobalTechAndControls(TechControlCode codeToUpdate, bool isEnabled)
     {
-
+        //Find the item in the tech controller that matches the code we want to update
+        //Skip if not found (ie, it's a control specific thing being changed)
+        int linkToChange = techController.techAvailability.FindIndex(x => x.code == codeToUpdate);
+        if (linkToChange != -1)
+        {
+            //Update the item and check if any of the building buttons need updating as well
+            techController.techAvailability[linkToChange].isEnabled = isEnabled;
+            rtsController.GetSelectedUnitTypes();
+            UpdateMainBuildingButtons();
+            return;
+        }
+        
+        //The code must be a control-related item, update as needed
+        switch (codeToUpdate) 
+        {
+            case TechControlCode.CONTROL_RTSTOGGLE:
+                techController.control_RTSToggle = isEnabled; break;
+            case TechControlCode.CONTROL_MOVEMENT:
+                techController.control_movement = isEnabled; break;
+            case TechControlCode.CONTROL_SHOOTING:
+                techController.control_Shooting = isEnabled; break;
+            case TechControlCode.CONTROL_RTSSELECTION:
+                techController.control_rtsSelection = isEnabled; break;
+            case TechControlCode.CONTROL_RTSORDERS:
+                techController.control_rtsOrders = isEnabled; break;
+            default: GD.Print("A tech code is missing from the tech controller!"); break;
+        }
     }
 
     public Vector2 GetMapSize()
@@ -571,6 +693,13 @@ public partial class MainLevelController : Node2D
         {
             PauseGame();
         }
+
+        //For testing specific things
+        //if (Input.IsActionJustPressed("TestingButton"))
+        //{
+        //    GD.Print("Disabling Unit1");
+        //    UpdateGlobalTechAndControls(TechControlCode.TECH_UNITSCOUT, false);
+        //}
     }
 
     public bool isPlayerActive()
@@ -632,9 +761,6 @@ public partial class MainLevelController : Node2D
             if (Input.IsActionJustPressed("RTS_ControlGroup9")) { controlGroupSelected = 8; }
             if (Input.IsActionJustPressed("RTS_ControlGroup10")) { controlGroupSelected = 9; }
         }
-
-
-
 
         if (controlGroupSelected != -1)
         {
@@ -1083,16 +1209,51 @@ public partial class MainLevelController : Node2D
     //Functions for the factory UI
     public void SetFactoryButtonInfo(ConstructInfo[] factoryInfo) //Run to initialise the buttons
     {
-        mainUI.GetRTSToolbar().SetFactoryBuildingButtons(factoryInfo);
+        //Create a filtered list of the build items based on their tech availability
+        List<ConstructInfo> filteredInfo = new();
+        for (int i = 0; i < factoryInfo.Length; i++)
+        {
+            int linkIndex = techController.techAvailability.FindIndex(x => x.tech == factoryInfo[i]);
+            if (linkIndex != -1)
+            {
+                if (techController.techAvailability[linkIndex].isEnabled)
+                {
+                    filteredInfo.Add(factoryInfo[i]);
+                }
+            }
+        }
+
+        mainUI.GetRTSToolbar().SetFactoryBuildingButtons(filteredInfo);
     }
-    public void UpdateFactoryButtonQueueInfo() //run to update the button amounts
+    public void UpdateFactoryButtonQueueInfo() //run to update the button queue amounts
     {
         List<ConstructInfo> queueList = rtsController.GetSelectedFactoryQueue();
         mainUI.GetRTSToolbar().SetFactoryBuildingQueueAmounts(queueList);
     }
-    public void ResetUIToBuildingButtons()
+    public void ResetUIToBuildingButtons() //Resetting the UI back to the main building buttons after deselecting the factory
     {
         mainUI.GetRTSToolbar().ResetBuildingButtons();
+    }
+    //changes the visibility of buttons (usually run after tech availability changes)
+    public void UpdateMainBuildingButtons()
+    {
+        //Create a filtered list of the build items based on their tech availability
+        List<ConstructInfo> filteredInfo = new();
+        for (int i = 0; i<buildingList_tier1.Length; i++)
+        {
+            int linkIndex = techController.techAvailability.FindIndex(x => x.tech == buildingList_tier1[i]);
+            if (linkIndex != -1)
+            {
+                if (techController.techAvailability[linkIndex].isEnabled)
+                {
+                    filteredInfo.Add(buildingList_tier1[i]);
+                }
+            }
+        }
+
+        //Send this info to the buttons
+        mainUI.GetPersonalToolbar().SetBuildingButtons(filteredInfo);
+        mainUI.GetRTSToolbar().SetBuildingButtons(filteredInfo);
     }
 
 

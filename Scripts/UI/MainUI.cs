@@ -90,6 +90,8 @@ public partial class MainUI : CanvasLayer
             minimapZoomButtonBG.Modulate = new Color(1, 1, 1, 1);
             buildQueueBar.Modulate = new Color(1, 1, 1, 1);
         }
+
+
     }
 	public void InitBuildGhost()
 	{

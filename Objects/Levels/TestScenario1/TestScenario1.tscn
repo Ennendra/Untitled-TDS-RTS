@@ -1,15 +1,23 @@
-[gd_scene load_steps=36 format=4 uid="uid://b2shq52ahls6c"]
+[gd_scene load_steps=44 format=4 uid="uid://b2shq52ahls6c"]
 
 [ext_resource type="Script" path="res://Scripts/Scenarios/TestScenario1.cs" id="1_om60n"]
 [ext_resource type="PackedScene" uid="uid://de2gm8ancssa7" path="res://Objects/UI/MainUI.tscn" id="1_opx02"]
+[ext_resource type="Resource" uid="uid://dcxhrv06cdy4i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_NetworkHub.tres" id="2_1l8oc"]
 [ext_resource type="Texture2D" uid="uid://b5bi526386u1m" path="res://Textures/Tilesets/grasstile.png" id="2_c1fxb"]
 [ext_resource type="Texture2D" uid="uid://cxuspvi06ufjx" path="res://Textures/Tilesets/Water.png" id="2_orl32"]
+[ext_resource type="Resource" uid="uid://yjs4iloqmg2i" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Generator.tres" id="3_dbo5p"]
 [ext_resource type="PackedScene" uid="uid://bajnlaslouu4e" path="res://Objects/UI/RTSController.tscn" id="3_k5so8"]
 [ext_resource type="Texture2D" uid="uid://cyvfug66mahru" path="res://Textures/Tilesets/tilemap1.png" id="3_qkj6x"]
 [ext_resource type="AudioStream" uid="uid://dvj0ypum3joxq" path="res://Sounds/Music/Like Angels Fall.mp3" id="4_pipwy"]
+[ext_resource type="Resource" uid="uid://uuwgt6j15354" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Miner.tres" id="4_wci2s"]
+[ext_resource type="Resource" uid="uid://cv3aep28kx6f8" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Refinery.tres" id="5_8bduw"]
 [ext_resource type="PackedScene" uid="uid://m05bm446wc85" path="res://Objects/Units and Structures/Units/Player.tscn" id="6_3g7nl"]
 [ext_resource type="PackedScene" uid="uid://dgxbaegip6qd3" path="res://Objects/FOWController.tscn" id="6_b5ptr"]
+[ext_resource type="Resource" uid="uid://duv5n2wh276mn" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_EnergyStorage.tres" id="6_obsm8"]
+[ext_resource type="Resource" uid="uid://3yiscuiw5o3t" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_MetalStorage.tres" id="7_wpi1b"]
+[ext_resource type="Resource" uid="uid://cu5mfbycdnot5" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Factory.tres" id="8_o4iox"]
 [ext_resource type="PackedScene" uid="uid://d8rp6yirf64h" path="res://Objects/Units and Structures/Buildings/BuildingNetworkHub.tscn" id="8_w0l73"]
+[ext_resource type="Resource" uid="uid://dclclw6hqdrx7" path="res://Objects/Units and Structures/Construction Info/Buildings/BI_Turret.tres" id="9_kmkjm"]
 [ext_resource type="PackedScene" uid="uid://b8vkvmby213gr" path="res://Objects/Other/ObstacleWater.tscn" id="10_2j7vy"]
 [ext_resource type="PackedScene" uid="uid://6akwd6vee46k" path="res://Objects/Units and Structures/Units/Unit1.tscn" id="10_d6ee4"]
 [ext_resource type="PackedScene" uid="uid://cybcybto6k8b2" path="res://Objects/Other/ObstacleWall.tscn" id="11_mq8xd"]
@@ -88,6 +96,7 @@ agent_radius = 30.0
 [node name="TestScenario1" type="Node2D" node_paths=PackedStringArray("navigationRegionGround", "navigationRegionHover", "fowController", "terrainTilemapLayers", "aiControllers")]
 process_mode = 3
 script = ExtResource("1_om60n")
+buildingList_tier1 = Array[Resource]([ExtResource("2_1l8oc"), ExtResource("3_dbo5p"), ExtResource("4_wci2s"), ExtResource("5_8bduw"), ExtResource("6_obsm8"), ExtResource("7_wpi1b"), ExtResource("8_o4iox"), ExtResource("9_kmkjm")])
 navigationRegionGround = NodePath("NavigationRegion2D")
 navigationRegionHover = NodePath("NavigationRegion2DWithoutLow")
 top = 0.0
