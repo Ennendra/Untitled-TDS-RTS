@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dysdvelk5qky0"
+path="res://.godot/imported/What Are We Fighting For Now.mp3-d2ec9ae81ee9dd4a629cea8313e6e741.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Music/What Are We Fighting For Now.mp3"
+dest_files=["res://.godot/imported/What Are We Fighting For Now.mp3-d2ec9ae81ee9dd4a629cea8313e6e741.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

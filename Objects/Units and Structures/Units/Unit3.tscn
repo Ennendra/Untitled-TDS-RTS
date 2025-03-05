@@ -78,7 +78,7 @@ position = Vector2(28, -13)
 
 [node name="WeaponFireSound" parent="AimingComponent/Weapon" index="1"]
 stream = ExtResource("10_jia2i")
-volume_db = -5.0
+volume_db = -2.0
 
 [node name="DamageComponent" parent="." instance=ExtResource("10_fussk")]
 healthBarOffset = 25.0

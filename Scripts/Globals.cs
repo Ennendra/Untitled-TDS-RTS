@@ -7,8 +7,22 @@ public partial class Globals : Node
 	public NavigationRegion2D navigationAreaGround;
     public NavigationRegion2D navigationAreaHover;
 
+    //audio settings
+    public float setting_masterVolume = 50;
+    public float setting_musicVolume = 50;
+    public float setting_combatVolume = 50;
+    public float setting_UIVolume = 50;
 
-	public Resource cursorImage_Personal = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/Cursor.png");
+    //Settings for scenario 1
+    public float scenario1_enemy1AwakenTimer = 240;
+    public float scenario1_enemy2AwakenTimer = 360;
+    public float scenario1_enemy3AwakenTimer = 600;
+    public float scenario1_enemy4AwakenTimer = 900;
+    public bool scenario1_AIDisabled = false;
+    public bool scenario1_FOWDisabled = false;
+
+
+    public Resource cursorImage_Personal = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/Cursor.png");
     public Resource cursorImage_Move = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/UICursorMove.png");
     public Resource cursorImage_Attack = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/UICursorAttack.png");
     public Resource cursorImage_Guard = ResourceLoader.Load("res://Textures/UI/Icons/CustomCursors/UICursorGuard.png");

@@ -231,7 +231,7 @@ public partial class MainLevelController : Node2D
     ResourceStats[] factionResources = new ResourceStats[2];
 
     //Fog of war tracking
-    [Export] FOWController fowController;
+    [Export] protected FOWController fowController;
     ImageTexture[] fowTextures;
 
     //Tracker for all misc environment obstacles used when baking new navmeshes

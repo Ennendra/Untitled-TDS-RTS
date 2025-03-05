@@ -105,7 +105,7 @@ trail_lifetime = 0.6
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_svd8c")
-volume_db = -8.0
+volume_db = -6.0
 autoplay = true
 max_distance = 800.0
 bus = &"ProjectileHit"

@@ -81,9 +81,15 @@ position = Vector2(10, -12.5)
 
 [node name="ToolBuilder1" parent="AimingComponent/Tools" instance=ExtResource("6_itfw1")]
 
+[node name="GPUParticles2D" parent="AimingComponent/Tools/ToolBuilder1" index="2"]
+visible = false
+
 [node name="ToolReclaimer1" parent="AimingComponent/Tools" node_paths=PackedStringArray("componentToIgnore") instance=ExtResource("7_v66lu")]
 componentToIgnore = NodePath("../../../DamageComponent")
 maxReclaimRate = 55.0
+
+[node name="GPUParticles2D" parent="AimingComponent/Tools/ToolReclaimer1" index="2"]
+visible = false
 
 [node name="AimingCursor" type="Sprite2D" parent="AimingComponent"]
 visible = false
@@ -143,3 +149,5 @@ factionComponent = NodePath("../FactionComponent")
 [connection signal="child_exiting_tree" from="AimingComponent/Tools" to="." method="OnToolRemoved"]
 
 [editable path="AimingComponent/Weapons/WeaponTest"]
+[editable path="AimingComponent/Tools/ToolBuilder1"]
+[editable path="AimingComponent/Tools/ToolReclaimer1"]

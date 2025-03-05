@@ -1,0 +1,270 @@
+[gd_scene load_steps=5 format=3 uid="uid://du72vxsq3w666"]
+
+[ext_resource type="LabelSettings" uid="uid://cmndx8sucoigj" path="res://Textures/UI/MainUIFont.tres" id="1_2gksb"]
+[ext_resource type="Script" path="res://Scripts/Menus/MainMenu/Scenario1Prep.cs" id="1_7kygb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_awaum"]
+font_size = 60
+font_color = Color(0, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wenke"]
+font_size = 40
+font_color = Color(0, 1, 1, 1)
+
+[node name="CL_Scenario1Prep" type="CanvasLayer" node_paths=PackedStringArray("enemy1Timer", "enemy2Timer", "enemy3Timer", "enemy4Timer", "enemy1Label", "enemy2Label", "enemy3Label", "enemy4Label", "cboxDisableAI", "cBoxDisableFOW")]
+script = ExtResource("1_7kygb")
+enemy1Timer = NodePath("S1PrepContainer/VBoxAwakenTimers/margin1/HBoxContainerEnemy1/HSlider_Enemy1Timer")
+enemy2Timer = NodePath("S1PrepContainer/VBoxAwakenTimers/margin2/HBoxContainerEnemy2/HSlider_Enemy2Timer")
+enemy3Timer = NodePath("S1PrepContainer/VBoxAwakenTimers/margin3/HBoxContainerEnemy3/HSlider_Enemy3Timer")
+enemy4Timer = NodePath("S1PrepContainer/VBoxAwakenTimers/margin4/HBoxContainerEnemy4/HSlider_Enemy4Timer")
+enemy1Label = NodePath("S1PrepContainer/VBoxAwakenTimers/margin1/HBoxContainerEnemy1/lblEnemy1TimerValue")
+enemy2Label = NodePath("S1PrepContainer/VBoxAwakenTimers/margin2/HBoxContainerEnemy2/lblEnemy2TimerValue")
+enemy3Label = NodePath("S1PrepContainer/VBoxAwakenTimers/margin3/HBoxContainerEnemy3/lblEnemy3TimerValue")
+enemy4Label = NodePath("S1PrepContainer/VBoxAwakenTimers/margin4/HBoxContainerEnemy4/lblEnemy4TimerValue")
+cboxDisableAI = NodePath("S1PrepContainer/HBoxContainerEnemyAI/CheckBox_DisableEnemyAI")
+cBoxDisableFOW = NodePath("S1PrepContainer/HBoxContainerFogOfWar/CheckBox_DisableFOW")
+
+[node name="S1PrepContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -213.0
+offset_top = -189.5
+offset_right = 213.0
+offset_bottom = 189.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="S1PrepContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Title" type="Label" parent="S1PrepContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Scenario Modifiers"
+label_settings = SubResource("LabelSettings_awaum")
+horizontal_alignment = 1
+
+[node name="TitleDifficulty" type="Label" parent="S1PrepContainer"]
+layout_mode = 2
+text = "Difficulty Presets"
+label_settings = SubResource("LabelSettings_wenke")
+horizontal_alignment = 1
+
+[node name="HBoxDifficultyButtons" type="HBoxContainer" parent="S1PrepContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="DifficultyButtonComfy" type="Button" parent="S1PrepContainer/HBoxDifficultyButtons"]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 2
+tooltip_text = "Enemies will never 'awaken' and build units."
+text = "Comfy"
+
+[node name="DifficultyButtonNormal" type="Button" parent="S1PrepContainer/HBoxDifficultyButtons"]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 2
+text = "Normal
+"
+
+[node name="DifficultyButtonHard" type="Button" parent="S1PrepContainer/HBoxDifficultyButtons"]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 2
+text = "Hard"
+
+[node name="DifficultyButtonBrutal" type="Button" parent="S1PrepContainer/HBoxDifficultyButtons"]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 2
+text = "Brutal"
+
+[node name="TitleAwakenTimers" type="Label" parent="S1PrepContainer"]
+layout_mode = 2
+text = "Awaken Timers"
+label_settings = SubResource("LabelSettings_wenke")
+horizontal_alignment = 1
+
+[node name="VBoxAwakenTimers" type="VBoxContainer" parent="S1PrepContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="margin1" type="MarginContainer" parent="S1PrepContainer/VBoxAwakenTimers"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainerEnemy1" type="HBoxContainer" parent="S1PrepContainer/VBoxAwakenTimers/margin1"]
+layout_mode = 2
+alignment = 1
+
+[node name="lblEnemy1Timer" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin1/HBoxContainerEnemy1"]
+custom_minimum_size = Vector2(170, 25)
+layout_mode = 2
+text = "Enemy 1 (South)"
+label_settings = ExtResource("1_2gksb")
+
+[node name="HSlider_Enemy1Timer" type="HSlider" parent="S1PrepContainer/VBoxAwakenTimers/margin1/HBoxContainerEnemy1"]
+custom_minimum_size = Vector2(600, 25)
+layout_mode = 2
+min_value = 60.0
+max_value = 1200.0
+step = 30.0
+value = 60.0
+rounded = true
+
+[node name="lblEnemy1TimerValue" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin1/HBoxContainerEnemy1"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+text = "120"
+label_settings = ExtResource("1_2gksb")
+
+[node name="margin2" type="MarginContainer" parent="S1PrepContainer/VBoxAwakenTimers"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainerEnemy2" type="HBoxContainer" parent="S1PrepContainer/VBoxAwakenTimers/margin2"]
+layout_mode = 2
+alignment = 1
+
+[node name="lblEnemy2Timer" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin2/HBoxContainerEnemy2"]
+custom_minimum_size = Vector2(170, 25)
+layout_mode = 2
+text = "Enemy 2 (Center)"
+label_settings = ExtResource("1_2gksb")
+
+[node name="HSlider_Enemy2Timer" type="HSlider" parent="S1PrepContainer/VBoxAwakenTimers/margin2/HBoxContainerEnemy2"]
+custom_minimum_size = Vector2(600, 25)
+layout_mode = 2
+min_value = 60.0
+max_value = 1200.0
+step = 30.0
+value = 60.0
+rounded = true
+
+[node name="lblEnemy2TimerValue" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin2/HBoxContainerEnemy2"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+text = "120"
+label_settings = ExtResource("1_2gksb")
+
+[node name="margin3" type="MarginContainer" parent="S1PrepContainer/VBoxAwakenTimers"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainerEnemy3" type="HBoxContainer" parent="S1PrepContainer/VBoxAwakenTimers/margin3"]
+layout_mode = 2
+alignment = 1
+
+[node name="lblEnemy3Timer" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin3/HBoxContainerEnemy3"]
+custom_minimum_size = Vector2(170, 25)
+layout_mode = 2
+text = "Enemy 3 (Northeast)"
+label_settings = ExtResource("1_2gksb")
+
+[node name="HSlider_Enemy3Timer" type="HSlider" parent="S1PrepContainer/VBoxAwakenTimers/margin3/HBoxContainerEnemy3"]
+custom_minimum_size = Vector2(600, 25)
+layout_mode = 2
+min_value = 60.0
+max_value = 1200.0
+step = 30.0
+value = 60.0
+rounded = true
+
+[node name="lblEnemy3TimerValue" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin3/HBoxContainerEnemy3"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+text = "120"
+label_settings = ExtResource("1_2gksb")
+
+[node name="margin4" type="MarginContainer" parent="S1PrepContainer/VBoxAwakenTimers"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainerEnemy4" type="HBoxContainer" parent="S1PrepContainer/VBoxAwakenTimers/margin4"]
+layout_mode = 2
+alignment = 1
+
+[node name="lblEnemy4Timer" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin4/HBoxContainerEnemy4"]
+custom_minimum_size = Vector2(170, 25)
+layout_mode = 2
+text = "Enemy 4 (Southeast)"
+label_settings = ExtResource("1_2gksb")
+
+[node name="HSlider_Enemy4Timer" type="HSlider" parent="S1PrepContainer/VBoxAwakenTimers/margin4/HBoxContainerEnemy4"]
+custom_minimum_size = Vector2(600, 25)
+layout_mode = 2
+min_value = 60.0
+max_value = 1200.0
+step = 30.0
+value = 60.0
+rounded = true
+
+[node name="lblEnemy4TimerValue" type="Label" parent="S1PrepContainer/VBoxAwakenTimers/margin4/HBoxContainerEnemy4"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+text = "120"
+label_settings = ExtResource("1_2gksb")
+
+[node name="TitleOtherModifiers" type="Label" parent="S1PrepContainer"]
+layout_mode = 2
+text = "Other Modifiers"
+label_settings = SubResource("LabelSettings_wenke")
+horizontal_alignment = 1
+
+[node name="HBoxContainerEnemyAI" type="HBoxContainer" parent="S1PrepContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="CheckBox_DisableEnemyAI" type="CheckBox" parent="S1PrepContainer/HBoxContainerEnemyAI"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="S1PrepContainer/HBoxContainerEnemyAI"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+text = "Disable Enemy AI"
+label_settings = ExtResource("1_2gksb")
+
+[node name="HBoxContainerFogOfWar" type="HBoxContainer" parent="S1PrepContainer"]
+layout_mode = 2
+
+[node name="CheckBox_DisableFOW" type="CheckBox" parent="S1PrepContainer/HBoxContainerFogOfWar"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="S1PrepContainer/HBoxContainerFogOfWar"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+text = "Disable Fog of War"
+label_settings = ExtResource("1_2gksb")
+
+[node name="MarginContainer2" type="MarginContainer" parent="S1PrepContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="S1PrepContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="PlayGameButton" type="Button" parent="S1PrepContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+text = "Start"
+
+[node name="BackButton" type="Button" parent="S1PrepContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+text = "Back
+"
+
+[connection signal="pressed" from="S1PrepContainer/HBoxDifficultyButtons/DifficultyButtonComfy" to="." method="OnDifficultyButtonPressedComfy"]
+[connection signal="pressed" from="S1PrepContainer/HBoxDifficultyButtons/DifficultyButtonNormal" to="." method="OnDifficultyButtonPressedNormal"]
+[connection signal="pressed" from="S1PrepContainer/HBoxDifficultyButtons/DifficultyButtonHard" to="." method="OnDifficultyButtonPressedHard"]
+[connection signal="pressed" from="S1PrepContainer/HBoxDifficultyButtons/DifficultyButtonBrutal" to="." method="OnDifficultyButtonPressedBrutal"]
+[connection signal="value_changed" from="S1PrepContainer/VBoxAwakenTimers/margin1/HBoxContainerEnemy1/HSlider_Enemy1Timer" to="." method="OnEnemy1TimerValueChanged"]
+[connection signal="value_changed" from="S1PrepContainer/VBoxAwakenTimers/margin2/HBoxContainerEnemy2/HSlider_Enemy2Timer" to="." method="OnEnemy2TimerValueChanged"]
+[connection signal="value_changed" from="S1PrepContainer/VBoxAwakenTimers/margin3/HBoxContainerEnemy3/HSlider_Enemy3Timer" to="." method="OnEnemy3TimerValueChanged"]
+[connection signal="value_changed" from="S1PrepContainer/VBoxAwakenTimers/margin4/HBoxContainerEnemy4/HSlider_Enemy4Timer" to="." method="OnEnemy4TimerValueChanged"]
+[connection signal="toggled" from="S1PrepContainer/HBoxContainerEnemyAI/CheckBox_DisableEnemyAI" to="." method="OnEnemyAIDisableToggle"]
+[connection signal="toggled" from="S1PrepContainer/HBoxContainerFogOfWar/CheckBox_DisableFOW" to="." method="OnFOWDisableToggle"]

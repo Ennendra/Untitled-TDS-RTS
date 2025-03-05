@@ -69,7 +69,7 @@ position = Vector2(16, 8)
 
 [node name="WeaponFireSound" parent="AimingComponent/Weapon" index="1"]
 stream = ExtResource("7_ee8su")
-volume_db = -9.088
+volume_db = -5.0
 
 [node name="DamageComponent" parent="." instance=ExtResource("1_etjku")]
 healthBarOffset = 25.0

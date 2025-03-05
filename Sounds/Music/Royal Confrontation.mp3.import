@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://gsqsikajn3vk"
+path="res://.godot/imported/Royal Confrontation.mp3-b4eae98aedeb26731d796028b1c62159.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Music/Royal Confrontation.mp3"
+dest_files=["res://.godot/imported/Royal Confrontation.mp3-b4eae98aedeb26731d796028b1c62159.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

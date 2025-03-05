@@ -352,7 +352,7 @@ public partial class MainAIController : Node2D
     bool isAwakened = false, AIEnabled = true;
 
     protected float PostAwakeningAITimer = 0;
-	[Export] float SleepTimeDuration = 180;
+	[Export] public float SleepTimeDuration = 180;
 
     //References to the construct info that will be used alongside the "item codes" to find factories that build them
     [Export] public ConstructInfo[] constructUnitInfoSet;
@@ -450,6 +450,11 @@ public partial class MainAIController : Node2D
         }
 		
 	}
+    public void ResetSleepTimer()
+    {
+        AISleepTimer = 0;
+        isAwakened = false;
+    }
 
 	//Runs the actions that the AI wants to take
 	//This will be set in separate child scripts

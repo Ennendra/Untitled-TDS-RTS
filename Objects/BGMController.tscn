@@ -1,0 +1,56 @@
+[gd_scene load_steps=12 format=3 uid="uid://b7a0tcvmg3kwu"]
+
+[ext_resource type="AudioStream" uid="uid://dvj0ypum3joxq" path="res://Sounds/Music/Like Angels Fall.mp3" id="1_sqk8x"]
+[ext_resource type="Script" path="res://Scripts/BgmController.cs" id="1_tstsy"]
+[ext_resource type="AudioStream" uid="uid://duprwsicjjyxl" path="res://Sounds/Music/BlackBag.mp3" id="2_gwdni"]
+[ext_resource type="AudioStream" uid="uid://co3otbx7biwpq" path="res://Sounds/Music/To Extinction.mp3" id="3_q0er8"]
+[ext_resource type="AudioStream" uid="uid://dvukey5qbdslt" path="res://Sounds/Music/Descent.mp3" id="4_srvp2"]
+[ext_resource type="AudioStream" uid="uid://dpna6kihtgf8r" path="res://Sounds/Music/Inside Her Nightmare combat.mp3" id="5_im8lu"]
+[ext_resource type="AudioStream" uid="uid://cvsxo6ic1xu3u" path="res://Sounds/Music/Bad Apple.mp3" id="6_uexds"]
+[ext_resource type="AudioStream" uid="uid://gsqsikajn3vk" path="res://Sounds/Music/Royal Confrontation.mp3" id="7_f7tm3"]
+[ext_resource type="AudioStream" uid="uid://bb2nwhp4ithf6" path="res://Sounds/Music/Raven's Last Test.mp3" id="8_23m0h"]
+[ext_resource type="AudioStream" uid="uid://bg8clrqhlharc" path="res://Sounds/Music/It All Begins Somewhere.mp3" id="9_otmww"]
+[ext_resource type="AudioStream" uid="uid://dysdvelk5qky0" path="res://Sounds/Music/What Are We Fighting For Now.mp3" id="10_urbyt"]
+
+[node name="BGMController" type="Node"]
+script = ExtResource("1_tstsy")
+
+[node name="BGM_LikeAngelsFall" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_sqk8x")
+bus = &"Music"
+
+[node name="BGM_BlackBag" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_gwdni")
+bus = &"Music"
+
+[node name="BGM_ToExtinction" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_q0er8")
+bus = &"Music"
+
+[node name="BGM_Descent" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_srvp2")
+bus = &"Music"
+
+[node name="BGM_InsideHerNightmare" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_im8lu")
+bus = &"Music"
+
+[node name="BGM_BadApple" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_uexds")
+bus = &"Music"
+
+[node name="BGM_RoyalConfrontation" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_f7tm3")
+bus = &"Music"
+
+[node name="BGM_RavensLastTest" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_23m0h")
+bus = &"Music"
+
+[node name="BGM_ItAllBeginsSomewhere" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_otmww")
+bus = &"Music"
+
+[node name="BGM_WhatAreWeFightingForNow" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_urbyt")
+bus = &"Music"

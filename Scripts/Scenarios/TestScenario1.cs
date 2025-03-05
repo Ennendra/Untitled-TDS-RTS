@@ -9,6 +9,8 @@ public partial class TestScenario1 : MainLevelController
 	{
 		base._Ready();
 
+        //Toggle whether the FOW is active or not from the menu setting
+        fowController.Visible = !globals.scenario1_FOWDisabled;
     }
 
     public override void InitAIUnitLists()
@@ -42,8 +44,12 @@ public partial class TestScenario1 : MainLevelController
         unitAddArea = new Rect2(7350, 3425, 4650, 2575);
         aiControllers[3].AddUnitsInArea(unitAddArea, "");
 
-        
-        //Set some factory rally points for each AI base
+
+        //Set the AI Controllers awakening timers based on the global settings set in the main menu'
+        aiControllers[0].SleepTimeDuration = globals.scenario1_enemy1AwakenTimer;
+        aiControllers[1].SleepTimeDuration = globals.scenario1_enemy2AwakenTimer;
+        aiControllers[2].SleepTimeDuration = globals.scenario1_enemy3AwakenTimer;
+        aiControllers[3].SleepTimeDuration = globals.scenario1_enemy4AwakenTimer;
 
     }
 
@@ -51,6 +57,15 @@ public partial class TestScenario1 : MainLevelController
     public override void _Process(double delta)
 	{
 		base._Process(delta);
+
+        //Constantly reset the sleep timer if the menu had the ai as "disabled"
+        if (globals.scenario1_AIDisabled)
+        {
+            aiControllers[0].ResetSleepTimer();
+            aiControllers[1].ResetSleepTimer();
+            aiControllers[2].ResetSleepTimer();
+            aiControllers[3].ResetSleepTimer();
+        }
 	}
 
     public override void AddUnit(UnitParent unit)

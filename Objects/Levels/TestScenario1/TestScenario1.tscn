@@ -179,9 +179,6 @@ SleepTimeDuration = 500.0
 [node name="Node2D" type="Node2D" parent="AIControllerContainer"]
 position = Vector2(2550, 1475)
 
-[node name="Unit2" parent="." instance=ExtResource("10_d6ee4")]
-position = Vector2(6875, 5950)
-
 [node name="ObstacleWater" parent="." instance=ExtResource("10_2j7vy")]
 position = Vector2(-200, 3850)
 
@@ -697,24 +694,8 @@ factionOverride = 2
 position = Vector2(4200, 5000)
 factionOverride = 2
 
-[node name="S_Unit2_5" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(6300, 5300)
-factionOverride = 2
-
-[node name="S_Unit2_6" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(6500, 5300)
-factionOverride = 2
-
 [node name="S_Unit2_7" parent="." instance=ExtResource("16_ykxnd")]
 position = Vector2(6400, 5400)
-factionOverride = 2
-
-[node name="S_Unit2_8" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(6300, 5500)
-factionOverride = 2
-
-[node name="S_Unit2_9" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(6500, 5500)
 factionOverride = 2
 
 [node name="S_Unit2_10" parent="." instance=ExtResource("16_ykxnd")]
@@ -901,28 +882,12 @@ factionOverride = 2
 position = Vector2(4500, 3150)
 factionOverride = 2
 
-[node name="C_Unit2_2" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(4600, 3150)
-factionOverride = 2
-
-[node name="C_Unit2_3" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(4950, 3600)
-factionOverride = 2
-
 [node name="C_Unit2_4" parent="." instance=ExtResource("16_ykxnd")]
 position = Vector2(4950, 3700)
 factionOverride = 2
 
 [node name="C_Unit2_5" parent="." instance=ExtResource("16_ykxnd")]
 position = Vector2(5600, 2000)
-factionOverride = 2
-
-[node name="C_Unit2_6" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(5700, 2000)
-factionOverride = 2
-
-[node name="C_Unit2_7" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(6300, 2050)
 factionOverride = 2
 
 [node name="C_Unit2_8" parent="." instance=ExtResource("16_ykxnd")]
@@ -955,14 +920,6 @@ factionOverride = 2
 
 [node name="Out_Unit2_7" parent="." instance=ExtResource("16_ykxnd")]
 position = Vector2(3650, 4050)
-factionOverride = 2
-
-[node name="Out_Unit2_8" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(3800, 4050)
-factionOverride = 2
-
-[node name="Out_Unit2_9" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(3800, 3950)
 factionOverride = 2
 
 [node name="Out_Unit2_10" parent="." instance=ExtResource("16_ykxnd")]
@@ -2017,22 +1974,6 @@ factionOverride = 2
 position = Vector2(10300, 5650)
 factionOverride = 2
 
-[node name="SE_Unit2_11" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(9300, 3825)
-factionOverride = 2
-
-[node name="SE_Unit2_12" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(9300, 3925)
-factionOverride = 2
-
-[node name="SE_Unit2_13" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(9400, 3825)
-factionOverride = 2
-
-[node name="SE_Unit2_14" parent="." instance=ExtResource("16_ykxnd")]
-position = Vector2(9400, 3925)
-factionOverride = 2
-
 [node name="SE_Unit3_1" parent="." instance=ExtResource("23_faf3p")]
 position = Vector2(8775, 5125)
 factionOverride = 2
@@ -2084,9 +2025,6 @@ factionOverride = 2
 [node name="SE_Unit3_13" parent="." instance=ExtResource("23_faf3p")]
 position = Vector2(11275, 5750)
 factionOverride = 2
-
-[node name="Unit1" parent="." instance=ExtResource("10_d6ee4")]
-position = Vector2(225, 3100)
 
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedFromScene"]

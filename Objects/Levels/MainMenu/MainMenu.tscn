@@ -1,0 +1,155 @@
+[gd_scene load_steps=7 format=3 uid="uid://c47m306mpetuk"]
+
+[ext_resource type="Script" path="res://Scripts/Menus/MainMenu/MainMenu.cs" id="1_7x7b8"]
+[ext_resource type="PackedScene" uid="uid://b2shq52ahls6c" path="res://Objects/Levels/TestScenario1/TestScenario1.tscn" id="2_8lxqf"]
+[ext_resource type="PackedScene" uid="uid://dql1gje1j0xtn" path="res://Objects/Levels/Tutorial/TutorialLevel.tscn" id="3_gg6pg"]
+[ext_resource type="LabelSettings" uid="uid://cmndx8sucoigj" path="res://Textures/UI/MainUIFont.tres" id="4_on58j"]
+[ext_resource type="PackedScene" uid="uid://du72vxsq3w666" path="res://Objects/Levels/MainMenu/Scenario1Prep.tscn" id="5_ax2a8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_awaum"]
+font_size = 60
+font_color = Color(0, 1, 1, 1)
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_7x7b8")
+scene_scenario1 = ExtResource("2_8lxqf")
+scene_tutorial = ExtResource("3_gg6pg")
+
+[node name="CL_MainMenu" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CL_MainMenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -213.0
+offset_top = -189.5
+offset_right = 213.0
+offset_bottom = 189.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="CL_MainMenu/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "TDS/RTS Game"
+label_settings = SubResource("LabelSettings_awaum")
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CL_MainMenu/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_top = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CL_MainMenu/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="PlayGameButton" type="Button" parent="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+text = "Play Game"
+
+[node name="TutorialButton" type="Button" parent="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+text = "Tutorial"
+
+[node name="SettingButton" type="Button" parent="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+text = "Settings"
+
+[node name="ExitGameButton" type="Button" parent="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+text = "Exit Game"
+
+[node name="CL_Settings" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CL_Settings"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -213.0
+offset_top = -189.5
+offset_right = 213.0
+offset_bottom = 189.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="CL_Settings/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Settings"
+label_settings = SubResource("LabelSettings_awaum")
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CL_Settings/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_top = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CL_Settings/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="MasterVolumeLabel" type="Label" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Master Volume"
+label_settings = ExtResource("4_on58j")
+
+[node name="Slider_MasterVolume" type="HSlider" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+value = 50.0
+
+[node name="MusicLabel" type="Label" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Music Volume"
+label_settings = ExtResource("4_on58j")
+
+[node name="Slider_MusicVolume" type="HSlider" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+value = 50.0
+
+[node name="CombatLabel" type="Label" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Combat Volume"
+label_settings = ExtResource("4_on58j")
+
+[node name="Slider_CombatVolume" type="HSlider" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+value = 50.0
+
+[node name="UILabel" type="Label" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "UI Volume"
+label_settings = ExtResource("4_on58j")
+
+[node name="Slider_UIVolume" type="HSlider" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+value = 50.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="BackButton" type="Button" parent="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+text = "Back"
+
+[node name="CL_Scenario1Prep" parent="." instance=ExtResource("5_ax2a8")]
+visible = false
+
+[connection signal="pressed" from="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer/PlayGameButton" to="." method="OnPlayGameButtonPressed"]
+[connection signal="pressed" from="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer/TutorialButton" to="." method="OnTutorialButtonPressed"]
+[connection signal="pressed" from="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer/SettingButton" to="." method="OnSettingsButtonPressed"]
+[connection signal="pressed" from="CL_MainMenu/VBoxContainer2/MarginContainer/VBoxContainer/ExitGameButton" to="." method="OnExitGameButtonPressed"]
+[connection signal="pressed" from="CL_Settings/VBoxContainer2/MarginContainer/VBoxContainer/MarginContainer/BackButton" to="." method="OnBackButtonPressed"]
+[connection signal="pressed" from="CL_Scenario1Prep/S1PrepContainer/MarginContainer2/VBoxContainer/PlayGameButton" to="." method="OnScenario1PlayPressed"]
+[connection signal="pressed" from="CL_Scenario1Prep/S1PrepContainer/MarginContainer2/VBoxContainer/BackButton" to="." method="OnBackButtonPressed"]
+
+[editable path="CL_Scenario1Prep"]
