@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://irwoceg3ib6x"]
+
+[ext_resource type="Script" path="res://Scripts/Scenarios/Tutorial/TutorialWaypoint.cs" id="1_bb2lt"]
+[ext_resource type="Texture2D" uid="uid://cl6fh2l3g244m" path="res://Textures/UI/Icons/Orders/UICommandMove.png" id="2_2ab34"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dc0gs"]
+radius = 15.0
+
+[node name="TutorialWaypoint" type="Area2D"]
+collision_layer = 0
+collision_mask = 16
+script = ExtResource("1_bb2lt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_2ab34")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_dc0gs")
+
+[connection signal="area_entered" from="." to="." method="OnAreaEntered"]

@@ -69,6 +69,9 @@ public partial class AIC_TS1_Center : MainAIController
 
     public override void GenerateNewAttackGroup()
     {
+        AIControlGroup newGroup = new AIControlGroup();
+        attackGroups.Add(newGroup);
+        newGroup.aiController = this;
         //Center - Generating the attack wave later in the game
         if (PostAwakeningAITimer > 540)
         {
@@ -80,9 +83,7 @@ public partial class AIC_TS1_Center : MainAIController
             if (chosenPathRand <= 0.5f) { chosenAttackPath = attackPath1; }
             else { chosenAttackPath = attackPath2; }
             //Create the new attack wave, which will generate a randomised group from that weighting
-            AIControlGroup newGroup = new AIControlGroup();
             newGroup.InitGroup(chosenAttackPath, buildSize, unitBuildWeight);
-            attackGroups.Add(newGroup);
         }
     }
     public override void GenerateNewDefenseGroup()
@@ -123,5 +124,6 @@ public partial class AIC_TS1_Center : MainAIController
         newGroup.InitGroup(chosenPath, defenseGroupComp);
         newGroup.SetAsDefenseGroup();
         defenseGroups.Add(newGroup);
+        newGroup.aiController = this;
     }
 }

@@ -30,6 +30,8 @@ public partial class MainUI : CanvasLayer
 	TextureRect minimapZoomButtonBG;
 	//Paused indicator
 	TextureRect pausedIcon;
+	//The text label used for unique mission text/dialogue
+	Label missionText;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -44,6 +46,7 @@ public partial class MainUI : CanvasLayer
         minimapZoomButtonMinus = GetNode<TextureButton>("UI_MinimapZoomMinus");
 		minimapZoomButtonBG = GetNode<TextureRect>("MinimapButtonBG");
 		pausedIcon = GetNode<TextureRect>("UI_Paused");
+		missionText = GetNode<Label>("UI_MissionTextLabel");
 
         CallDeferred("InitBuildGhost");
     }
@@ -162,6 +165,12 @@ public partial class MainUI : CanvasLayer
 	public bool AttemptBuildingPlacement()
 	{
 		return buildPlacementGhost.PlaceBuilding(GetPlayerFactionController());
+	}
+
+	//Function to edit the mission text
+	public void SetNewMissionText(string text)
+	{
+		missionText.Text = text;
 	}
 
 	//Functions for other scripts to get the specific UI modules

@@ -83,8 +83,10 @@ source_geometry_mode = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 30.0
 
-[node name="TutorialLevel" type="Node2D" node_paths=PackedStringArray("navigationRegionGround", "navigationRegionHover", "fowController", "terrainTilemapLayers")]
+[node name="TutorialLevel" type="Node2D" node_paths=PackedStringArray("tutorialFactory", "navigationRegionGround", "navigationRegionHover", "fowController", "terrainTilemapLayers")]
+process_mode = 3
 script = ExtResource("1_upeql")
+tutorialFactory = NodePath("BuildingFactory")
 buildingList_tier1 = Array[Resource]([ExtResource("2_t8ybb"), ExtResource("3_f5dbd"), ExtResource("4_7gg5f"), ExtResource("5_x1gtr"), ExtResource("6_c1ay3"), ExtResource("7_pexq7"), ExtResource("8_w4gj7"), ExtResource("9_v84at")])
 navigationRegionGround = NodePath("NavigationRegion2D")
 navigationRegionHover = NodePath("NavigationRegion2DWithoutLow")
@@ -100,7 +102,7 @@ environment = SubResource("Environment_xi4ko")
 
 [node name="WaterTilemap" type="TileMapLayer" parent="."]
 z_index = -5
-tile_map_data = PackedByteArray("AAAhACkAAAAAAAAAAAAhACgAAAAAAAAAAAAhACcAAAAAAAAAAAAhACYAAAAAAAAAAAAhACUAAAAAAAAAAAAhACQAAAAAAAAAAAAhACMAAAAAAAAAAAAiACMAAAAAAAAAAAAjACMAAAAAAAAAAAAkACMAAAAAAAAAAAAlACMAAAAAAAAAAAAmACMAAAAAAAAAAAAnACMAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAhACkAAAAAAAAAAAAhACgAAAAAAAAAAAAhACcAAAAAAAAAAAAhACYAAAAAAAAAAAAhACUAAAAAAAAAAAAhACQAAAAAAAAAAAAhACMAAAAAAAAAAAAiACMAAAAAAAAAAAAjACMAAAAAAAAAAAAkACMAAAAAAAAAAAAlACMAAAAAAAAAAAAmACMAAAAAAAAAAAAnACMAAAAAAAAAAAA1ABUAAAAAAAAAAAA1ABQAAAAAAAAAAAA1ABMAAAAAAAAAAAA1ABIAAAAAAAAAAAA1ABEAAAAAAAAAAAA1ABAAAAAAAAAAAAA1AA8AAAAAAAAAAAA1AA4AAAAAAAAAAAA1AA0AAAAAAAAAAAA1AAwAAAAAAAAAAAA1AAsAAAAAAAAAAAA1AAoAAAAAAAAAAAA1AAkAAAAAAAAAAAA1AAgAAAAAAAAAAAA1AAcAAAAAAAAAAAA1AAYAAAAAAAAAAAA1AAUAAAAAAAAAAAA1AAQAAAAAAAAAAAA1AAMAAAAAAAAAAAA1AAIAAAAAAAAAAAA1AAEAAAAAAAAAAAA1AAAAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_8od5m")
 
 [node name="GrassTilemap" type="TileMapLayer" parent="."]
@@ -269,6 +271,14 @@ polygon = PackedVector2Array(1000, 2100, 1000, 2200, 2000, 2200, 2000, 2100)
 [node name="ObstacleBounds" parent="ObstacleWater" index="0"]
 polygon = PackedVector2Array(1650, 2100, 1700, 2100, 1700, 1800, 2000, 1800, 2000, 1750, 1650, 1750)
 
+[node name="ObstacleWater2" parent="." instance=ExtResource("18_cob6v")]
+
+[node name="ObstacleBounds" parent="ObstacleWater2" index="0"]
+polygon = PackedVector2Array(2650, 1100, 2650, 0, 2700, 0, 2700, 1100)
+
+[node name="MetalNode4" parent="." instance=ExtResource("13_34d3f")]
+position = Vector2(1150, 1850)
+
 [connection signal="child_entered_tree" from="." to="." method="OnObjectAddedToScene"]
 [connection signal="child_exiting_tree" from="." to="." method="OnObjectRemovedFromScene"]
 
@@ -277,3 +287,4 @@ polygon = PackedVector2Array(1650, 2100, 1700, 2100, 1700, 1800, 2000, 1800, 200
 [editable path="ObstacleWall3"]
 [editable path="ObstacleWall4"]
 [editable path="ObstacleWater"]
+[editable path="ObstacleWater2"]

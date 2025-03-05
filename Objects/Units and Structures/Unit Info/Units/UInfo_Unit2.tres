@@ -5,8 +5,8 @@
 
 [resource]
 script = ExtResource("2_6l2l1")
-unitName = "Unit2"
-unitDescription = "Medium Battle Tank"
+unitName = "Tank"
+unitDescription = "Good balance of damage and durability."
 maxHealth = 120.0
 energyCost = 180.0
 metalCost = 100.0

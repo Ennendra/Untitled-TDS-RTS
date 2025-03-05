@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://de2gm8ancssa7"]
+[gd_scene load_steps=20 format=3 uid="uid://de2gm8ancssa7"]
 
 [ext_resource type="Script" path="res://Scripts/UI/MainUI.cs" id="1_jtxnd"]
 [ext_resource type="PackedScene" uid="uid://c5n86pfqwpxsp" path="res://Objects/UI/UI_BuildPlacement.tscn" id="2_1hj84"]
@@ -18,6 +18,10 @@
 [ext_resource type="Texture2D" uid="uid://cu2w63r68fdkm" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus_Hover.png" id="13_4uj1k"]
 [ext_resource type="Texture2D" uid="uid://bbjg2kwgfvp38" path="res://Textures/UI/MainUIFramework/MinimapZoomButtons/UIMinimapMinus_Disabled.png" id="14_8v02w"]
 [ext_resource type="Texture2D" uid="uid://c5t3yasw17eje" path="res://Textures/UI/MainUIFramework/UI_Paused.png" id="16_637u1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_so5p4"]
+font_size = 18
+font_color = Color(0, 1, 1, 1)
 
 [node name="MainUI" type="CanvasLayer"]
 process_mode = 3
@@ -105,6 +109,23 @@ offset_right = 75.0
 offset_bottom = 300.0
 grow_horizontal = 2
 texture = ExtResource("16_637u1")
+
+[node name="UI_MissionTextLabel" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -380.0
+offset_right = 250.0
+offset_bottom = -217.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_so5p4")
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2
 
 [connection signal="mouse_entered" from="UI_ResourceTracker" to="." method="OnMouseEntered"]
 [connection signal="mouse_exited" from="UI_ResourceTracker" to="." method="OnMouseExited"]

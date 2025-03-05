@@ -6,6 +6,8 @@ using System.Linq;
 //A class to help with tracking and processing actions for individual groups of units
 public class AIControlGroup 
 {
+    public MainAIController aiController;
+
 	public bool isAttackGroup = true;
 
     public List<UnitParent> units = new();
@@ -153,6 +155,19 @@ public class AIControlGroup
                 if (isAttackGroup)
                 {
                     //Attack: Target nearest enemy and attackmove towards it
+                    if (units.Count > 0)
+                    {
+                        Vector2 newAttackPosition = aiController.FindNearestEnemy(units[0].GlobalPosition);
+                        
+                        List<Vector2> newOrderPositions = GetMovePositionArray(newAttackPosition, units.Count);
+                        int currentMoveIndex = 0;
+
+                        foreach (UnitParent unit in units)
+                        {
+                            unit.GetAIComponent().SetNewAttackMoveOrder(newOrderPositions[currentMoveIndex]);
+                            currentMoveIndex++;
+                        }
+                    }
                 }
                 else
                 {
@@ -183,6 +198,7 @@ public class AIControlGroup
         }
         else
         {
+            //Check that each unit type has been adequately supplied
             int unitSetSupplied = 0;
             for (int i = 0; i < wantedUnits.Length; i++)
             {
@@ -198,6 +214,7 @@ public class AIControlGroup
             }
         }
     }
+    
     //Defender functions
     public void AITickDefense()
 	{
@@ -261,22 +278,22 @@ public class AIControlGroup
         units.Add(unit);
 		switch (unit.GetFactionComponent().unitInfo.unitName) 
 		{
-			case "Unit1":
+			case "Scout":
 				unitsSupplied[0]++;
                 unitsInReserve[0]--;
                 GD.Print("Wanted/Supplied/Reserve[0] - " + wantedUnits[0] + "/" + unitsSupplied[0] + "/" + unitsInReserve[0]);
                 break;
-            case "Unit2":
+            case "Tank":
                 unitsSupplied[1]++;
                 unitsInReserve[1]--;
                 GD.Print("Wanted/Supplied/Reserve[1] - " + wantedUnits[1] + "/" + unitsSupplied[1] + "/" + unitsInReserve[1]);
                 break;
-            case "Unit3":
+            case "Sniper":
                 unitsSupplied[2]++;
                 unitsInReserve[2]--;
                 GD.Print("Wanted/Supplied/Reserve[2] - " + wantedUnits[2] + "/" + unitsSupplied[2] + "/" + unitsInReserve[2]);
                 break;
-			default: break;
+			default: GD.Print("WARNING: AI Controller does not recognise this unit, check AIControlGroup.AddUnit"); break;
         }
 
 	}
@@ -315,6 +332,10 @@ public struct UnitsInProgress
 public partial class MainAIController : Node2D
 {
 	[Export] public int AIFaction = 2;
+
+    //A reference to the level controller. Used to track other units in the field for attack waves to attack after their attack path
+    MainLevelController levelController;
+
 	//All the units and buildings that this team can control
 	public List<BuildingParent> buildingsInTeam = new();
 	public List<UnitParent> unitsInTeam = new();
@@ -400,6 +421,8 @@ public partial class MainAIController : Node2D
     public override void _Ready()
     {
         base._Ready();
+
+        levelController = (MainLevelController)GetTree().CurrentScene;
         //InitUnitConstructInfoSet();
     }
 
@@ -579,11 +602,9 @@ public partial class MainAIController : Node2D
 		unitsInTeam.Add(unit);
 
         //If this unit is being built for a control group, assign it to that group and remove it from the units in progress
-        GD.Print("Checking for UIP");
         UnitsInProgress uip = FindUnitInProgressByFactory((BuildingParent)unit.motherFactory);
         if (uip.itemCode != -1) //-1 means it's not part of a factory build for a control group
         {
-            GD.Print("Adding to control group");
             uip.controlGroup.AddUnit(unit);
             unitsInProgress.Remove(uip);
         }
@@ -660,5 +681,82 @@ public partial class MainAIController : Node2D
         }
         GD.Print("Error with AI controller faction check");
         return 0;
+    }
+
+    //Function to find the nearest enemy from the supplied position
+    public Vector2 FindNearestEnemy(Vector2 position)
+    {
+        //Set up the nearest enemy by category (-1 = it has not assigned one
+        float nearestNetworkHub = -1, nearestBuilding = -1, nearestCommander = -1, nearestUnit = -1;
+        Vector2 nearestHubPosition = Vector2.Zero, nearestBuildingPosition = Vector2.Zero, nearestCommanderPosition = Vector2.Zero, nearestUnitPosition = Vector2.Zero;
+
+        foreach (BuildingParent building in levelController.buildingsInScene)
+        {
+            if (building.GetFactionComponent().faction != AIFaction)
+            {
+                float distanceToTarget = position.DistanceTo(building.GlobalPosition);
+                if (building.GetFactionComponent().unitInfo.unitName == "Network Pylon")
+                {
+                    if ((distanceToTarget < nearestNetworkHub) || (nearestNetworkHub == -1))
+                    {
+                        nearestNetworkHub = distanceToTarget;
+                        nearestHubPosition = building.GlobalPosition;
+                    }
+                }
+                else
+                {
+                    if ((distanceToTarget < nearestBuilding) || (nearestBuilding == -1))
+                    {
+                        nearestBuilding = distanceToTarget;
+                        nearestBuildingPosition = building.GlobalPosition;
+                    }
+                }
+            }
+        }
+        //If a building was found, mark that as the position now
+        if (nearestNetworkHub != -1) { return nearestHubPosition; }
+        if (nearestBuilding != -1) { return nearestBuildingPosition; }
+
+        //No buildings found, find units
+        foreach (UnitParent unit in  levelController.unitsInScene)
+        {
+            if (unit.GetFactionComponent().faction != AIFaction)
+            {
+                float distanceToTarget = position.DistanceTo(unit.GlobalPosition);
+                if (unit.GetFactionComponent().unitInfo.unitName == "Commander")
+                {
+                    if ((distanceToTarget < nearestCommander) || (nearestCommander == -1))
+                    {
+                        nearestCommander = distanceToTarget;
+                        nearestCommanderPosition = unit.GlobalPosition;
+                    }
+                }
+                else
+                {
+                    if ((distanceToTarget < nearestUnit) || (nearestUnit == -1))
+                    {
+                        nearestUnit = distanceToTarget;
+                        nearestUnitPosition = unit.GlobalPosition;
+                    }
+                }
+            }
+        }
+
+        //Specific check on the player unit if it exists
+        if (IsInstanceValid(levelController.player))
+        {
+            float distanceToTarget = position.DistanceTo(levelController.player.GlobalPosition);
+            if ((distanceToTarget < nearestCommander) || (nearestCommander == -1))
+            {
+                nearestCommander = distanceToTarget;
+                nearestCommanderPosition = levelController.player.GlobalPosition;
+            }
+        }
+
+        if (nearestCommander != -1) { return nearestCommanderPosition; }
+        if (nearestUnit != -1) { return nearestUnitPosition; }
+
+        //default value, no enemies found
+        return position;
     }
 }

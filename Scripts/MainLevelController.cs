@@ -7,18 +7,33 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using static Godot.WebSocketPeer;
 
+//The general state the level is in:
+//Will track whether we are in the pause menu or playing, and whether we have reached a victory or loss condition
+public enum GeneralLevelState 
+{   
+    INGAME,
+    INMENU,
+    WINTIMER,
+    LOSSTIMER,
+    ENDMENU
+}
+
+
+//Tracks whether we are in Pilot or Strategic mode
 public enum LevelControllerPlayState
 {
     PERSONALPLAYER,
     RTSCOMMAND
 }
 
+//When in pilot mode, tracks whether we are placing a structure or not
 public enum PersonalPlayState
 {
     STANDARD,
     BUILDPLACEMENT
 }
 
+//Tracks states while in strategic mode
 public enum RTSPlayState
 {
     STANDARD,
@@ -27,6 +42,7 @@ public enum RTSPlayState
     SETORDER_ATTACK
 }
 
+//Code enumerations to track whether certain controls such as movement are enabled and whether certain tech is available (mostly for tutorial purposes)
 public enum TechControlCode 
 { 
     TECH_UNITSCOUT,
@@ -156,7 +172,7 @@ public class LevelTechAvailabilityController
 
 public partial class MainLevelController : Node2D
 {
-    Globals globals;
+    protected Globals globals;
 
     //signals
     [Signal] public delegate void GetNewBuildInfoEventHandler(ConstructInfo buildInfo);
@@ -182,7 +198,7 @@ public partial class MainLevelController : Node2D
     public PersonalPlayState personalPlayState { get; private set; } = PersonalPlayState.STANDARD;
     public RTSPlayState rtsPlayState { get; private set; } = RTSPlayState.STANDARD;
 
-    int levelPhase = 1;
+    protected int levelPhase = 1;
     public LevelTechAvailabilityController techController = new();
     [Export] ConstructInfo[] buildingList_tier1;
 
@@ -190,7 +206,7 @@ public partial class MainLevelController : Node2D
     public bool playerIsBuilding = false;
     int playerFaction = 1;
 	public MainUI mainUI { get; protected set; }
-    RTSController rtsController;
+    protected RTSController rtsController;
     //Which building in the player's build queue is selected to deploy between 0-4. -1 = none selected
     int buildQueueSelected = -1;
 
@@ -207,9 +223,9 @@ public partial class MainLevelController : Node2D
     Vector2[] mapBounds;
 
     //Trackers for all buildings and units currently in the scene
-    List<BuildingParent> buildingsInScene = new();
-    List<BlueprintParent> blueprintsInScene = new();
-    List<UnitParent> unitsInScene = new();
+    public List<BuildingParent> buildingsInScene { get; protected set; } = new();
+    public List<BlueprintParent> blueprintsInScene { get; protected set; } = new();
+    public List<UnitParent> unitsInScene { get; protected set; } = new();
 
     //Trackers for each faction's resources
     ResourceStats[] factionResources = new ResourceStats[2];
@@ -230,6 +246,9 @@ public partial class MainLevelController : Node2D
 
     //The AI that will control the RTS movements of enemies
     [Export] public MainAIController[] aiControllers = new MainAIController[0];
+
+    //States to control whether we are in a menu or not.
+    public GeneralLevelState mainLevelState { get; protected set; } = GeneralLevelState.INGAME;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -495,211 +514,226 @@ public partial class MainLevelController : Node2D
             }
         }
 
-        //Processing Fog of War
-        UpdateFOW(delta);
-        //Processing resource ticks and minimap display
-        UpdateResourceUI(false);
-        UpdateMinimap((float)delta);
-
-        //Check whether we are in a build-placement state and set the UI to be visible accordingly
-        CheckBuildPlacementVisibility();
-        
-
-        //General inputs when in personal player mode
-        if (playState == LevelControllerPlayState.PERSONALPLAYER)
+        if (mainLevelState == GeneralLevelState.INGAME || mainLevelState == GeneralLevelState.WINTIMER || mainLevelState == GeneralLevelState.LOSSTIMER)
         {
-            globals.SetNewCustomCursor("Personal");
+            //Processing Fog of War
+            UpdateFOW(delta);
+            //Processing resource ticks and minimap display
+            UpdateResourceUI(false);
+            UpdateMinimap((float)delta);
 
-            ProcessBuildingQueueInputs();
+            //Check whether we are in a build-placement state and set the UI to be visible accordingly
+            CheckBuildPlacementVisibility();
 
 
-            if (personalPlayState == PersonalPlayState.STANDARD)
-            {
-                if (!GetTree().Paused) { player.CheckMouseInputs(); }
-            }
-            if (personalPlayState == PersonalPlayState.BUILDPLACEMENT)
-            {
-                player.weaponsDisabled = true;
-                ProcessBuildPlacementChecks();
-            }
-        }
-
-        //General inputs when in RTS mode
-        if (playState == LevelControllerPlayState.RTSCOMMAND)
-        {
-            if (rtsController.isCurrentlySelecting || mainUI.IsOverActiveUI())
-                { globals.SetNewCustomCursor("Personal"); }
-            else
-                { 
-                string cursorHoverCode = rtsController.ScanCursorPosition(GetGlobalMousePosition());
-                globals.SetNewCustomCursor(cursorHoverCode); 
-                }
-
-            //Run this when only factories are selected and their build menu is shown, so it shows accurate info on the UI
-            if (rtsController.factoryBuildMenuEnabled)
-            {
-                UpdateFactoryButtonQueueInfo();
-            }
-
-            if (rtsPlayState == RTSPlayState.STANDARD)
-            {
-                //pressing selection button
-                if (Input.IsActionJustPressed("RTS_Select"))
-                {
-                    if (!mainUI.IsOverActiveUI() && techController.control_rtsSelection) //Are we not over any UI?
-                    {
-                        rtsController.SetInitialSelectionPoint();
-                    }
-                    else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
-                    {
-                        //Set the camera position to the relative map position to the minimap
-                        rtsController.SetCameraPosition(GetMinimapToMapPosition());
-                    }
-                }
-                //Releasing selection button
-                if (Input.IsActionJustReleased("RTS_Select"))
-                {
-                    if (rtsController.isCurrentlySelecting)
-                    {
-                        List<RTSSelectionType> selection;
-
-                        if (Input.IsKeyPressed(Key.Shift))
-                            selection = rtsController.ExecuteSelection(true);
-                        else
-                            selection = rtsController.ExecuteSelection(false);
-                        //send the unit selection data to the UI to display
-                        SetUnitSelectionUI(selection);
-
-                    }
-                    specialOrderJustExecuted = false;
-                }
-                //Pressing execute order button
-                if (Input.IsActionJustPressed("RTS_ExecuteOrder") && techController.control_rtsOrders)
-                {
-                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
-                    {
-                        rtsController.ExecuteStandardOrder(GetGlobalMousePosition());
-                    }
-                    else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
-                    {
-                        //Execute order to the relative map position to the minimap
-                        rtsController.ExecuteStandardOrder(GetMinimapToMapPosition());
-                    }
-                    
-                }
-
-                //Checking general 'selection' mouse press for the minimap, when minimap is in full mode
-                if (Input.IsActionPressed("RTS_Select") && !specialOrderJustExecuted && !rtsController.isCurrentlySelecting && mainUI.IsOverActiveUI())
-                {
-                    if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition()) && mainUI.GetMinimap().IsMinimapFullMap())
-                    {
-                        //Set the camera position to the relative map position to the minimap
-                        rtsController.SetCameraPosition(GetMinimapToMapPosition());
-                    }
-                }
-
-                //Pressing any of the order hotbar hotkeys
-                if (techController.control_rtsOrders)
-                {
-                    if (Input.IsActionJustPressed("RTS_SetMoveOrder"))
-                    {
-                        OnOrderStatePress("Move");
-                    }
-                    if (Input.IsActionJustPressed("RTS_SetAttackOrder"))
-                    {
-                        OnOrderStatePress("Attack");
-                    }
-                    if (Input.IsActionJustPressed("RTS_SetStopOrder"))
-                    {
-                        OnOrderStatePress("Stop");
-                    }
-                    if (Input.IsActionJustPressed("RTS_SetHoldOrder"))
-                    {
-                        OnOrderStatePress("Hold");
-                    }
-                }
-                
-                
-
-            }
-            else if (rtsPlayState == RTSPlayState.BUILDPLACEMENT)
+            //General inputs when in personal player mode
+            if (playState == LevelControllerPlayState.PERSONALPLAYER)
             {
                 globals.SetNewCustomCursor("Personal");
-                ProcessBuildPlacementChecks();
+
+                ProcessBuildingQueueInputs();
+
+
+                if (personalPlayState == PersonalPlayState.STANDARD)
+                {
+                    if (!GetTree().Paused) { player.CheckMouseInputs(); }
+                }
+                if (personalPlayState == PersonalPlayState.BUILDPLACEMENT)
+                {
+                    player.weaponsDisabled = true;
+                    ProcessBuildPlacementChecks();
+                }
             }
-            else if (rtsPlayState == RTSPlayState.SETORDER_MOVE)
+
+            //General inputs when in RTS mode
+            if (playState == LevelControllerPlayState.RTSCOMMAND)
             {
-                if (Input.IsActionJustPressed("RTS_Select"))
+                if (rtsController.isCurrentlySelecting || mainUI.IsOverActiveUI())
+                { globals.SetNewCustomCursor("Personal"); }
+                else
                 {
-                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
+                    string cursorHoverCode = rtsController.ScanCursorPosition(GetGlobalMousePosition());
+                    globals.SetNewCustomCursor(cursorHoverCode);
+                }
+
+                //Run this when only factories are selected and their build menu is shown, so it shows accurate info on the UI
+                if (rtsController.factoryBuildMenuEnabled)
+                {
+                    UpdateFactoryButtonQueueInfo();
+                }
+
+                if (rtsPlayState == RTSPlayState.STANDARD)
+                {
+                    //pressing selection button
+                    if (Input.IsActionJustPressed("RTS_Select"))
                     {
-                        //Execute Move at the mouse position
-                        rtsController.ExecuteMoveOrder(GetGlobalMousePosition());
-                        SetStateToStandard();
+                        if (!mainUI.IsOverActiveUI() && techController.control_rtsSelection) //Are we not over any UI?
+                        {
+                            rtsController.SetInitialSelectionPoint();
+                        }
+                        else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
+                        {
+                            //Set the camera position to the relative map position to the minimap
+                            rtsController.SetCameraPosition(GetMinimapToMapPosition());
+                        }
                     }
-                    else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
+                    //Releasing selection button
+                    if (Input.IsActionJustReleased("RTS_Select"))
                     {
-                        //Execute Move at the relative map position to the minimap
-                        rtsController.ExecuteMoveOrder(GetMinimapToMapPosition());
-                        specialOrderJustExecuted = true;
+                        if (rtsController.isCurrentlySelecting)
+                        {
+                            List<RTSSelectionType> selection;
+
+                            if (Input.IsKeyPressed(Key.Shift))
+                                selection = rtsController.ExecuteSelection(true);
+                            else
+                                selection = rtsController.ExecuteSelection(false);
+                            //send the unit selection data to the UI to display
+                            SetUnitSelectionUI(selection);
+
+                        }
+                        specialOrderJustExecuted = false;
+                    }
+                    //Pressing execute order button
+                    if (Input.IsActionJustPressed("RTS_ExecuteOrder") && techController.control_rtsOrders)
+                    {
+                        if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
+                        {
+                            rtsController.ExecuteStandardOrder(GetGlobalMousePosition());
+                        }
+                        else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
+                        {
+                            //Execute order to the relative map position to the minimap
+                            rtsController.ExecuteStandardOrder(GetMinimapToMapPosition());
+                        }
+
+                    }
+
+                    //Checking general 'selection' mouse press for the minimap, when minimap is in full mode
+                    if (Input.IsActionPressed("RTS_Select") && !specialOrderJustExecuted && !rtsController.isCurrentlySelecting && mainUI.IsOverActiveUI())
+                    {
+                        if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition()) && mainUI.GetMinimap().IsMinimapFullMap())
+                        {
+                            //Set the camera position to the relative map position to the minimap
+                            rtsController.SetCameraPosition(GetMinimapToMapPosition());
+                        }
+                    }
+
+                    //Pressing any of the order hotbar hotkeys
+                    if (techController.control_rtsOrders)
+                    {
+                        if (Input.IsActionJustPressed("RTS_SetMoveOrder"))
+                        {
+                            OnOrderStatePress("Move");
+                        }
+                        if (Input.IsActionJustPressed("RTS_SetAttackOrder"))
+                        {
+                            OnOrderStatePress("Attack");
+                        }
+                        if (Input.IsActionJustPressed("RTS_SetStopOrder"))
+                        {
+                            OnOrderStatePress("Stop");
+                        }
+                        if (Input.IsActionJustPressed("RTS_SetHoldOrder"))
+                        {
+                            OnOrderStatePress("Hold");
+                        }
+                    }
+
+
+
+                }
+                else if (rtsPlayState == RTSPlayState.BUILDPLACEMENT)
+                {
+                    globals.SetNewCustomCursor("Personal");
+                    ProcessBuildPlacementChecks();
+                }
+                else if (rtsPlayState == RTSPlayState.SETORDER_MOVE)
+                {
+                    if (Input.IsActionJustPressed("RTS_Select"))
+                    {
+                        if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
+                        {
+                            //Execute Move at the mouse position
+                            rtsController.ExecuteMoveOrder(GetGlobalMousePosition());
+                            SetStateToStandard();
+                        }
+                        else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
+                        {
+                            //Execute Move at the relative map position to the minimap
+                            rtsController.ExecuteMoveOrder(GetMinimapToMapPosition());
+                            specialOrderJustExecuted = true;
+                            SetStateToStandard();
+                        }
+                    }
+                    if (Input.IsActionJustPressed("RTS_ExecuteOrder"))
+                    {
                         SetStateToStandard();
                     }
                 }
-                if (Input.IsActionJustPressed("RTS_ExecuteOrder"))
+                else if (rtsPlayState == RTSPlayState.SETORDER_ATTACK)
                 {
-                    SetStateToStandard();
+                    if (Input.IsActionJustPressed("RTS_Select"))
+                    {
+                        if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
+                        {
+                            //Execute Attack/Attack-Move at the mouse position
+                            rtsController.ExecuteAttackOrder(GetGlobalMousePosition());
+                            SetStateToStandard();
+                        }
+                        else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
+                        {
+                            //Execute Attack/Attack-Move at the relative map position to the minimap
+                            rtsController.ExecuteAttackOrder(GetMinimapToMapPosition());
+                            specialOrderJustExecuted = true;
+                            SetStateToStandard();
+                        }
+                    }
+                    if (Input.IsActionJustPressed("RTS_ExecuteOrder"))
+                    {
+                        SetStateToStandard();
+                    }
                 }
+
+                //Control Group interaction
+                ProcessControlGroupInputs();
+
+
             }
-            else if (rtsPlayState == RTSPlayState.SETORDER_ATTACK)
+
+            //Check minimap zoom keybinds
+            ProcessMinimapInputs();
+            //Toggling RTS Mode
+            if (Input.IsActionJustPressed("RTSModeToggle") && techController.control_RTSToggle)
             {
-                if (Input.IsActionJustPressed("RTS_Select"))
-                {
-                    if (!mainUI.IsOverActiveUI()) //Are we not over any UI?
-                    {
-                        //Execute Attack/Attack-Move at the mouse position
-                        rtsController.ExecuteAttackOrder(GetGlobalMousePosition());
-                        SetStateToStandard();
-                    }
-                    else if (mainUI.GetMinimap().IsInputWithinMinimapBounds(GetViewport().GetMousePosition())) //We are over UI, is it the minimap?
-                    {
-                        //Execute Attack/Attack-Move at the relative map position to the minimap
-                        rtsController.ExecuteAttackOrder(GetMinimapToMapPosition());
-                        specialOrderJustExecuted = true;
-                        SetStateToStandard();
-                    }
-                }
-                if (Input.IsActionJustPressed("RTS_ExecuteOrder"))
-                {
-                    SetStateToStandard();
-                }
+                CallDeferred("ToggleRTSMode");
             }
 
-            //Control Group interaction
-            ProcessControlGroupInputs();
+            //Pausing and unpausing
+            if (Input.IsActionJustPressed("PauseGame") && mainLevelState == GeneralLevelState.INGAME) //Make this control not available if win or loss conditions are met
+            {
+                PauseGame();
+            }
+            if (Input.IsActionJustPressed("EscapeMenu") && mainLevelState == GeneralLevelState.INGAME) //Make this control not available if win or loss conditions are met
+            {
+                OpenEscapeMenu();
+            }
 
-            
+            //For testing specific things
+            //if (Input.IsActionJustPressed("TestingButton"))
+            //{
+            //    GD.Print("Disabling Unit1");
+            //    UpdateGlobalTechAndControls(TechControlCode.TECH_UNITSCOUT, false);
+            //}
+
         }
-
-        //Check minimap zoom keybinds
-        ProcessMinimapInputs();
-        //Toggling RTS Mode
-        if (Input.IsActionJustPressed("RTSModeToggle") && techController.control_RTSToggle)
+        else if (mainLevelState == GeneralLevelState.INMENU) //in the escape pause menu
         {
-            CallDeferred("ToggleRTSMode");
+            if (Input.IsActionJustPressed("EscapeMenu"))
+            {
+                CloseEscapeMenu();
+            }
         }
-
-        //Pausing and unpausing
-        if (Input.IsActionJustPressed("PauseGame"))
-        {
-            PauseGame();
-        }
-
-        //For testing specific things
-        //if (Input.IsActionJustPressed("TestingButton"))
-        //{
-        //    GD.Print("Disabling Unit1");
-        //    UpdateGlobalTechAndControls(TechControlCode.TECH_UNITSCOUT, false);
-        //}
     }
 
     public bool isPlayerActive()
@@ -715,9 +749,32 @@ public partial class MainLevelController : Node2D
     //Setting the pause state
     public void PauseGame()
     {
-        GD.Print("Before pause: " + GetTree().Paused);
-        GetTree().Paused = !GetTree().Paused;
-        GD.Print("After Pause: " + GetTree().Paused);
+        if (mainLevelState == GeneralLevelState.INGAME)
+        {
+            GetTree().Paused = !GetTree().Paused;
+        }
+    }
+    public void OpenEscapeMenu()
+    {
+        if (!GetTree().Paused) { GetTree().Paused = true; }
+        GD.Print("Pause Menu opened");
+        mainLevelState = GeneralLevelState.INMENU;
+    }
+    public void CloseEscapeMenu()
+    {
+        GetTree().Paused = false;
+        GD.Print("Pause Menu closed");
+        mainLevelState = GeneralLevelState.INGAME;
+    }
+    public void FinaliseWinMenu()
+    {
+        if (!GetTree().Paused) { GetTree().Paused = true; }
+        mainLevelState = GeneralLevelState.ENDMENU;
+    }
+    public void FinaliseLossMenu()
+    {
+        if (!GetTree().Paused) { GetTree().Paused = true; }
+        mainLevelState = GeneralLevelState.ENDMENU;
     }
 
     public Vector2 GetMinimapToMapPosition()

@@ -53,15 +53,13 @@ public partial class AIC_TS1_South : MainAIController
             buildSize = RandIntRange(10, 13);
         }
 
-        //TODO - Choose one of the attack paths
         Vector2[] chosenAttackPath = attackPath1;
         
         //Create the new attack wave, which will generate a randomised group from that weighting
         AIControlGroup newGroup = new AIControlGroup();
         newGroup.InitGroup(chosenAttackPath, buildSize, unitBuildWeight);
         attackGroups.Add(newGroup);
-
-        GD.Print(newGroup.wantedUnits);
+        newGroup.aiController = this;
     }
     public override void GenerateNewDefenseGroup()
     {
@@ -71,5 +69,6 @@ public partial class AIC_TS1_South : MainAIController
         newGroup.InitGroup(defensePath, defenseGroupComp);
         newGroup.SetAsDefenseGroup();
         defenseGroups.Add(newGroup);
+        newGroup.aiController = this;
     }
 }

@@ -67,6 +67,7 @@ public partial class AIC_TS1_Northeast : MainAIController
         AIControlGroup newGroup = new AIControlGroup();
         newGroup.InitGroup(chosenAttackPath, buildSize, unitBuildWeight);
         attackGroups.Add(newGroup);
+        newGroup.aiController = this;
     }
     public override void GenerateNewDefenseGroup()
     {
@@ -76,17 +77,20 @@ public partial class AIC_TS1_Northeast : MainAIController
         newGroup.InitGroup(defensePath1, defenseGroupComp);
         newGroup.SetAsDefenseGroup();
         defenseGroups.Add(newGroup);
+        newGroup.aiController = this;
 
         defenseGroupComp = new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1 };
         newGroup = new AIControlGroup();
         newGroup.InitGroup(defensePath2, defenseGroupComp);
         newGroup.SetAsDefenseGroup();
         defenseGroups.Add(newGroup);
+        newGroup.aiController = this;
 
         defenseGroupComp = new int[] { 0, 0, 0, 1, 1, 1, 1, 1, 1, 2 };
         newGroup = new AIControlGroup();
         newGroup.InitGroup(defensePath3, defenseGroupComp);
         newGroup.SetAsDefenseGroup();
         defenseGroups.Add(newGroup);
+        newGroup.aiController = this;
     }
 }

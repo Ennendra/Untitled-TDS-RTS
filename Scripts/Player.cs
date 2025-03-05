@@ -115,12 +115,15 @@ public partial class Player : UnitParent
             mouseDistanceFromPlayer = GlobalPosition.DistanceTo(GetGlobalMousePosition());
             spriteAimCursor.GlobalPosition = GlobalPosition + (Vector2.FromAngle(aimComponent.GlobalRotation) * mouseDistanceFromPlayer);
 
-            //Slide the camera based on camera and mouse position from the center of the screen
-            float viewportMovementScale = 0.1f; //The higher this value, the more the camera will move based on cursor movement
-            Vector2 viewportTargetPos = (GetViewport().GetMousePosition() - (GetViewportRect().Size / 2)) * viewportMovementScale;
-            float cameraMovementAmount = Mathf.Lerp(0, camera.Position.DistanceTo(viewportTargetPos), 4 * (float)delta);
-            camera.Position = camera.Position.MoveToward(viewportTargetPos, cameraMovementAmount);
-            
+            //Slide the camera based on camera and mouse position from the center of the screen, as long as the pause menu isn't up
+            if (levelController.mainLevelState == GeneralLevelState.INGAME || levelController.mainLevelState == GeneralLevelState.WINTIMER || levelController.mainLevelState == GeneralLevelState.LOSSTIMER)
+            {
+                float viewportMovementScale = 0.1f; //The higher this value, the more the camera will move based on cursor movement
+                Vector2 viewportTargetPos = (GetViewport().GetMousePosition() - (GetViewportRect().Size / 2)) * viewportMovementScale;
+                float cameraMovementAmount = Mathf.Lerp(0, camera.Position.DistanceTo(viewportTargetPos), 4 * (float)delta);
+                camera.Position = camera.Position.MoveToward(viewportTargetPos, cameraMovementAmount);
+            }
+
             SendHealthBarData();
 
             
@@ -140,7 +143,8 @@ public partial class Player : UnitParent
         {
             if (IsLevelControllerSet())
             {
-                targetDirection = Input.GetVector("Personal_MoveLeft", "Personal_MoveRight", "Personal_MoveUp", "Personal_MoveDown");
+                if (levelController.techController.control_movement)
+                    { targetDirection = Input.GetVector("Personal_MoveLeft", "Personal_MoveRight", "Personal_MoveUp", "Personal_MoveDown"); }
             }
 
             if (targetDirection != Vector2.Zero)

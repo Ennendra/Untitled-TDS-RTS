@@ -149,6 +149,12 @@ public partial class FactoryComponent : Node2D
         }
         return false;
 	}
+    public void ClearBuildQueue()
+    {
+        buildQueue.Clear();
+        energySupplied = 0;
+        metalSupplied = 0;
+    }
 	public List<ConstructInfo> GetBuildQueue()
 	{
 		return buildQueue;

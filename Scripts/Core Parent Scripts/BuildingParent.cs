@@ -77,6 +77,11 @@ public partial class BuildingParent : CombatantParent
         if (IsInstanceValid(constructorComponent)) return constructorComponent;
         else return null;
     }
+	public FactoryComponent GetFactoryComponent()
+	{
+        if (IsInstanceValid(factoryComponent)) return factoryComponent;
+        else return null;
+    }
 
     public virtual void ProcessBuildingOperation(double delta)
 	{

@@ -118,7 +118,7 @@ public partial class DamageComponent : Area2D
     }
     public void TakeDamage(float amount, DamageType type, Node2D source)
 	{
-        if (type == DamageType.COMBATDAMAGE)
+        if (type == DamageType.COMBATDAMAGE && source != null)
         {
             if (timeSinceLastDamage>2.5f) //limit response checks so attack responses arent spammed
             {

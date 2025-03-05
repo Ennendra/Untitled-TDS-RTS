@@ -5,8 +5,8 @@
 
 [resource]
 script = ExtResource("2_v4nvh")
-unitName = "Unit3"
-unitDescription = "Slow, long-range sniper unit."
+unitName = "Sniper"
+unitDescription = "Slow, long-range unit. Can hover over water."
 maxHealth = 60.0
 energyCost = 300.0
 metalCost = 80.0
